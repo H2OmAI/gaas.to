@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDKs &mdash; GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+    .type { color: #7ee787; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #30363d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>SDKs</h1>
+    <p class="subtitle">
+      Official client libraries for Python, TypeScript, and Java. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+    </p>
+
+    <h2>At a Glance</h2>
+    <table>
+      <tr>
+        <th>Language</th>
+        <th>Package</th>
+        <th>Install</th>
+        <th>Requirements</th>
+      </tr>
+      <tr>
+        <td>Python</td>
+        <td><code>gaas-sdk</code></td>
+        <td><code>pip install gaas-sdk</code></td>
+        <td>Python 3.11+</td>
+      </tr>
+      <tr>
+        <td>TypeScript</td>
+        <td><code>@gaas/sdk</code></td>
+        <td><code>npm install @gaas/sdk</code></td>
+        <td>Node.js 18+</td>
+      </tr>
+      <tr>
+        <td>Java</td>
+        <td><code>com.gaas:gaas-sdk</code></td>
+        <td>Maven / Gradle</td>
+        <td>Java 17+</td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <strong>All SDKs are Apache-2.0 licensed.</strong> Source and full documentation at <a class="link" href="https://github.com/H2OmAI/gaas">github.com/H2OmAI/gaas</a> under <code>sdks/</code>.
+    </div>
+
+    <hr class="divider">
+
+    <!-- ── Python ──────────────────────────────────────────────── -->
+
+    <h2>Python</h2>
+
+    <h3>Install</h3>
+    <pre><code>pip install gaas-sdk</code></pre>
+
+    <h3>Submit an Intent</h3>
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent
+
+<span class="keyword">async with</span> <span class="func">GaaSClient</span>(
+    <span class="string">"https://api.gaas.to"</span>,
+    headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_key"</span>},
+) <span class="keyword">as</span> client:
+    intent = <span class="func">build_intent</span>(
+        agent_id=<span class="string">"billing_bot"</span>,
+        action_type=<span class="string">"communicate"</span>,
+        verb=<span class="string">"send_email"</span>,
+        target_type=<span class="string">"person"</span>,
+        target_identifier=<span class="string">"patient@example.com"</span>,
+        summary=<span class="string">"Send billing statement to patient"</span>,
+        content={<span class="string">"recipient"</span>: <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>: <span class="string">"email"</span>},
+    )
+    response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)
+
+    <span class="keyword">if</span> response.data.verdict == <span class="string">"approve"</span>:
+        <span class="func">send_email</span>(response.data)
+    <span class="keyword">elif</span> response.data.verdict == <span class="string">"block"</span>:
+        <span class="func">log</span>(response.data.reasoning)</code></pre>
+
+    <h3>Sync Client</h3>
+    <p>
+      A synchronous client is available for non-async codebases:
+    </p>
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClientSync
+
+<span class="keyword">with</span> <span class="func">GaaSClientSync</span>(
+    <span class="string">"https://api.gaas.to"</span>,
+    headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_key"</span>},
+) <span class="keyword">as</span> client:
+    response = client.<span class="func">submit_intent</span>(intent)</code></pre>
+
+    <h3>Error Handling</h3>
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSValidationError, GaaSConnectionError
+
+<span class="keyword">try</span>:
+    response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)
+<span class="keyword">except</span> <span class="type">GaaSValidationError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(<span class="string">f"Validation failed: </span>{e.message}<span class="string">"</span>)
+<span class="keyword">except</span> <span class="type">GaaSConnectionError</span>:
+    <span class="func">print</span>(<span class="string">"Could not reach GaaS server"</span>)</code></pre>
+    <p>
+      Exception classes: <code>GaaSValidationError</code> (400), <code>GaaSSemanticError</code> (422), <code>GaaSNotFoundError</code> (404), <code>GaaSConflictError</code> (409), <code>GaaSServerError</code> (500), <code>GaaSConnectionError</code> (network).
+    </p>
+
+    <hr class="divider">
+
+    <!-- ── TypeScript ──────────────────────────────────────────── -->
+
+    <h2>TypeScript</h2>
+
+    <h3>Install</h3>
+    <pre><code>npm install @gaas/sdk</code></pre>
+
+    <h3>Submit an Intent</h3>
+    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
+  baseUrl: <span class="string">'https://api.gaas.to'</span>,
+  headers: { <span class="string">'X-API-Key'</span>: <span class="string">'your_key'</span> },
+});
+
+<span class="keyword">const</span> intent = <span class="func">buildIntent</span>({
+  agentId: <span class="string">'billing_bot'</span>,
+  actionType: <span class="string">'communicate'</span>,
+  verb: <span class="string">'send_email'</span>,
+  targetType: <span class="string">'person'</span>,
+  targetIdentifier: <span class="string">'patient@example.com'</span>,
+  summary: <span class="string">'Send billing statement to patient'</span>,
+  content: { recipient: <span class="string">'patient@example.com'</span>, channel: <span class="string">'email'</span> },
+});
+
+<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);
+
+<span class="keyword">if</span> (response.data.verdict === <span class="string">'approve'</span>) {
+  <span class="func">sendEmail</span>(response.data);
+} <span class="keyword">else if</span> (response.data.verdict === <span class="string">'block'</span>) {
+  console.<span class="func">log</span>(response.data.verdictReason);
+}</code></pre>
+
+    <div class="note">
+      <strong>Automatic case conversion.</strong> The TypeScript SDK converts between camelCase (JavaScript) and snake_case (API) automatically. <code>buildIntent({ agentId })</code> sends <code>agent_id</code> over the wire; <code>response.data.riskAssessment</code> comes from <code>risk_assessment</code>.
+    </div>
+
+    <h3>Error Handling</h3>
+    <pre><code><span class="keyword">import</span> { GaaSValidationError, GaaSConnectionError } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+
+<span class="keyword">try</span> {
+  <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);
+} <span class="keyword">catch</span> (error) {
+  <span class="keyword">if</span> (error <span class="keyword">instanceof</span> <span class="type">GaaSValidationError</span>) {
+    console.<span class="func">error</span>(<span class="string">`Validation failed: </span>${error.message}<span class="string">`</span>);
+  } <span class="keyword">else if</span> (error <span class="keyword">instanceof</span> <span class="type">GaaSConnectionError</span>) {
+    console.<span class="func">error</span>(<span class="string">'Could not reach GaaS server'</span>);
+  }
+}</code></pre>
+
+    <hr class="divider">
+
+    <!-- ── Java ────────────────────────────────────────────────── -->
+
+    <h2>Java</h2>
+
+    <h3>Install</h3>
+
+    <p><strong>Maven:</strong></p>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.gaas&lt;/groupId&gt;
+    &lt;artifactId&gt;gaas-sdk&lt;/artifactId&gt;
+    &lt;version&gt;0.2.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+
+    <p><strong>Gradle:</strong></p>
+    <pre><code>implementation <span class="string">'com.gaas:gaas-sdk:0.2.0'</span></code></pre>
+
+    <h3>Submit an Intent</h3>
+    <pre><code><span class="keyword">import</span> com.gaas.sdk.*;
+
+<span class="keyword">try</span> (<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.to"</span>, <span class="string">"your_key"</span>)) {
+    <span class="type">IntentDeclaration</span> intent = <span class="type">IntentBuilder</span>.<span class="func">create</span>()
+        .<span class="func">agentId</span>(<span class="string">"billing_bot"</span>)
+        .<span class="func">actionType</span>(ActionType.COMMUNICATE)
+        .<span class="func">verb</span>(<span class="string">"send_email"</span>)
+        .<span class="func">targetType</span>(TargetType.PERSON)
+        .<span class="func">targetIdentifier</span>(<span class="string">"patient@example.com"</span>)
+        .<span class="func">summary</span>(<span class="string">"Send billing statement to patient"</span>)
+        .<span class="func">content</span>(Map.<span class="func">of</span>(<span class="string">"recipient"</span>, <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>, <span class="string">"email"</span>))
+        .<span class="func">build</span>();
+
+    <span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent);
+
+    <span class="keyword">if</span> (response.<span class="func">getData</span>().<span class="func">getVerdict</span>() == Verdict.APPROVE) {
+        <span class="func">sendEmail</span>(response.<span class="func">getData</span>());
+    } <span class="keyword">else if</span> (response.<span class="func">getData</span>().<span class="func">getVerdict</span>() == Verdict.BLOCK) {
+        System.out.<span class="func">println</span>(response.<span class="func">getData</span>().<span class="func">getReasoning</span>());
+    }
+}</code></pre>
+
+    <h3>Async API</h3>
+    <pre><code><span class="type">CompletableFuture</span>&lt;<span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt;&gt; future =
+    client.<span class="func">submitIntentAsync</span>(intent);</code></pre>
+
+    <h3>Error Handling</h3>
+    <pre><code><span class="keyword">try</span> {
+    <span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent);
+} <span class="keyword">catch</span> (<span class="type">GaaSValidationException</span> e) {
+    System.out.<span class="func">println</span>(<span class="string">"Validation failed: "</span> + e.<span class="func">getMessage</span>());
+} <span class="keyword">catch</span> (<span class="type">GaaSConnectionException</span> e) {
+    System.out.<span class="func">println</span>(<span class="string">"Could not reach GaaS server"</span>);
+}</code></pre>
+
+    <hr class="divider">
+
+    <!-- ── Common Patterns ─────────────────────────────────────── -->
+
+    <h2>Common Patterns</h2>
+
+    <h3>Builder Pattern</h3>
+    <p>
+      All three SDKs provide a builder function (<code>build_intent</code> in Python, <code>buildIntent</code> in TypeScript, <code>IntentBuilder</code> in Java) that flattens the nested intent model into a flat argument list. This handles the <code>agent.id</code>, <code>action.type</code>, <code>action.target.identifier</code> nesting so you don't have to construct nested objects manually.
+    </p>
+
+    <h3>Response Structure</h3>
+    <p>
+      Every SDK method returns a typed response with two fields:
+    </p>
+    <ul>
+      <li><code>data</code> &mdash; the response payload (e.g., <code>GovernanceDecision</code>, <code>AuditRecord</code>, <code>HealthStatus</code>)</li>
+      <li><code>meta</code> &mdash; request metadata: request ID, decision ID, pipeline latency, status code</li>
+    </ul>
+
+    <h3>Retrieving Decisions</h3>
+    <p>Python:</p>
+    <pre><code>decision = <span class="keyword">await</span> client.<span class="func">get_decision</span>(<span class="string">"intent-id"</span>)</code></pre>
+    <p>TypeScript:</p>
+    <pre><code><span class="keyword">const</span> decision = <span class="keyword">await</span> client.<span class="func">getDecision</span>(<span class="string">'intent-id'</span>);</code></pre>
+    <p>Java:</p>
+    <pre><code><span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; decision = client.<span class="func">getDecision</span>(<span class="string">"intent-id"</span>);</code></pre>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="getting-started.html">Getting Started</a> &mdash; full quickstart walkthrough</li>
+      <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; endpoint reference and schema details</li>
+      <li><a class="link" href="shadow-mode.html">Shadow Mode</a> &mdash; test governance without enforcement</li>
+    </ul>
+
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>

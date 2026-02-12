@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversational Dashboard &mdash; GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .step-label {
+      display: inline-block;
+      background: #1f6feb33;
+      color: #58a6ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .flow-step:last-child { border-bottom: none; }
+
+    .flow-icon {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #58a6ff;
+    }
+
+    .flow-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.25rem;
+      margin-top: 0;
+    }
+
+    .flow-content p {
+      font-size: 0.875rem;
+      color: #8b949e;
+      margin-bottom: 0;
+    }
+
+    .highlight-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight-box h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.5rem;
+      margin-top: 0;
+    }
+
+    .highlight-box p {
+      font-size: 0.875rem;
+      color: #8b949e;
+      margin-bottom: 0;
+    }
+
+    .highlight-box ul {
+      margin-bottom: 0;
+      padding-left: 1.25rem;
+    }
+
+    .highlight-box li {
+      font-size: 0.8125rem;
+      color: #8b949e;
+      margin-bottom: 0.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #30363d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .tool-category {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-category h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-category .tool-count {
+      display: inline-block;
+      background: #1f6feb33;
+      color: #58a6ff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.1rem 0.45rem;
+      border-radius: 3px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .tool-category ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .tool-category li {
+      font-size: 0.8125rem;
+      color: #8b949e;
+      margin-bottom: 0.25rem;
+    }
+
+    .conversation-example {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    .conversation-example .user-msg {
+      color: #58a6ff;
+      margin-bottom: 0.5rem;
+    }
+
+    .conversation-example .user-msg::before {
+      content: "You: ";
+      font-weight: 600;
+    }
+
+    .conversation-example .ai-msg {
+      color: #c9d1d9;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+      border-left: 2px solid #30363d;
+    }
+
+    .conversation-example .ai-msg::before {
+      content: "GaaS: ";
+      font-weight: 600;
+      color: #3fb950;
+    }
+
+    .conversation-example .artifact-indicator {
+      color: #d2a8ff;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+    }
+
+    .conversation-example .action-chips {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-left: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .conversation-example .action-chips span {
+      background: #1e2533;
+      border: 1px solid #30363d;
+      border-radius: 100px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.75rem;
+      color: #8b949e;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Conversational Dashboard</h1>
+    <p class="subtitle">
+      Governance operations through natural language. Ask questions, review escalations, explore decisions, run backtests &mdash; all in a chat interface.
+    </p>
+
+    <h2>Chat, Not Dashboards</h2>
+    <p>
+      Traditional governance dashboards bury critical signals under page navigation. GaaS takes a different approach: you talk to your governance system. Ask "what happened overnight?" and get a summary with data. Say "review that top escalation" and get the context package with approve/deny options. No clicks through menus. No tab switching.
+    </p>
+    <p>
+      The dashboard is powered by Claude, with 33 tools that map to the full GaaS API. Claude fetches live data, generates visual artifacts inline, and takes actions on your behalf &mdash; all within the conversation.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Architecture</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">1</div>
+        <div class="flow-content">
+          <h3>You</h3>
+          <p>Type a question or click a suggested action. Natural language, no syntax required.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">2</div>
+        <div class="flow-content">
+          <h3>Chat UI</h3>
+          <p>React frontend with markdown rendering, live artifact preview, and suggested action chips. Streams responses in real time via server-sent events.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">3</div>
+        <div class="flow-content">
+          <h3>BFF (Express + Claude)</h3>
+          <p>Backend-for-frontend server. Sends your message to Claude with 33 governance tools. Claude decides which tools to call, executes them against the GaaS API (up to 10 rounds), and streams text and artifacts back.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">4</div>
+        <div class="flow-content">
+          <h3>GaaS API</h3>
+          <p>The governance engine. All data &mdash; decisions, escalations, learning, membranes &mdash; comes from the same API your agents use.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>No direct API access required.</strong> The dashboard handles authentication, tool orchestration, and response formatting. You never see raw JSON unless you ask for it.
+    </div>
+
+    <hr class="divider">
+
+    <h2>What You Can Do</h2>
+    <p>
+      The dashboard exposes five categories of governance operations through natural language.
+    </p>
+
+    <div class="tool-category">
+      <h4>Operational Intelligence <span class="tool-count">10 tools</span></h4>
+      <ul>
+        <li><strong>Command center</strong> &mdash; real-time metrics: decisions today, blocks, pending escalations, risk index, block rate, latency</li>
+        <li><strong>Attention queue</strong> &mdash; items needing immediate human attention, ranked by urgency</li>
+        <li><strong>Daily digest</strong> &mdash; yesterday's governance summary with block/modify/escalate breakdown</li>
+        <li><strong>Weekly summary</strong> &mdash; executive overview with week-over-week comparisons and top risks</li>
+        <li><strong>Evidence packages</strong> &mdash; generate compliance packages for auditors with sampled audit records and hash-verified chains</li>
+        <li><strong>Decision stream</strong> &mdash; filterable feed of all governance decisions (by verdict, risk level, agent, action type, pipeline mode, time range)</li>
+        <li><strong>Agent explorer</strong> &mdash; overview of all registered agents with risk patterns and compliance metrics</li>
+        <li><strong>Notification rules</strong> &mdash; configure alerts for escalation timeouts, risk thresholds, and anomalies</li>
+      </ul>
+    </div>
+
+    <div class="tool-category">
+      <h4>Escalation Management <span class="tool-count">8 tools</span></h4>
+      <ul>
+        <li>List and filter escalations by status, reviewer, risk score, trigger source</li>
+        <li>View full escalation context: intent summary, policy evaluation, deliberation positions, audit reference</li>
+        <li>Submit review decisions: approve, modify, or deny with notes and conditions</li>
+        <li>Reassign escalations to different reviewers</li>
+        <li>Cancel escalations when the original intent is no longer relevant</li>
+        <li>View escalation statistics: resolution rates, average review time, timeout rates</li>
+      </ul>
+    </div>
+
+    <div class="tool-category">
+      <h4>Learning &amp; Calibration <span class="tool-count">9 tools</span></h4>
+      <ul>
+        <li>View current calibration: agent weights, deliberation threshold, risk dimension weights, circuit breaker status</li>
+        <li>Browse calibration history: parameter changes, triggers, impact assessments</li>
+        <li>Explore insights: policy hotspots, override patterns, risk drift, latency bottlenecks</li>
+        <li>Run backtests: simulate how a parameter change would have affected historical decisions</li>
+        <li>Submit feedback on decisions: flag false positives, false negatives, or confirm good catches</li>
+        <li>Report governance incidents linked to specific audit records</li>
+        <li>Check Collective Knowledge Base updates from the GaaS network</li>
+      </ul>
+    </div>
+
+    <div class="tool-category">
+      <h4>Onboarding &amp; Membranes <span class="tool-count">2 tools</span></h4>
+      <ul>
+        <li>View membrane status: draft, shadow, or live with full UCM and policy set</li>
+        <li>Check shadow mode statistics: verdict distribution, average risk, policy coverage</li>
+      </ul>
+    </div>
+
+    <div class="tool-category">
+      <h4>Audit &amp; Decisions <span class="tool-count">2 tools</span></h4>
+      <ul>
+        <li>Retrieve any governance decision with full reasoning chain, risk assessment, and blocking policies</li>
+        <li>Access complete audit trails covering all 5 pipeline stages</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Visual Artifacts</h2>
+    <p>
+      When data needs to be seen rather than described, Claude generates live React components inline in the conversation. Charts, tables, metric cards, and status indicators render directly below the response text.
+    </p>
+
+    <div class="highlight-box">
+      <h3>What gets rendered</h3>
+      <ul>
+        <li>Bar, line, area, and pie charts (decision trends, risk distributions, verdict breakdowns)</li>
+        <li>Data tables with clickable rows (escalation queues, decision streams, agent lists)</li>
+        <li>Metric cards with trend indicators (decisions today, block rate, risk index)</li>
+        <li>Status indicators (pipeline health, circuit breaker state)</li>
+        <li>Interactive buttons that trigger follow-up messages (approve/deny/review actions within artifacts)</li>
+      </ul>
+    </div>
+
+    <p>
+      Artifacts are expandable to full-screen and include a code toggle for transparency. Every visualization is generated from live GaaS data &mdash; nothing is mocked or pre-built.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Suggested Actions</h2>
+    <p>
+      After responses with clear next steps, clickable action chips appear below the message. These guide workflows without requiring you to type.
+    </p>
+
+    <div class="conversation-example">
+      <div class="user-msg">Show me pending escalations</div>
+      <div class="ai-msg">Here are 3 pending escalations, sorted by urgency...</div>
+      <div class="artifact-indicator">[Escalation queue table rendered inline]</div>
+      <div class="action-chips">
+        <span>Review top escalation</span>
+        <span>Show escalation stats</span>
+        <span>Filter by risk</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Example Conversation Flows</h2>
+
+    <h3>Morning check-in</h3>
+    <div class="conversation-example">
+      <div class="user-msg">What happened overnight?</div>
+      <div class="ai-msg">Here's your daily digest for yesterday...</div>
+      <div class="artifact-indicator">[Metric cards + decision trend chart]</div>
+      <div class="ai-msg">12 decisions processed, 2 blocks, 1 escalation pending. Block rate is up 8% vs last week &mdash; both blocks were on agent-fintech-01 hitting the PCI data policy.</div>
+      <div class="action-chips">
+        <span>Review the blocks</span>
+        <span>Show that escalation</span>
+        <span>Agent details for fintech-01</span>
+      </div>
+    </div>
+
+    <h3>Escalation review</h3>
+    <div class="conversation-example">
+      <div class="user-msg">Review that escalation</div>
+      <div class="ai-msg">Here's the context package for ESC-2847...</div>
+      <div class="artifact-indicator">[Context package: intent summary, policy triggers, deliberation positions]</div>
+      <div class="ai-msg">The agent tried to send regulated patient data via an unencrypted channel. Policy pol_t1_003 triggered. The deliberation panel voted 5-1 to escalate (the dissenting agent noted the low audience size).</div>
+      <div class="action-chips">
+        <span>Approve</span>
+        <span>Deny</span>
+        <span>Modify</span>
+        <span>Reassign</span>
+      </div>
+    </div>
+
+    <h3>Calibration backtest</h3>
+    <div class="conversation-example">
+      <div class="user-msg">What if we lowered the deliberation threshold to 0.6?</div>
+      <div class="ai-msg">Running backtest on deliberation_threshold: 0.7 &rarr; 0.6...</div>
+      <div class="artifact-indicator">[Impact analysis chart showing verdict changes]</div>
+      <div class="ai-msg">Over the last 30 days, 4 additional decisions would have triggered deliberation. 2 of those were ultimately approved &mdash; the other 2 would have caught edge cases that slipped through.</div>
+      <div class="action-chips">
+        <span>Apply this change</span>
+        <span>Try 0.65 instead</span>
+        <span>Show the 2 edge cases</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Setup</h2>
+
+    <div class="step-label">ENVIRONMENT VARIABLES</div>
+    <table>
+      <tr>
+        <th>Variable</th>
+        <th>Required</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>ANTHROPIC_API_KEY</code></td>
+        <td>Yes</td>
+        <td>Claude API key for the BFF conversation engine</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_API_URL</code></td>
+        <td>No</td>
+        <td>GaaS API server URL (default: <code>http://localhost:8000</code>)</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_API_KEY</code></td>
+        <td>No</td>
+        <td>API key for the GaaS API (omit if running in open mode)</td>
+      </tr>
+    </table>
+
+    <div class="step-label">RUNNING THE DASHBOARD</div>
+    <pre><code>cd apps/dashboard
+npm install
+npm run dev</code></pre>
+
+    <p>
+      This starts both the BFF server (port 3001) and the Vite dev server concurrently. The frontend proxies <code>/api</code> requests to the BFF automatically.
+    </p>
+
+    <div class="note">
+      <strong>Prerequisites:</strong> Node.js 18+, a running GaaS API server, and an Anthropic API key. See <a class="link" href="getting-started.html">Getting Started</a> for the GaaS API setup.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="getting-started.html">Getting Started</a> &mdash; onboard, integrate, and go live</li>
+      <li><a class="link" href="shadow-mode.html">Shadow Mode</a> &mdash; run the full pipeline without enforcement</li>
+      <li><a class="link" href="sdks.html">SDKs</a> &mdash; Python, TypeScript, and Java client libraries</li>
+    </ul>
+
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>
