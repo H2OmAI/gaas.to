@@ -4,212 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Load Testing &mdash; GaaS Documentation</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0e17;
-      color: #c9d1d9;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-    }
-
-    header nav a:hover { color: #e6edf3; }
-
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    p { margin-bottom: 1rem; font-size: 0.9375rem; }
-
-    pre {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 1.25rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-    }
-
-    code {
-      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
-      color: #e6edf3;
-    }
-
-    p code, li code, td code {
-      background: #161b22;
-      padding: 0.15em 0.4em;
-      border-radius: 3px;
-      font-size: 0.85em;
-    }
-
-    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
-    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
-
-    a.link { color: #58a6ff; text-decoration: none; }
-    a.link:hover { text-decoration: underline; }
-
-    .note {
-      background: #161b22;
-      border-left: 3px solid #58a6ff;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .note strong { color: #58a6ff; }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #1e2533;
-      margin: 2.5rem 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-    }
-
-    th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #30363d;
-      color: #8b949e;
-      font-weight: 600;
-    }
-
-    td {
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .flow {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: 2rem;
-    }
-
-    .flow-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .flow-step:last-child { border-bottom: none; }
-
-    .flow-icon {
-      flex-shrink: 0;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #58a6ff;
-    }
-
-    .flow-content h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.25rem;
-      margin-top: 0;
-    }
-
-    .flow-content p {
-      font-size: 0.875rem;
-      color: #8b949e;
-      margin-bottom: 0;
-    }
-
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
-
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -222,13 +20,13 @@
   </header>
 
   <main>
-    <h1>Load Testing</h1>
-    <p class="subtitle">
+    <h1 class="fade-in">Load Testing</h1>
+    <p class="subtitle fade-in">
       k6 scripts for smoke, sustained load, and stress testing &mdash; targeting the governance pipeline, dashboard, and escalation endpoints. Integrated into the deployment pipeline as a gate between staging and production.
     </p>
 
-    <h2>Three Test Profiles</h2>
-    <div class="flow">
+    <h2 class="fade-in">Three Test Profiles</h2>
+    <div class="flow fade-in">
       <div class="flow-step">
         <div class="flow-icon">1</div>
         <div class="flow-content">
@@ -254,7 +52,7 @@
 
     <hr class="divider">
 
-    <h2>Running Locally</h2>
+    <h2 class="fade-in">Running Locally</h2>
     <p>
       Install <a class="link" href="https://k6.io/docs/get-started/installation/">k6</a>, then start the API in open mode:
     </p>
@@ -279,7 +77,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Payload Mix</h2>
+    <h2 class="fade-in">Payload Mix</h2>
     <p>
       The load and stress tests select intents from a weighted random pool that exercises all verdict paths through the governance pipeline:
     </p>
@@ -323,7 +121,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Pass/Fail Thresholds</h2>
+    <h2 class="fade-in">Pass/Fail Thresholds</h2>
     <table>
       <tr>
         <th>Endpoint Group</th>
@@ -364,7 +162,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Custom Metrics</h2>
+    <h2 class="fade-in">Custom Metrics</h2>
     <p>
       Beyond standard k6 HTTP metrics, the load tests track governance-specific measurements:
     </p>
@@ -399,7 +197,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>CI Integration</h2>
+    <h2 class="fade-in">CI Integration</h2>
     <p>
       Load tests run automatically in the deployment pipeline after staging deploy and before production. The GitHub Actions workflow:
     </p>
@@ -418,7 +216,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>File Structure</h2>
+    <h2 class="fade-in">File Structure</h2>
     <pre><code>tests/load/
   config.js       &mdash; Base URL, auth, thresholds
   payloads.js     &mdash; 5 intent factories + weighted random selector
@@ -429,7 +227,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Environment Variables</h2>
+    <h2 class="fade-in">Environment Variables</h2>
     <table>
       <tr>
         <th>Variable</th>
@@ -460,7 +258,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Related Pages</h2>
+    <h2 class="fade-in">Related Pages</h2>
     <ul>
       <li><a class="link" href="observability.html">Observability &amp; Alerting</a> &mdash; Prometheus metrics that k6 results correlate with</li>
       <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; the pipeline endpoints under test</li>
@@ -472,5 +270,17 @@ k6 run tests/load/stress.js</code></pre>
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
