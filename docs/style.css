@@ -92,18 +92,19 @@ header {
 }
 
 header .logo {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
   text-decoration: none;
   transition: opacity 0.2s;
 }
 
 header .logo:hover { opacity: 0.85; }
 
-header .logo span { color: var(--accent); }
+header .logo img {
+  height: 40px;
+  width: auto;
+  filter: drop-shadow(0 0 10px rgba(0, 212, 170, 0.15));
+}
 
 header nav a {
   font-family: var(--font-mono);
