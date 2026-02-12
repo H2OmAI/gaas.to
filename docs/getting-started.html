@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="favicon.png">
   <title>Getting Started — GaaS Documentation</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,16 +15,6 @@
       min-height: 100vh;
     }
 
-    #meshCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
     header {
       border-bottom: 1px solid #1e2533;
       padding: 1.5rem 2rem;
@@ -35,9 +24,14 @@
     }
 
     header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
       text-decoration: none;
     }
 
+    header .logo span { color: #58a6ff; }
 
     header nav a {
       color: #8b949e;
@@ -180,9 +174,8 @@
   </style>
 </head>
 <body>
-<canvas id="meshCanvas"></canvas>
   <header>
-    <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
@@ -239,48 +232,60 @@ Content-Type: application/json
     </p>
 
     <h3>Python</h3>
-    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent
 
-client = GaaSClient(api_key=<span class="string">"your_api_key"</span>)
+<span class="keyword">async with</span> <span class="func">GaaSClient</span>(
+    <span class="string">"http://localhost:8000"</span>,
+    headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_api_key"</span>},
+) <span class="keyword">as</span> client:
+    <span class="comment"># Declare what the agent wants to do</span>
+    intent = <span class="func">build_intent</span>(
+        agent_id=<span class="string">"billing_bot"</span>,
+        action_type=<span class="string">"COMMUNICATE"</span>,
+        verb=<span class="string">"send_email"</span>,
+        target_type=<span class="string">"PERSON"</span>,
+        target_identifier=<span class="string">"patient@example.com"</span>,
+        target_sensitivity=<span class="string">"CONFIDENTIAL"</span>,
+        summary=<span class="string">"Send billing statement to patient"</span>,
+        content={<span class="string">"recipient"</span>: <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>: <span class="string">"email"</span>},
+        reversible=True,
+        audience_size=1,
+    )
+    response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)
 
-<span class="comment"># Declare what the agent wants to do</span>
-decision = client.submit_intent(
-    agent_id=<span class="string">"billing_bot"</span>,
-    action_type=<span class="string">"communicate"</span>,
-    verb=<span class="string">"send_email"</span>,
-    target_type=<span class="string">"person"</span>,
-    target_id=<span class="string">"patient@example.com"</span>,
-    sensitivity=<span class="string">"confidential"</span>,
-    summary=<span class="string">"Send billing statement to patient"</span>,
-    content={<span class="string">"recipient"</span>: <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>: <span class="string">"email"</span>},
-    impact={<span class="string">"reversible"</span>: True, <span class="string">"audience_size"</span>: 1}
-)
-
-<span class="comment"># Act on the governance decision</span>
-<span class="keyword">if</span> decision.approved:
-    send_email(decision.payload)
-<span class="keyword">elif</span> decision.blocked:
-    log(decision.verdict_reason)</code></pre>
+    <span class="comment"># Act on the governance decision</span>
+    <span class="keyword">if</span> response.data.verdict == <span class="string">"approve"</span>:
+        <span class="func">send_email</span>(response.data)
+    <span class="keyword">elif</span> response.data.verdict == <span class="string">"block"</span>:
+        <span class="func">log</span>(response.data.reasoning)</code></pre>
 
     <h3>TypeScript</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
 
-<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({ apiKey: <span class="string">'your_api_key'</span> });
-
-<span class="keyword">const</span> decision = <span class="keyword">await</span> client.<span class="func">submitIntent</span>({
-  agentId: <span class="string">'billing_bot'</span>,
-  actionType: <span class="string">'communicate'</span>,
-  verb: <span class="string">'send_email'</span>,
-  target: { type: <span class="string">'person'</span>, id: <span class="string">'patient@example.com'</span>, sensitivity: <span class="string">'confidential'</span> },
-  summary: <span class="string">'Send billing statement to patient'</span>,
-  content: { recipient: <span class="string">'patient@example.com'</span>, channel: <span class="string">'email'</span> },
-  impact: { reversible: <span class="keyword">true</span>, audienceSize: 1 }
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
+  baseUrl: <span class="string">'http://localhost:8000'</span>,
+  headers: { <span class="string">'X-API-Key'</span>: <span class="string">'your_api_key'</span> },
 });
 
-<span class="keyword">if</span> (decision.approved) {
-  <span class="func">sendEmail</span>(decision.payload);
-} <span class="keyword">else if</span> (decision.blocked) {
-  console.<span class="func">log</span>(decision.verdictReason);
+<span class="keyword">const</span> intent = <span class="func">buildIntent</span>({
+  agentId: <span class="string">'billing_bot'</span>,
+  actionType: <span class="string">'COMMUNICATE'</span>,
+  verb: <span class="string">'send_email'</span>,
+  targetType: <span class="string">'PERSON'</span>,
+  targetIdentifier: <span class="string">'patient@example.com'</span>,
+  targetSensitivity: <span class="string">'CONFIDENTIAL'</span>,
+  summary: <span class="string">'Send billing statement to patient'</span>,
+  content: { recipient: <span class="string">'patient@example.com'</span>, channel: <span class="string">'email'</span> },
+  reversible: <span class="keyword">true</span>,
+  audienceSize: 1,
+});
+
+<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);
+
+<span class="keyword">if</span> (response.data.verdict === <span class="string">'approve'</span>) {
+  <span class="func">sendEmail</span>(response.data);
+} <span class="keyword">else if</span> (response.data.verdict === <span class="string">'block'</span>) {
+  console.<span class="func">log</span>(response.data.reasoning);
 }</code></pre>
 
     <div class="warning">
@@ -334,6 +339,5 @@ decision = client.submit_intent(
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
-<script src="constellation.js"></script>
 </body>
 </html>

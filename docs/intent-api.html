@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="favicon.png">
   <title>Intent Declaration API — GaaS Documentation</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,16 +15,6 @@
       min-height: 100vh;
     }
 
-    #meshCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
     header {
       border-bottom: 1px solid #1e2533;
       padding: 1.5rem 2rem;
@@ -35,9 +24,14 @@
     }
 
     header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
       text-decoration: none;
     }
 
+    header .logo span { color: #58a6ff; }
 
     header nav a {
       color: #8b949e;
@@ -194,9 +188,8 @@
   </style>
 </head>
 <body>
-<canvas id="meshCanvas"></canvas>
   <header>
-    <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
@@ -220,14 +213,11 @@
 
     <h2>Authentication</h2>
     <p>
-      Every request requires an API key scoped to your organization. Keys are environment-specific:
+      Every request requires an API key scoped to your organization, passed via the <code>X-API-Key</code> header. Each key is bound to an <code>org_id</code> &mdash; all data returned is automatically scoped to that organization.
     </p>
-    <table>
-      <tr><th>Environment</th><th>Purpose</th></tr>
-      <tr><td><code>live</code></td><td>Production &mdash; decisions are enforced</td></tr>
-      <tr><td><code>shadow</code></td><td>Shadow mode &mdash; decisions are logged, not enforced</td></tr>
-      <tr><td><code>test</code></td><td>Testing &mdash; no audit trail, no rate limits</td></tr>
-    </table>
+    <p>
+      Shadow vs. live mode is controlled per-request via the <code>?mode=shadow</code> query parameter, or by the membrane's lifecycle state. Both modes produce full audit trails. See <a href="shadow-mode.html" style="color:#58a6ff;">Shadow Mode</a> for details.
+    </p>
 
     <h2>Submitting an Intent</h2>
     <p>
@@ -235,35 +225,36 @@
     </p>
     <pre><code>POST /v1/intents
 Content-Type: application/json
-Authorization: Bearer your_api_key
+X-API-Key: your_api_key
 
 {
   "intent": {
     "agent": {
-      "id": "customer_service_bot_v2"
+      "id": "customer_service_bot_v2",
+      "framework": "custom"
     },
     "action": {
-      "type": "communicate",
+      "type": "COMMUNICATE",
       "verb": "send_email",
       "target": {
-        "type": "person",
+        "type": "PERSON",
         "identifier": "customer@example.com",
-        "sensitivity": "confidential"
-      },
-      "payload": {
-        "summary": "Send loan rate quote with APR disclosure",
-        "content": {
-          "recipient": "customer@example.com",
-          "channel": "email",
-          "message_body": "..."
-        },
-        "estimated_impact": {
-          "reversible": true,
-          "financial_exposure_usd": 0,
-          "audience_size": 1,
-          "regulatory_domains": ["TILA"]
-        }
+        "sensitivity": "CONFIDENTIAL"
       }
+    },
+    "payload": {
+      "summary": "Send loan rate quote with APR disclosure",
+      "content": {
+        "recipient": "customer@example.com",
+        "channel": "email",
+        "message_body": "..."
+      }
+    },
+    "estimated_impact": {
+      "reversible": true,
+      "financial_exposure_usd": 0,
+      "audience_size": 1,
+      "regulatory_domains": ["TILA"]
     }
   }
 }</code></pre>
@@ -274,13 +265,13 @@ Authorization: Bearer your_api_key
     </p>
     <table>
       <tr><th>Type</th><th>Description</th></tr>
-      <tr><td><code>communicate</code></td><td>Sending information to a person or system</td></tr>
-      <tr><td><code>transact</code></td><td>Moving money, assets, or value</td></tr>
-      <tr><td><code>access</code></td><td>Reading or retrieving sensitive information</td></tr>
-      <tr><td><code>control</code></td><td>Operating a physical or digital system</td></tr>
-      <tr><td><code>publish</code></td><td>Making content publicly visible</td></tr>
-      <tr><td><code>recommend</code></td><td>Advising a human on a decision</td></tr>
-      <tr><td><code>modify</code></td><td>Changing a record, configuration, or state</td></tr>
+      <tr><td><code>COMMUNICATE</code></td><td>Sending information to a person or system</td></tr>
+      <tr><td><code>TRANSACT</code></td><td>Moving money, assets, or value</td></tr>
+      <tr><td><code>ACCESS</code></td><td>Reading or retrieving sensitive information</td></tr>
+      <tr><td><code>CONTROL</code></td><td>Operating a physical or digital system</td></tr>
+      <tr><td><code>PUBLISH</code></td><td>Making content publicly visible</td></tr>
+      <tr><td><code>RECOMMEND</code></td><td>Advising a human on a decision</td></tr>
+      <tr><td><code>MODIFY</code></td><td>Changing a record, configuration, or state</td></tr>
     </table>
 
     <h2>The Governance Decision</h2>
@@ -307,12 +298,7 @@ Authorization: Bearer your_api_key
     <div class="endpoint">
       <span class="method method-post">POST</span>
       <span class="path">/v1/intents</span>
-      <p class="desc">Submit an intent for synchronous governance evaluation</p>
-    </div>
-    <div class="endpoint">
-      <span class="method method-post">POST</span>
-      <span class="path">/v1/intents/async</span>
-      <p class="desc">Submit an intent for asynchronous evaluation with webhook or polling</p>
+      <p class="desc">Submit an intent for synchronous governance evaluation. Add <code>?mode=shadow</code> for shadow mode.</p>
     </div>
     <div class="endpoint">
       <span class="method method-get">GET</span>
@@ -322,22 +308,17 @@ Authorization: Bearer your_api_key
     <div class="endpoint">
       <span class="method method-get">GET</span>
       <span class="path">/v1/intents/{intent_id}/audit</span>
-      <p class="desc">Retrieve the full governance audit trail</p>
+      <p class="desc">Retrieve the full governance audit trail (SHA-256 hash-chained)</p>
     </div>
-    <div class="endpoint">
-      <span class="method method-get">GET</span>
-      <span class="path">/v1/intents</span>
-      <p class="desc">List and filter intent declarations</p>
-    </div>
-    <div class="endpoint">
-      <span class="method method-post">POST</span>
-      <span class="path">/v1/agents</span>
-      <p class="desc">Register an agent with GaaS</p>
-    </div>
+
+    <h2>Idempotency</h2>
+    <p>
+      Include an <code>Idempotency-Key</code> header on intent submissions to prevent duplicate processing. If the same key is reused within 24 hours with the same content, the original decision is returned. Using the same key with different content returns a 409 conflict.
+    </p>
 
     <h2>SDKs</h2>
     <p>
-      Official SDKs for Python and TypeScript handle authentication, request construction, and response parsing. See the <a href="getting-started.html" style="color:#58a6ff;">Getting Started</a> guide for usage examples.
+      Official SDKs for Python, TypeScript, and Java handle authentication, request construction, and response parsing. See the <a href="sdks.html" style="color:#58a6ff;">SDKs</a> page or the <a href="getting-started.html" style="color:#58a6ff;">Getting Started</a> guide for usage examples.
     </p>
 
   </main>
@@ -345,6 +326,5 @@ Authorization: Bearer your_api_key
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
-<script src="constellation.js"></script>
 </body>
 </html>
