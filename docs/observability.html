@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observability &amp; Alerting &mdash; GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code, td code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #30363d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .highlight-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight-box h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.5rem;
+      margin-top: 0;
+    }
+
+    .highlight-box p {
+      font-size: 0.875rem;
+      color: #8b949e;
+      margin-bottom: 0;
+    }
+
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .flow-step:last-child { border-bottom: none; }
+
+    .flow-icon {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #58a6ff;
+    }
+
+    .flow-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.25rem;
+      margin-top: 0;
+    }
+
+    .flow-content p {
+      font-size: 0.875rem;
+      color: #8b949e;
+      margin-bottom: 0;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Observability &amp; Alerting</h1>
+    <p class="subtitle">
+      Structured logging, Prometheus metrics, distributed tracing, and threshold-based anomaly alerting &mdash; built into the governance pipeline.
+    </p>
+
+    <h2>Three Layers</h2>
+    <p>
+      GaaS observability is designed around three layers that work independently. You can run with just structured logs, add Prometheus scraping, and optionally enable OpenTelemetry tracing &mdash; each layer requires zero code changes.
+    </p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">1</div>
+        <div class="flow-content">
+          <h3>Structured Logging</h3>
+          <p>JSON-formatted structured logs via <code>structlog</code>. Every log entry carries a <code>request_id</code> for correlation across the pipeline. Set <code>GAAS_LOG_LEVEL</code> to control verbosity.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">2</div>
+        <div class="flow-content">
+          <h3>Prometheus Metrics</h3>
+          <p>Scrape <code>GET /metrics</code> for HTTP request counts, latency histograms, pipeline stage durations, decision verdicts, error rates, circuit breaker state, and more. No authentication required on this endpoint.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">3</div>
+        <div class="flow-content">
+          <h3>Distributed Tracing</h3>
+          <p>Optional OpenTelemetry integration. Set <code>GAAS_TRACING_ENABLED=true</code> and <code>GAAS_OTEL_ENDPOINT</code> to send spans for every pipeline stage to your collector. Zero overhead when disabled.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Anomaly Alerting</h2>
+    <p>
+      Beyond passive metrics, GaaS actively monitors operational health and fires alerts when thresholds are exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check, dispatching events through the notification engine.
+    </p>
+
+    <h3>Event Types</h3>
+    <table>
+      <tr>
+        <th>Event</th>
+        <th>Trigger</th>
+        <th>Severity</th>
+      </tr>
+      <tr>
+        <td><code>circuit_breaker_tripped</code></td>
+        <td>Learning calibration circuit breaker freezes due to quality degradation</td>
+        <td>Critical</td>
+      </tr>
+      <tr>
+        <td><code>critical_escalation</code></td>
+        <td>Escalation created with risk score &ge; 0.7</td>
+        <td>Critical</td>
+      </tr>
+      <tr>
+        <td><code>high_error_rate</code></td>
+        <td>More than 10 application errors in a 5-minute window</td>
+        <td>Critical</td>
+      </tr>
+      <tr>
+        <td><code>block_rate_anomaly</code></td>
+        <td>Block rate exceeds 50% over recent decisions (min 10 sample size)</td>
+        <td>Warning</td>
+      </tr>
+      <tr>
+        <td><code>pipeline_degraded</code></td>
+        <td>Any single pipeline execution exceeds 5,000ms</td>
+        <td>Warning</td>
+      </tr>
+      <tr>
+        <td><code>rate_limit_spike</code></td>
+        <td>More than 50 rate-limit rejections in a 5-minute window</td>
+        <td>Warning</td>
+      </tr>
+      <tr>
+        <td><code>escalation_queue_growth</code></td>
+        <td>Pending escalation count &ge; 10 and growing (checked every 60s)</td>
+        <td>Warning</td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <strong>Deduplication.</strong> The notification engine respects per-rule cooldown periods. A rule with <code>cooldown_minutes: 15</code> will fire at most once every 15 minutes for the same event type, preventing alert storms during sustained anomalies.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Notification Channels</h2>
+    <p>
+      Alert events are dispatched through configurable channels. Each notification rule specifies a channel and recipients.
+    </p>
+
+    <table>
+      <tr>
+        <th>Channel</th>
+        <th>Configuration</th>
+        <th>Recipient Format</th>
+      </tr>
+      <tr>
+        <td><strong>Webhook</strong></td>
+        <td>No env vars needed</td>
+        <td>URL &mdash; receives JSON POST with <code>title</code>, <code>message</code>, <code>metadata</code></td>
+      </tr>
+      <tr>
+        <td><strong>Email</strong></td>
+        <td><code>GAAS_SMTP_HOST</code>, <code>GAAS_SMTP_PORT</code>, <code>GAAS_SMTP_USER</code>, <code>GAAS_SMTP_PASS</code>, <code>GAAS_SMTP_FROM</code></td>
+        <td>Email address</td>
+      </tr>
+      <tr>
+        <td><strong>PagerDuty</strong></td>
+        <td><code>GAAS_PAGERDUTY_ROUTING_KEY</code></td>
+        <td>PagerDuty service key</td>
+      </tr>
+    </table>
+
+    <p>
+      Channels degrade gracefully &mdash; if SMTP is not configured, email rules silently skip. The same applies to PagerDuty. Webhook requires no server-side configuration.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Notification Rules</h2>
+    <p>
+      Rules are managed via the dashboard API. Each rule matches an event type (exact or wildcard) to a channel and recipient list.
+    </p>
+
+    <pre><code>POST /v1/dashboard/notifications/rules
+Content-Type: application/json
+
+{
+  "name": "Ops team &mdash; all critical events",
+  "trigger": "*_critical*",
+  "channel": "webhook",
+  "recipients": ["https://hooks.slack.com/services/T00/B00/xxx"],
+  "cooldown_minutes": 15
+}</code></pre>
+
+    <p>Trigger patterns:</p>
+    <ul>
+      <li><code>circuit_breaker_tripped</code> &mdash; exact match</li>
+      <li><code>circuit_*</code> &mdash; wildcard prefix (matches any event starting with <code>circuit_</code>)</li>
+      <li><code>*</code> &mdash; catch-all, matches every event</li>
+    </ul>
+
+    <div class="note">
+      <strong>Dashboard integration.</strong> You can also create and manage notification rules through the <a class="link" href="dashboard.html">conversational dashboard</a> using natural language.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Prometheus Metrics Reference</h2>
+    <table>
+      <tr>
+        <th>Metric</th>
+        <th>Type</th>
+        <th>Labels</th>
+      </tr>
+      <tr>
+        <td><code>gaas_http_requests_total</code></td>
+        <td>Counter</td>
+        <td>method, path_template, status_code</td>
+      </tr>
+      <tr>
+        <td><code>gaas_http_request_duration_seconds</code></td>
+        <td>Histogram</td>
+        <td>method, path_template</td>
+      </tr>
+      <tr>
+        <td><code>gaas_active_requests</code></td>
+        <td>Gauge</td>
+        <td>&mdash;</td>
+      </tr>
+      <tr>
+        <td><code>gaas_pipeline_stage_duration_seconds</code></td>
+        <td>Histogram</td>
+        <td>stage</td>
+      </tr>
+      <tr>
+        <td><code>gaas_pipeline_total_duration_seconds</code></td>
+        <td>Histogram</td>
+        <td>&mdash;</td>
+      </tr>
+      <tr>
+        <td><code>gaas_decisions_total</code></td>
+        <td>Counter</td>
+        <td>verdict, pipeline_mode</td>
+      </tr>
+      <tr>
+        <td><code>gaas_errors_total</code></td>
+        <td>Counter</td>
+        <td>error_code</td>
+      </tr>
+      <tr>
+        <td><code>gaas_rate_limit_hits_total</code></td>
+        <td>Counter</td>
+        <td>scope</td>
+      </tr>
+      <tr>
+        <td><code>gaas_circuit_breaker_state</code></td>
+        <td>Gauge</td>
+        <td>breaker_name (0=normal, 1=frozen)</td>
+      </tr>
+      <tr>
+        <td><code>gaas_escalations_created_total</code></td>
+        <td>Counter</td>
+        <td>&mdash;</td>
+      </tr>
+      <tr>
+        <td><code>gaas_deliberation_triggered_total</code></td>
+        <td>Counter</td>
+        <td>&mdash;</td>
+      </tr>
+    </table>
+
+    <hr class="divider">
+
+    <h2>Environment Variables</h2>
+    <table>
+      <tr>
+        <th>Variable</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>GAAS_LOG_LEVEL</code></td>
+        <td><code>info</code></td>
+        <td>Structlog level (debug, info, warning, error)</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_TRACING_ENABLED</code></td>
+        <td><code>false</code></td>
+        <td>Enable OpenTelemetry tracing</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_OTEL_ENDPOINT</code></td>
+        <td><code>localhost:4317</code></td>
+        <td>OTLP gRPC collector endpoint</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_SMTP_HOST</code></td>
+        <td>&mdash;</td>
+        <td>SMTP server for email notifications</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_SMTP_PORT</code></td>
+        <td><code>587</code></td>
+        <td>SMTP port</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_SMTP_USER</code></td>
+        <td>&mdash;</td>
+        <td>SMTP username</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_SMTP_PASS</code></td>
+        <td>&mdash;</td>
+        <td>SMTP password</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_SMTP_FROM</code></td>
+        <td>&mdash;</td>
+        <td>From address for email alerts</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_PAGERDUTY_ROUTING_KEY</code></td>
+        <td>&mdash;</td>
+        <td>PagerDuty Events API v2 routing key</td>
+      </tr>
+    </table>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="dashboard.html">Conversational Dashboard</a> &mdash; manage notification rules and review alerts through natural language</li>
+      <li><a class="link" href="getting-started.html">Getting Started</a> &mdash; onboard, integrate, and go live</li>
+      <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; the pipeline that generates the metrics</li>
+    </ul>
+
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>
