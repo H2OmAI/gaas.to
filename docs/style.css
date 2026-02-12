@@ -101,7 +101,7 @@ header .logo {
 header .logo:hover { opacity: 0.85; }
 
 header .logo img {
-  height: 40px;
+  height: 70px;
   width: auto;
   filter: drop-shadow(0 0 10px rgba(0, 212, 170, 0.15));
 }
