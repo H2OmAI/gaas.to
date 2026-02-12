@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .step-label {
+      display: inline-block;
+      background: #1f6feb33;
+      color: #58a6ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Getting Started</h1>
+    <p class="subtitle">
+      Add governance to your AI agents in three steps: onboard, integrate, go live.
+    </p>
+
+    <!-- STEP 1 -->
+    <div class="step-label">STEP 1</div>
+    <h2>Onboard Your Organization</h2>
+    <p>
+      The fastest path is the quickstart endpoint. One call handles intake, analysis, membrane generation, and API key provisioning:
+    </p>
+    <pre><code>POST /v1/onboarding/quickstart
+Content-Type: application/json
+
+{
+  "organization": {
+    "name": "Acme Health",
+    "domain_url": "https://acmehealth.com",
+    "description": "Healthcare call center with AI agents for billing and scheduling"
+  },
+  "agents": [
+    {
+      "name": "Billing Bot",
+      "framework": "langchain",
+      "action_types": ["communicate", "access"],
+      "domains": ["healthcare"]
+    }
+  ]
+}</code></pre>
+
+    <p>
+      GaaS analyzes your context, infers the applicable regulatory frameworks, builds a governance membrane, and returns an API key. Your membrane starts in shadow mode &mdash; full evaluation, zero enforcement.
+    </p>
+
+    <div class="note">
+      <strong>What is a membrane?</strong> Your governance membrane is the complete set of policies, risk thresholds, delegation limits, and configurations that define how GaaS governs your agents. See <a class="link" href="onboarding.html">Onboarding</a> for the full lifecycle.
+    </div>
+
+    <hr class="divider">
+
+    <!-- STEP 2 -->
+    <div class="step-label">STEP 2</div>
+    <h2>Integrate Your Agent</h2>
+    <p>
+      Before your agent takes an action, have it declare the intent to GaaS and act on the decision.
+    </p>
+
+    <h3>Python</h3>
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient
+
+client = GaaSClient(api_key=<span class="string">"your_api_key"</span>)
+
+<span class="comment"># Declare what the agent wants to do</span>
+decision = client.submit_intent(
+    agent_id=<span class="string">"billing_bot"</span>,
+    action_type=<span class="string">"communicate"</span>,
+    verb=<span class="string">"send_email"</span>,
+    target_type=<span class="string">"person"</span>,
+    target_id=<span class="string">"patient@example.com"</span>,
+    sensitivity=<span class="string">"confidential"</span>,
+    summary=<span class="string">"Send billing statement to patient"</span>,
+    content={<span class="string">"recipient"</span>: <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>: <span class="string">"email"</span>},
+    impact={<span class="string">"reversible"</span>: True, <span class="string">"audience_size"</span>: 1}
+)
+
+<span class="comment"># Act on the governance decision</span>
+<span class="keyword">if</span> decision.approved:
+    send_email(decision.payload)
+<span class="keyword">elif</span> decision.blocked:
+    log(decision.verdict_reason)</code></pre>
+
+    <h3>TypeScript</h3>
+    <pre><code><span class="keyword">import</span> { GaaSClient } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({ apiKey: <span class="string">'your_api_key'</span> });
+
+<span class="keyword">const</span> decision = <span class="keyword">await</span> client.<span class="func">submitIntent</span>({
+  agentId: <span class="string">'billing_bot'</span>,
+  actionType: <span class="string">'communicate'</span>,
+  verb: <span class="string">'send_email'</span>,
+  target: { type: <span class="string">'person'</span>, id: <span class="string">'patient@example.com'</span>, sensitivity: <span class="string">'confidential'</span> },
+  summary: <span class="string">'Send billing statement to patient'</span>,
+  content: { recipient: <span class="string">'patient@example.com'</span>, channel: <span class="string">'email'</span> },
+  impact: { reversible: <span class="keyword">true</span>, audienceSize: 1 }
+});
+
+<span class="keyword">if</span> (decision.approved) {
+  <span class="func">sendEmail</span>(decision.payload);
+} <span class="keyword">else if</span> (decision.blocked) {
+  console.<span class="func">log</span>(decision.verdictReason);
+}</code></pre>
+
+    <div class="warning">
+      <strong>Important:</strong> Always use the <code>payload</code> from the decision response when executing an approved action, not your original content. GaaS may modify the payload for compliance (e.g., adding required disclosures).
+    </div>
+
+    <hr class="divider">
+
+    <!-- STEP 3 -->
+    <div class="step-label">STEP 3</div>
+    <h2>Review Shadow Decisions, Then Go Live</h2>
+    <p>
+      While your membrane is in shadow mode, GaaS evaluates every intent through the full governance pipeline but doesn't enforce any decisions. Use the dashboard to review:
+    </p>
+    <ul>
+      <li>What GaaS <strong>would have blocked</strong> &mdash; these show where governance adds value</li>
+      <li>What GaaS <strong>would have modified</strong> &mdash; these show where governance improves action quality</li>
+      <li>What GaaS <strong>would have escalated</strong> &mdash; this previews your human review workload</li>
+    </ul>
+    <p>
+      Mark any false positives. The membrane refines based on your feedback. When you're confident, activate live mode:
+    </p>
+    <pre><code>POST /v1/membranes/{membrane_id}/activate
+
+{
+  "activation": {
+    "mode": "live"
+  }
+}</code></pre>
+    <p>
+      Live mode can be reverted to shadow at any time with a single call. All audit records are preserved across both modes.
+    </p>
+
+    <hr class="divider">
+
+    <h2>What's Next</h2>
+    <ul>
+      <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; full endpoint reference</li>
+      <li><a class="link" href="onboarding.html">Onboarding</a> &mdash; membrane lifecycle, context intake, and shadow mode details</li>
+    </ul>
+    <p>
+      Questions? Reach out on <a class="link" href="https://github.com/H2OmAI">GitHub</a>.
+    </p>
+
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>

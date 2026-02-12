@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intent Declaration API — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .endpoint {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .endpoint .method {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      margin-right: 0.5rem;
+    }
+
+    .method-post { background: #1f6feb33; color: #58a6ff; }
+    .method-get { background: #23863633; color: #3fb950; }
+
+    .endpoint .path {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.875rem;
+      color: #e6edf3;
+    }
+
+    .endpoint .desc {
+      margin-top: 0.5rem;
+      font-size: 0.8125rem;
+      color: #8b949e;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #30363d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    .verdict-table td:first-child {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.8125rem;
+      color: #e6edf3;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Intent Declaration API</h1>
+    <p class="subtitle">
+      The front door to GaaS governance. Every AI agent action begins with an intent declaration.
+    </p>
+
+    <h2>Core Concept</h2>
+    <p>
+      Before an AI agent takes any action, it declares <em>what</em> it intends to do, <em>to whom</em>, and with <em>what impact</em>. GaaS evaluates that declaration through a multi-stage governance pipeline and returns a decision: approve, modify, escalate, or block.
+    </p>
+    <p>
+      If an agent can't declare it, it can't do it. Opacity of intent is the primary risk vector in autonomous AI systems &mdash; GaaS eliminates it at the point of entry.
+    </p>
+
+    <h2>Authentication</h2>
+    <p>
+      Every request requires an API key scoped to your organization. Keys are environment-specific:
+    </p>
+    <table>
+      <tr><th>Environment</th><th>Purpose</th></tr>
+      <tr><td><code>live</code></td><td>Production &mdash; decisions are enforced</td></tr>
+      <tr><td><code>shadow</code></td><td>Shadow mode &mdash; decisions are logged, not enforced</td></tr>
+      <tr><td><code>test</code></td><td>Testing &mdash; no audit trail, no rate limits</td></tr>
+    </table>
+
+    <h2>Submitting an Intent</h2>
+    <p>
+      An intent declaration includes the agent's identity, the action it wants to take, the target, the expected impact, and any context the agent already has. The schema adapts &mdash; lightweight for routine actions, verbose for high-stakes ones.
+    </p>
+    <pre><code>POST /v1/intents
+Content-Type: application/json
+Authorization: Bearer your_api_key
+
+{
+  "intent": {
+    "agent": {
+      "id": "customer_service_bot_v2"
+    },
+    "action": {
+      "type": "communicate",
+      "verb": "send_email",
+      "target": {
+        "type": "person",
+        "identifier": "customer@example.com",
+        "sensitivity": "confidential"
+      },
+      "payload": {
+        "summary": "Send loan rate quote with APR disclosure",
+        "content": {
+          "recipient": "customer@example.com",
+          "channel": "email",
+          "message_body": "..."
+        },
+        "estimated_impact": {
+          "reversible": true,
+          "financial_exposure_usd": 0,
+          "audience_size": 1,
+          "regulatory_domains": ["TILA"]
+        }
+      }
+    }
+  }
+}</code></pre>
+
+    <h2>Action Types</h2>
+    <p>
+      GaaS recognizes seven categories of agent action, each with different governance implications:
+    </p>
+    <table>
+      <tr><th>Type</th><th>Description</th></tr>
+      <tr><td><code>communicate</code></td><td>Sending information to a person or system</td></tr>
+      <tr><td><code>transact</code></td><td>Moving money, assets, or value</td></tr>
+      <tr><td><code>access</code></td><td>Reading or retrieving sensitive information</td></tr>
+      <tr><td><code>control</code></td><td>Operating a physical or digital system</td></tr>
+      <tr><td><code>publish</code></td><td>Making content publicly visible</td></tr>
+      <tr><td><code>recommend</code></td><td>Advising a human on a decision</td></tr>
+      <tr><td><code>modify</code></td><td>Changing a record, configuration, or state</td></tr>
+    </table>
+
+    <h2>The Governance Decision</h2>
+    <p>
+      Every intent submission returns a governance decision with one of four verdicts:
+    </p>
+    <table class="verdict-table">
+      <tr><th>Verdict</th><th>What it means</th></tr>
+      <tr><td>approve</td><td>Action may proceed as declared</td></tr>
+      <tr><td>approve_modified</td><td>Action may proceed with modifications &mdash; use the returned payload, not the original</td></tr>
+      <tr><td>escalate</td><td>Action requires human review before proceeding</td></tr>
+      <tr><td>block</td><td>Action is denied, with reasoning and suggested alternatives</td></tr>
+    </table>
+
+    <div class="note">
+      <strong>Note:</strong> A <code>block</code> returns HTTP 200, not 403. A block is a successful governance decision, not an error. HTTP 4xx codes are reserved for actual request failures.
+    </div>
+
+    <p>
+      Decisions include a risk assessment, the list of pipeline stages that executed, and a reference to the full audit record.
+    </p>
+
+    <h2>Endpoints</h2>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/intents</span>
+      <p class="desc">Submit an intent for synchronous governance evaluation</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/intents/async</span>
+      <p class="desc">Submit an intent for asynchronous evaluation with webhook or polling</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/intents/{intent_id}/decision</span>
+      <p class="desc">Retrieve the governance decision for a previously submitted intent</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/intents/{intent_id}/audit</span>
+      <p class="desc">Retrieve the full governance audit trail</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/intents</span>
+      <p class="desc">List and filter intent declarations</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/agents</span>
+      <p class="desc">Register an agent with GaaS</p>
+    </div>
+
+    <h2>SDKs</h2>
+    <p>
+      Official SDKs for Python and TypeScript handle authentication, request construction, and response parsing. See the <a href="getting-started.html" style="color:#58a6ff;">Getting Started</a> guide for usage examples.
+    </p>
+
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>
