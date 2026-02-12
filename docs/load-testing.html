@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Testing &mdash; GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code, td code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #30363d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .flow-step:last-child { border-bottom: none; }
+
+    .flow-icon {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #58a6ff;
+    }
+
+    .flow-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.25rem;
+      margin-top: 0;
+    }
+
+    .flow-content p {
+      font-size: 0.875rem;
+      color: #8b949e;
+      margin-bottom: 0;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Load Testing</h1>
+    <p class="subtitle">
+      k6 scripts for smoke, sustained load, and stress testing &mdash; targeting the governance pipeline, dashboard, and escalation endpoints. Integrated into the deployment pipeline as a gate between staging and production.
+    </p>
+
+    <h2>Three Test Profiles</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">1</div>
+        <div class="flow-content">
+          <h3>Smoke</h3>
+          <p>1 virtual user, 1 iteration. Validates every endpoint responds correctly &mdash; health, pipeline (all verdict paths), shadow mode, dashboard, and escalation. Any failure aborts. Runs first in CI.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">2</div>
+        <div class="flow-content">
+          <h3>Load</h3>
+          <p>Three concurrent scenarios: pipeline submissions ramping to 8 req/s, dashboard polling with 10 virtual users, and escalation queries at 2 virtual users. Measures p95 latency under sustained realistic traffic for 7.5 minutes.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">3</div>
+        <div class="flow-content">
+          <h3>Stress</h3>
+          <p>Ramps pipeline traffic to 50 req/s (100 VUs) and dashboard to 80 VUs. Finds the breaking point, measures when 429s appear, and verifies the system recovers after load drops. Expects degradation but not collapse.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Running Locally</h2>
+    <p>
+      Install <a class="link" href="https://k6.io/docs/get-started/installation/">k6</a>, then start the API in open mode:
+    </p>
+
+    <pre><code># Start API (no auth, no rate limiting)
+GAAS_OPEN_MODE=true GAAS_RATE_LIMIT_ENABLED=false \
+  uvicorn packages.api.main:app
+
+# Run smoke test
+k6 run tests/load/smoke.js
+
+# Run load test with JSON export
+k6 run tests/load/load.js --out json=results.json
+
+# Run stress test
+k6 run tests/load/stress.js</code></pre>
+
+    <p>Override the target URL for remote environments:</p>
+
+    <pre><code>K6_BASE_URL=https://staging.example.com K6_API_KEY=gsk_... \
+  k6 run tests/load/smoke.js</code></pre>
+
+    <hr class="divider">
+
+    <h2>Payload Mix</h2>
+    <p>
+      The load and stress tests select intents from a weighted random pool that exercises all verdict paths through the governance pipeline:
+    </p>
+
+    <table>
+      <tr>
+        <th>Scenario</th>
+        <th>Pipeline Path</th>
+        <th>Weight</th>
+      </tr>
+      <tr>
+        <td>Clean low-risk</td>
+        <td>Full pipeline &rarr; <strong>APPROVE</strong></td>
+        <td>50%</td>
+      </tr>
+      <tr>
+        <td>PCI regulated data</td>
+        <td>Policy fast-fail &rarr; <strong>BLOCK</strong></td>
+        <td>15%</td>
+      </tr>
+      <tr>
+        <td>High financial ($75k)</td>
+        <td>Triggers deliberation &rarr; <strong>ESCALATE</strong></td>
+        <td>15%</td>
+      </tr>
+      <tr>
+        <td>Minor data (COPPA)</td>
+        <td>Policy fast-fail &rarr; <strong>BLOCK</strong></td>
+        <td>10%</td>
+      </tr>
+      <tr>
+        <td>Audit tampering</td>
+        <td>Policy fast-fail &rarr; <strong>BLOCK</strong></td>
+        <td>10%</td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <strong>Deliberation coverage.</strong> The high-financial scenario exceeds the $10,000 delegation limit, triggering 3-round deliberation with 6 specialized agents. This is the most expensive code path and the primary target for latency measurement.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Pass/Fail Thresholds</h2>
+    <table>
+      <tr>
+        <th>Endpoint Group</th>
+        <th>Metric</th>
+        <th>Threshold</th>
+      </tr>
+      <tr>
+        <td>Pipeline (live &amp; shadow)</td>
+        <td>p95 latency</td>
+        <td>&lt; 2,000ms</td>
+      </tr>
+      <tr>
+        <td>Dashboard</td>
+        <td>p95 latency</td>
+        <td>&lt; 500ms</td>
+      </tr>
+      <tr>
+        <td>Escalation</td>
+        <td>p95 latency</td>
+        <td>&lt; 500ms</td>
+      </tr>
+      <tr>
+        <td>Health / Metrics</td>
+        <td>p95 latency</td>
+        <td>&lt; 200ms</td>
+      </tr>
+      <tr>
+        <td>Global</td>
+        <td>Error rate</td>
+        <td>&lt; 5%</td>
+      </tr>
+      <tr>
+        <td>Stress (pipeline)</td>
+        <td>Success rate</td>
+        <td>&ge; 70%</td>
+      </tr>
+    </table>
+
+    <hr class="divider">
+
+    <h2>Custom Metrics</h2>
+    <p>
+      Beyond standard k6 HTTP metrics, the load tests track governance-specific measurements:
+    </p>
+
+    <table>
+      <tr>
+        <th>Metric</th>
+        <th>Type</th>
+        <th>Source</th>
+      </tr>
+      <tr>
+        <td><code>gaas_pipeline_latency_ms</code></td>
+        <td>Trend</td>
+        <td>Extracted from <code>X-GaaS-Pipeline-Latency-Ms</code> response header &mdash; server-side pipeline execution time</td>
+      </tr>
+      <tr>
+        <td><code>gaas_verdicts_approve</code></td>
+        <td>Rate</td>
+        <td>Fraction of decisions that result in approve or approve_modified</td>
+      </tr>
+      <tr>
+        <td><code>gaas_error_rate</code></td>
+        <td>Rate</td>
+        <td>Application-level errors (non-200 on expected-success requests)</td>
+      </tr>
+      <tr>
+        <td><code>gaas_rate_limit_429s</code></td>
+        <td>Counter</td>
+        <td>Rate-limit rejections during stress tests</td>
+      </tr>
+    </table>
+
+    <hr class="divider">
+
+    <h2>CI Integration</h2>
+    <p>
+      Load tests run automatically in the deployment pipeline after staging deploy and before production. The GitHub Actions workflow:
+    </p>
+
+    <ul>
+      <li>Pulls the freshly built API container image from GHCR</li>
+      <li>Starts it with <code>GAAS_OPEN_MODE=true</code> and <code>GAAS_RATE_LIMIT_ENABLED=false</code></li>
+      <li>Waits for the health endpoint to respond</li>
+      <li>Runs <strong>smoke</strong> tests (gate) then <strong>load</strong> tests</li>
+      <li>Uploads JSON results as build artifacts (30-day retention)</li>
+    </ul>
+
+    <div class="note">
+      <strong>Rate limiting disabled in CI.</strong> Load tests measure pipeline performance, not rate limiter behavior. The stress test can be run separately with rate limiting enabled to validate backpressure handling.
+    </div>
+
+    <hr class="divider">
+
+    <h2>File Structure</h2>
+    <pre><code>tests/load/
+  config.js       &mdash; Base URL, auth, thresholds
+  payloads.js     &mdash; 5 intent factories + weighted random selector
+  helpers.js      &mdash; Request helpers + custom k6 metrics
+  smoke.js        &mdash; 1 VU endpoint validation
+  load.js         &mdash; Sustained multi-scenario load test
+  stress.js       &mdash; Breaking-point stress test</code></pre>
+
+    <hr class="divider">
+
+    <h2>Environment Variables</h2>
+    <table>
+      <tr>
+        <th>Variable</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>K6_BASE_URL</code></td>
+        <td><code>http://localhost:8000</code></td>
+        <td>Target API base URL</td>
+      </tr>
+      <tr>
+        <td><code>K6_API_KEY</code></td>
+        <td><em>(empty)</em></td>
+        <td>API key for authenticated environments</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_OPEN_MODE</code></td>
+        <td><code>false</code></td>
+        <td>Set to <code>true</code> on the API server to skip authentication</td>
+      </tr>
+      <tr>
+        <td><code>GAAS_RATE_LIMIT_ENABLED</code></td>
+        <td><code>true</code></td>
+        <td>Set to <code>false</code> on the API server to disable rate limiting</td>
+      </tr>
+    </table>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="observability.html">Observability &amp; Alerting</a> &mdash; Prometheus metrics that k6 results correlate with</li>
+      <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; the pipeline endpoints under test</li>
+      <li><a class="link" href="dashboard.html">Conversational Dashboard</a> &mdash; the dashboard endpoints under test</li>
+    </ul>
+
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>
