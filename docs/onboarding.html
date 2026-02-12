@@ -4,220 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Onboarding — GaaS Documentation</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0e17;
-      color: #c9d1d9;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-    }
-
-    header nav a:hover { color: #e6edf3; }
-
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    p { margin-bottom: 1rem; font-size: 0.9375rem; }
-
-    .flow {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: 2rem;
-    }
-
-    .flow-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .flow-step:last-child { border-bottom: none; }
-
-    .flow-icon {
-      flex-shrink: 0;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #58a6ff;
-    }
-
-    .flow-content h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.25rem;
-    }
-
-    .flow-content p {
-      font-size: 0.875rem;
-      color: #8b949e;
-      margin-bottom: 0;
-    }
-
-    .highlight-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .highlight-box h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.5rem;
-    }
-
-    .highlight-box p {
-      font-size: 0.875rem;
-      color: #8b949e;
-      margin-bottom: 0;
-    }
-
-    .note {
-      background: #161b22;
-      border-left: 3px solid #58a6ff;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .note strong { color: #58a6ff; }
-
-    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
-    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
-
-    a.link { color: #58a6ff; text-decoration: none; }
-    a.link:hover { text-decoration: underline; }
-
-    .endpoint {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .endpoint .method {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      font-family: "SF Mono", Menlo, Consolas, monospace;
-      margin-right: 0.5rem;
-    }
-
-    .method-post { background: #1f6feb33; color: #58a6ff; }
-    .method-get { background: #23863633; color: #3fb950; }
-
-    .endpoint .path {
-      font-family: "SF Mono", Menlo, Consolas, monospace;
-      font-size: 0.875rem;
-      color: #e6edf3;
-    }
-
-    .endpoint .desc {
-      margin-top: 0.5rem;
-      font-size: 0.8125rem;
-      color: #8b949e;
-    }
-
-    code {
-      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
-    }
-
-    p code, li code {
-      background: #161b22;
-      padding: 0.15em 0.4em;
-      border-radius: 3px;
-      font-size: 0.85em;
-      color: #e6edf3;
-    }
-
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
-
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -230,12 +20,12 @@
   </header>
 
   <main>
-    <h1>Onboarding</h1>
-    <p class="subtitle">
+    <h1 class="fade-in">Onboarding</h1>
+    <p class="subtitle fade-in">
       From "I want to govern my AI agents" to governed agents &mdash; in hours, not weeks.
     </p>
 
-    <h2>How It Works</h2>
+    <h2 class="fade-in">How It Works</h2>
     <p>
       You provide context about your organization. GaaS builds a governance membrane around your agents. You validate it through conversation and scenario testing, then deploy in shadow mode before going live.
     </p>
@@ -243,8 +33,8 @@
       You never configure a rules engine. You never write YAML. You provide context, and the system builds protection.
     </p>
 
-    <h2>The Onboarding Flow</h2>
-    <div class="flow">
+    <h2 class="fade-in">The Onboarding Flow</h2>
+    <div class="flow fade-in">
       <div class="flow-step">
         <div class="flow-icon">1</div>
         <div class="flow-content">
@@ -282,7 +72,7 @@
       </div>
     </div>
 
-    <h2>Context Intake</h2>
+    <h2 class="fade-in">Context Intake</h2>
     <p>
       The intake system accepts multiple types of input. Each is analyzed by a specialized processor:
     </p>
@@ -296,7 +86,7 @@
       Everything feeds into a Unified Context Model &mdash; a structured representation of your organization that drives membrane generation.
     </p>
 
-    <h2>The Governance Membrane</h2>
+    <h2 class="fade-in">The Governance Membrane</h2>
     <p>
       The membrane is your complete governance configuration. It includes:
     </p>
@@ -313,7 +103,7 @@
       <strong>Quickstart:</strong> For the fastest path, use the <code>POST /v1/onboarding/quickstart</code> endpoint &mdash; a single call that runs intake, analysis, and membrane generation, then drops you straight into shadow mode with an API key.
     </div>
 
-    <h2>Shadow Mode</h2>
+    <h2 class="fade-in">Shadow Mode</h2>
     <p>
       No governance system should go from zero to enforcement without a trial period. In shadow mode, GaaS evaluates every agent action through the full pipeline but never blocks, modifies, or escalates.
     </p>
@@ -328,12 +118,12 @@
       </p>
     </div>
 
-    <h2>Membrane Lifecycle</h2>
+    <h2 class="fade-in">Membrane Lifecycle</h2>
     <p>
       The membrane moves through defined states: <code>DRAFT</code> &rarr; <code>SHADOW</code> &rarr; <code>LIVE</code>. You can revert from live to shadow at any time. All audit records from both modes are preserved.
     </p>
 
-    <h2>Key Endpoints</h2>
+    <h2 class="fade-in">Key Endpoints</h2>
     <div class="endpoint">
       <span class="method method-post">POST</span>
       <span class="path">/v1/onboarding/quickstart</span>
@@ -369,5 +159,17 @@
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>

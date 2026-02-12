@@ -4,183 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SDKs &mdash; GaaS Documentation</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0e17;
-      color: #c9d1d9;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-    }
-
-    header nav a:hover { color: #e6edf3; }
-
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    p { margin-bottom: 1rem; font-size: 0.9375rem; }
-
-    pre {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 1.25rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-    }
-
-    code {
-      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
-      color: #e6edf3;
-    }
-
-    p code, li code {
-      background: #161b22;
-      padding: 0.15em 0.4em;
-      border-radius: 3px;
-      font-size: 0.85em;
-    }
-
-    .note {
-      background: #161b22;
-      border-left: 3px solid #58a6ff;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .note strong { color: #58a6ff; }
-
-    .warning {
-      background: #161b22;
-      border-left: 3px solid #d29922;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .warning strong { color: #d29922; }
-
-    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
-    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
-
-    a.link { color: #58a6ff; text-decoration: none; }
-    a.link:hover { text-decoration: underline; }
-
-    .comment { color: #8b949e; }
-    .keyword { color: #ff7b72; }
-    .string { color: #a5d6ff; }
-    .func { color: #d2a8ff; }
-    .type { color: #7ee787; }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #1e2533;
-      margin: 2.5rem 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-    }
-
-    th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #30363d;
-      color: #8b949e;
-      font-weight: 600;
-    }
-
-    td {
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
-
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -193,12 +20,12 @@
   </header>
 
   <main>
-    <h1>SDKs</h1>
-    <p class="subtitle">
+    <h1 class="fade-in">SDKs</h1>
+    <p class="subtitle fade-in">
       Official client libraries for Python, TypeScript, and Java. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
-    <h2>At a Glance</h2>
+    <h2 class="fade-in">At a Glance</h2>
     <table>
       <tr>
         <th>Language</th>
@@ -234,7 +61,7 @@
 
     <!-- ── Python ──────────────────────────────────────────────── -->
 
-    <h2>Python</h2>
+    <h2 class="fade-in">Python</h2>
 
     <h3>Install</h3>
     <pre><code>pip install gaas-sdk</code></pre>
@@ -291,7 +118,7 @@
 
     <!-- ── TypeScript ──────────────────────────────────────────── -->
 
-    <h2>TypeScript</h2>
+    <h2 class="fade-in">TypeScript</h2>
 
     <h3>Install</h3>
     <pre><code>npm install @gaas/sdk</code></pre>
@@ -343,7 +170,7 @@
 
     <!-- ── Java ────────────────────────────────────────────────── -->
 
-    <h2>Java</h2>
+    <h2 class="fade-in">Java</h2>
 
     <h3>Install</h3>
 
@@ -397,7 +224,7 @@
 
     <!-- ── Common Patterns ─────────────────────────────────────── -->
 
-    <h2>Common Patterns</h2>
+    <h2 class="fade-in">Common Patterns</h2>
 
     <h3>Builder Pattern</h3>
     <p>
@@ -423,7 +250,7 @@
 
     <hr class="divider">
 
-    <h2>Related Pages</h2>
+    <h2 class="fade-in">Related Pages</h2>
     <ul>
       <li><a class="link" href="getting-started.html">Getting Started</a> &mdash; full quickstart walkthrough</li>
       <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; endpoint reference and schema details</li>
@@ -435,5 +262,17 @@
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>

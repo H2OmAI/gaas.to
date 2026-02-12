@@ -4,163 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GaaS Documentation — Governance as a Service by H2Om</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0e17;
-      color: #c9d1d9;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-    }
-
-    header nav a:hover { color: #e6edf3; }
-
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 1.5rem;
-    }
-
-    .pipeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: 3rem;
-    }
-
-    .stage {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .stage:last-child { border-bottom: none; }
-
-    .stage-number {
-      flex-shrink: 0;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #58a6ff;
-    }
-
-    .stage-content h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.25rem;
-    }
-
-    .stage-content p {
-      font-size: 0.875rem;
-      color: #8b949e;
-    }
-
-    .coming-soon {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .coming-soon h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.5rem;
-    }
-
-    .coming-soon p {
-      font-size: 0.875rem;
-      color: #8b949e;
-    }
-
-    .coming-soon a {
-      color: #58a6ff;
-      text-decoration: none;
-    }
-
-    .coming-soon a:hover { text-decoration: underline; }
-
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
-
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <a class="logo" href="index.html" style="text-decoration:none;">G<span>aa</span>S</a>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -168,14 +19,14 @@
   </header>
 
   <main>
-    <h1>Governance as a Service</h1>
-    <p class="subtitle">
+    <h1 class="fade-in">Governance as a Service</h1>
+    <p class="subtitle fade-in">
       A structured governance layer for autonomous AI agents.
       Every action passes through a five-stage pipeline before execution.
     </p>
 
-    <h2>The Pipeline</h2>
-    <div class="pipeline">
+    <h2 class="fade-in">The Pipeline</h2>
+    <div class="pipeline fade-in">
       <div class="stage">
         <div class="stage-number">1</div>
         <div class="stage-content">
@@ -213,9 +64,9 @@
       </div>
     </div>
 
-    <h2>Documentation</h2>
-    <div class="pipeline">
-      <a href="getting-started.html" style="text-decoration:none;color:inherit;">
+    <h2 class="fade-in">Documentation</h2>
+    <div class="pipeline fade-in">
+      <a href="getting-started.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -224,7 +75,7 @@
           </div>
         </div>
       </a>
-      <a href="intent-api.html" style="text-decoration:none;color:inherit;">
+      <a href="intent-api.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -233,7 +84,7 @@
           </div>
         </div>
       </a>
-      <a href="onboarding.html" style="text-decoration:none;color:inherit;">
+      <a href="onboarding.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -242,7 +93,7 @@
           </div>
         </div>
       </a>
-      <a href="dashboard.html" style="text-decoration:none;color:inherit;">
+      <a href="dashboard.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -251,7 +102,7 @@
           </div>
         </div>
       </a>
-      <a href="sdks.html" style="text-decoration:none;color:inherit;">
+      <a href="sdks.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -260,7 +111,7 @@
           </div>
         </div>
       </a>
-      <a href="shadow-mode.html" style="text-decoration:none;color:inherit;">
+      <a href="shadow-mode.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -269,7 +120,7 @@
           </div>
         </div>
       </a>
-      <a href="observability.html" style="text-decoration:none;color:inherit;">
+      <a href="observability.html">
         <div class="stage">
           <div class="stage-number">&rarr;</div>
           <div class="stage-content">
@@ -289,7 +140,7 @@
       </a>
     </div>
 
-    <div class="coming-soon">
+    <div class="coming-soon fade-in">
       <h3>More on the Way</h3>
       <p>Policy authoring guides and field-level API references are in progress.<br>
       Visit <a href="https://gaas.is">gaas.is</a> for an overview of the project.</p>
@@ -299,5 +150,17 @@
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>

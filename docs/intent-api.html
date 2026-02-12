@@ -4,188 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Intent Declaration API — GaaS Documentation</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0e17;
-      color: #c9d1d9;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-    }
-
-    header nav a:hover { color: #e6edf3; }
-
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    p { margin-bottom: 1rem; font-size: 0.9375rem; }
-
-    pre {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 1.25rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-    }
-
-    code {
-      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
-      color: #e6edf3;
-    }
-
-    p code, li code {
-      background: #161b22;
-      padding: 0.15em 0.4em;
-      border-radius: 3px;
-      font-size: 0.85em;
-    }
-
-    .endpoint {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .endpoint .method {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      font-family: "SF Mono", Menlo, Consolas, monospace;
-      margin-right: 0.5rem;
-    }
-
-    .method-post { background: #1f6feb33; color: #58a6ff; }
-    .method-get { background: #23863633; color: #3fb950; }
-
-    .endpoint .path {
-      font-family: "SF Mono", Menlo, Consolas, monospace;
-      font-size: 0.875rem;
-      color: #e6edf3;
-    }
-
-    .endpoint .desc {
-      margin-top: 0.5rem;
-      font-size: 0.8125rem;
-      color: #8b949e;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-    }
-
-    th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #30363d;
-      color: #8b949e;
-      font-weight: 600;
-    }
-
-    td {
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .note {
-      background: #161b22;
-      border-left: 3px solid #58a6ff;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .note strong { color: #58a6ff; }
-
-    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
-    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
-
-    .verdict-table td:first-child {
-      font-family: "SF Mono", Menlo, Consolas, monospace;
-      font-size: 0.8125rem;
-      color: #e6edf3;
-    }
-
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
-
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -198,12 +20,12 @@
   </header>
 
   <main>
-    <h1>Intent Declaration API</h1>
-    <p class="subtitle">
+    <h1 class="fade-in">Intent Declaration API</h1>
+    <p class="subtitle fade-in">
       The front door to GaaS governance. Every AI agent action begins with an intent declaration.
     </p>
 
-    <h2>Core Concept</h2>
+    <h2 class="fade-in">Core Concept</h2>
     <p>
       Before an AI agent takes any action, it declares <em>what</em> it intends to do, <em>to whom</em>, and with <em>what impact</em>. GaaS evaluates that declaration through a multi-stage governance pipeline and returns a decision: approve, modify, escalate, or block.
     </p>
@@ -211,7 +33,7 @@
       If an agent can't declare it, it can't do it. Opacity of intent is the primary risk vector in autonomous AI systems &mdash; GaaS eliminates it at the point of entry.
     </p>
 
-    <h2>Authentication</h2>
+    <h2 class="fade-in">Authentication</h2>
     <p>
       Every request requires an API key scoped to your organization. Keys are environment-specific:
     </p>
@@ -222,7 +44,7 @@
       <tr><td><code>test</code></td><td>Testing &mdash; no audit trail, no rate limits</td></tr>
     </table>
 
-    <h2>Submitting an Intent</h2>
+    <h2 class="fade-in">Submitting an Intent</h2>
     <p>
       An intent declaration includes the agent's identity, the action it wants to take, the target, the expected impact, and any context the agent already has. The schema adapts &mdash; lightweight for routine actions, verbose for high-stakes ones.
     </p>
@@ -261,7 +83,7 @@ Authorization: Bearer your_api_key
   }
 }</code></pre>
 
-    <h2>Action Types</h2>
+    <h2 class="fade-in">Action Types</h2>
     <p>
       GaaS recognizes seven categories of agent action, each with different governance implications:
     </p>
@@ -276,7 +98,7 @@ Authorization: Bearer your_api_key
       <tr><td><code>modify</code></td><td>Changing a record, configuration, or state</td></tr>
     </table>
 
-    <h2>The Governance Decision</h2>
+    <h2 class="fade-in">The Governance Decision</h2>
     <p>
       Every intent submission returns a governance decision with one of four verdicts:
     </p>
@@ -296,7 +118,7 @@ Authorization: Bearer your_api_key
       Decisions include a risk assessment, the list of pipeline stages that executed, and a reference to the full audit record.
     </p>
 
-    <h2>Endpoints</h2>
+    <h2 class="fade-in">Endpoints</h2>
     <div class="endpoint">
       <span class="method method-post">POST</span>
       <span class="path">/v1/intents</span>
@@ -328,9 +150,9 @@ Authorization: Bearer your_api_key
       <p class="desc">Register an agent with GaaS</p>
     </div>
 
-    <h2>SDKs</h2>
+    <h2 class="fade-in">SDKs</h2>
     <p>
-      Official SDKs for Python and TypeScript handle authentication, request construction, and response parsing. See the <a href="getting-started.html" style="color:#58a6ff;">Getting Started</a> guide for usage examples.
+      Official SDKs for Python and TypeScript handle authentication, request construction, and response parsing. See the <a class="link" href="getting-started.html">Getting Started</a> guide for usage examples.
     </p>
 
   </main>
@@ -338,5 +160,17 @@ Authorization: Bearer your_api_key
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>

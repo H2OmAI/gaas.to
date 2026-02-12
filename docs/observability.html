@@ -4,245 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Observability &amp; Alerting &mdash; GaaS Documentation</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0e17;
-      color: #c9d1d9;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-    }
-
-    header nav a:hover { color: #e6edf3; }
-
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    p { margin-bottom: 1rem; font-size: 0.9375rem; }
-
-    pre {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 1.25rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-    }
-
-    code {
-      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
-      color: #e6edf3;
-    }
-
-    p code, li code, td code {
-      background: #161b22;
-      padding: 0.15em 0.4em;
-      border-radius: 3px;
-      font-size: 0.85em;
-    }
-
-    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
-    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
-
-    a.link { color: #58a6ff; text-decoration: none; }
-    a.link:hover { text-decoration: underline; }
-
-    .note {
-      background: #161b22;
-      border-left: 3px solid #58a6ff;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .note strong { color: #58a6ff; }
-
-    .warning {
-      background: #161b22;
-      border-left: 3px solid #d29922;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.875rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .warning strong { color: #d29922; }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #1e2533;
-      margin: 2.5rem 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5rem;
-      font-size: 0.8125rem;
-    }
-
-    th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #30363d;
-      color: #8b949e;
-      font-weight: 600;
-    }
-
-    td {
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .highlight-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .highlight-box h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.5rem;
-      margin-top: 0;
-    }
-
-    .highlight-box p {
-      font-size: 0.875rem;
-      color: #8b949e;
-      margin-bottom: 0;
-    }
-
-    .flow {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: 2rem;
-    }
-
-    .flow-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .flow-step:last-child { border-bottom: none; }
-
-    .flow-icon {
-      flex-shrink: 0;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #58a6ff;
-    }
-
-    .flow-content h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.25rem;
-      margin-top: 0;
-    }
-
-    .flow-content p {
-      font-size: 0.875rem;
-      color: #8b949e;
-      margin-bottom: 0;
-    }
-
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
-
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -255,17 +20,17 @@
   </header>
 
   <main>
-    <h1>Observability &amp; Alerting</h1>
-    <p class="subtitle">
+    <h1 class="fade-in">Observability &amp; Alerting</h1>
+    <p class="subtitle fade-in">
       Structured logging, Prometheus metrics, distributed tracing, and threshold-based anomaly alerting &mdash; built into the governance pipeline.
     </p>
 
-    <h2>Three Layers</h2>
+    <h2 class="fade-in">Three Layers</h2>
     <p>
       GaaS observability is designed around three layers that work independently. You can run with just structured logs, add Prometheus scraping, and optionally enable OpenTelemetry tracing &mdash; each layer requires zero code changes.
     </p>
 
-    <div class="flow">
+    <div class="flow fade-in">
       <div class="flow-step">
         <div class="flow-icon">1</div>
         <div class="flow-content">
@@ -291,7 +56,7 @@
 
     <hr class="divider">
 
-    <h2>Anomaly Alerting</h2>
+    <h2 class="fade-in">Anomaly Alerting</h2>
     <p>
       Beyond passive metrics, GaaS actively monitors operational health and fires alerts when thresholds are exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check, dispatching events through the notification engine.
     </p>
@@ -346,7 +111,7 @@
 
     <hr class="divider">
 
-    <h2>Notification Channels</h2>
+    <h2 class="fade-in">Notification Channels</h2>
     <p>
       Alert events are dispatched through configurable channels. Each notification rule specifies a channel and recipients.
     </p>
@@ -380,7 +145,7 @@
 
     <hr class="divider">
 
-    <h2>Notification Rules</h2>
+    <h2 class="fade-in">Notification Rules</h2>
     <p>
       Rules are managed via the dashboard API. Each rule matches an event type (exact or wildcard) to a channel and recipient list.
     </p>
@@ -409,7 +174,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Prometheus Metrics Reference</h2>
+    <h2 class="fade-in">Prometheus Metrics Reference</h2>
     <table>
       <tr>
         <th>Metric</th>
@@ -475,7 +240,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Environment Variables</h2>
+    <h2 class="fade-in">Environment Variables</h2>
     <table>
       <tr>
         <th>Variable</th>
@@ -531,7 +296,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Related Pages</h2>
+    <h2 class="fade-in">Related Pages</h2>
     <ul>
       <li><a class="link" href="dashboard.html">Conversational Dashboard</a> &mdash; manage notification rules and review alerts through natural language</li>
       <li><a class="link" href="getting-started.html">Getting Started</a> &mdash; onboard, integrate, and go live</li>
@@ -543,5 +308,17 @@ Content-Type: application/json
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
