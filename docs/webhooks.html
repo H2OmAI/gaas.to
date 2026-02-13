@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webhooks — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Webhooks</h1>
+    <p class="subtitle">
+      Real-time event notifications with HMAC-SHA256 signature verification.
+    </p>
+
+    <h2>Overview</h2>
+    <p>
+      Webhooks allow you to receive real-time notifications when escalations change state. Instead of polling for updates, GaaS sends an HTTP POST request to your server with event details whenever an escalation is created, claimed, reviewed, reassigned, or cancelled.
+    </p>
+
+    <p><strong>Key features:</strong></p>
+    <ul>
+      <li><strong>HMAC-SHA256 signed payloads</strong> for security</li>
+      <li><strong>Automatic retries</strong> (3 attempts with exponential backoff)</li>
+      <li><strong>Per-escalation or wildcard subscriptions</strong></li>
+      <li><strong>Delivery tracking</strong> for debugging</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Available Events</h2>
+    <p>
+      GaaS sends webhook notifications for the following escalation lifecycle events:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Event Type</th>
+          <th>Description</th>
+          <th>When Triggered</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>created</code></td>
+          <td>Escalation created</td>
+          <td>Governance decision requires human review (ESCALATE verdict)</td>
+        </tr>
+        <tr>
+          <td><code>claimed</code></td>
+          <td>Escalation claimed by a reviewer</td>
+          <td>Reviewer assigns themselves to the escalation</td>
+        </tr>
+        <tr>
+          <td><code>completed</code></td>
+          <td>Escalation resolved (approved or rejected)</td>
+          <td>Reviewer submits final decision</td>
+        </tr>
+        <tr>
+          <td><code>rejected</code></td>
+          <td>Escalation rejected by reviewer</td>
+          <td>Reviewer blocks the action</td>
+        </tr>
+        <tr>
+          <td><code>modified</code></td>
+          <td>Escalation approved with modifications</td>
+          <td>Reviewer approves with payload changes</td>
+        </tr>
+        <tr>
+          <td><code>reassigned</code></td>
+          <td>Escalation reassigned to different reviewers</td>
+          <td>Admin changes assigned reviewers</td>
+        </tr>
+        <tr>
+          <td><code>cancelled</code></td>
+          <td>Escalation cancelled</td>
+          <td>Admin cancels escalation (no longer needed)</td>
+        </tr>
+        <tr>
+          <td><code>timeout</code></td>
+          <td>Escalation timed out</td>
+          <td>No review received within configured SLA window</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <h2>Registering a Webhook</h2>
+    <p>
+      Create a webhook subscription with a <code>POST</code> request to the webhooks endpoint:
+    </p>
+    <pre><code>POST https://api.gaas.is/v1/escalations/webhooks
+X-API-Key: your_api_key
+Content-Type: application/json
+
+{
+  "url": "https://yourapp.com/webhooks/gaas",
+  "events": ["created", "completed", "timeout"],
+  "escalation_id": null,
+  "secret": "your_webhook_secret_32_chars_min"
+}</code></pre>
+
+    <p><strong>Parameters:</strong></p>
+    <ul>
+      <li><code>url</code> (required) — Your webhook receiver endpoint (must be HTTPS in production)</li>
+      <li><code>events</code> (required) — Array of event types to subscribe to (use <code>["*"]</code> for all events)</li>
+      <li><code>escalation_id</code> (optional) — Specific escalation ID to watch (omit or <code>null</code> for wildcard)</li>
+      <li><code>secret</code> (required) — Shared secret for HMAC-SHA256 signature (min 32 characters)</li>
+    </ul>
+
+    <p>The response includes a webhook ID:</p>
+    <pre><code>{
+  "webhook_id": "wh_abc123...",
+  "url": "https://yourapp.com/webhooks/gaas",
+  "events": ["created", "completed", "timeout"],
+  "created_at": "2026-02-13T10:30:00Z"
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>Event Payload Structure</h2>
+    <p>
+      When an event occurs, GaaS sends a POST request to your webhook URL with this structure:
+    </p>
+    <pre><code>{
+  "event": "completed",
+  "escalation_id": "esc_abc123...",
+  "timestamp": "2026-02-13T10:35:00Z",
+  "data": {
+    "escalation_id": "esc_abc123...",
+    "status": "resolved",
+    "reviewer": "reviewer@company.com",
+    "decision": "approve",
+    "reasoning": "Action complies with policy, approved.",
+    "audit_record_id": "aud_xyz789..."
+  }
+}</code></pre>
+
+    <p><strong>Headers sent with webhook:</strong></p>
+    <ul>
+      <li><code>Content-Type: application/json</code></li>
+      <li><code>X-GaaS-Signature: sha256=&lt;hmac_signature&gt;</code> — HMAC-SHA256 signature for verification</li>
+      <li><code>X-GaaS-Event: &lt;event_type&gt;</code> — Event type (e.g., <code>completed</code>)</li>
+      <li><code>X-GaaS-Webhook-ID: wh_abc123...</code> — Webhook ID that triggered this delivery</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Signature Verification (HMAC-SHA256)</h2>
+    <p>
+      <strong>Always verify webhook signatures</strong> to ensure requests are from GaaS and haven't been tampered with. The <code>X-GaaS-Signature</code> header contains an HMAC-SHA256 signature of the raw request body.
+    </p>
+
+    <h3>Python (Flask)</h3>
+    <pre><code><span class="keyword">import</span> hashlib
+<span class="keyword">import</span> hmac
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, abort
+
+app = <span class="func">Flask</span>(__name__)
+WEBHOOK_SECRET = <span class="string">"your_webhook_secret_32_chars_min"</span>
+
+<span class="keyword">@app.route</span>(<span class="string">"/webhooks/gaas"</span>, methods=[<span class="string">"POST"</span>])
+<span class="keyword">def</span> <span class="func">handle_webhook</span>():
+    <span class="comment"># Get signature from header</span>
+    signature_header = request.headers.get(<span class="string">"X-GaaS-Signature"</span>)
+    <span class="keyword">if not</span> signature_header <span class="keyword">or not</span> signature_header.startswith(<span class="string">"sha256="</span>):
+        <span class="func">abort</span>(401, <span class="string">"Missing or invalid signature"</span>)
+
+    expected_sig = signature_header[7:]  <span class="comment"># Remove "sha256=" prefix</span>
+
+    <span class="comment"># Compute HMAC-SHA256 of raw request body</span>
+    raw_body = request.get_data()
+    computed_sig = hmac.<span class="func">new</span>(
+        WEBHOOK_SECRET.encode(<span class="string">"utf-8"</span>),
+        raw_body,
+        hashlib.sha256
+    ).<span class="func">hexdigest</span>()
+
+    <span class="comment"># Constant-time comparison to prevent timing attacks</span>
+    <span class="keyword">if not</span> hmac.<span class="func">compare_digest</span>(expected_sig, computed_sig):
+        <span class="func">abort</span>(401, <span class="string">"Invalid signature"</span>)
+
+    <span class="comment"># Signature valid, process event</span>
+    payload = request.get_json()
+    event_type = payload[<span class="string">"event"</span>]
+    escalation_id = payload[<span class="string">"escalation_id"</span>]
+
+    <span class="keyword">if</span> event_type == <span class="string">"created"</span>:
+        <span class="func">handle_escalation_created</span>(payload)
+    <span class="keyword">elif</span> event_type == <span class="string">"completed"</span>:
+        <span class="func">handle_escalation_completed</span>(payload)
+
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"received"</span>}, 200</code></pre>
+
+    <h3>TypeScript (Express)</h3>
+    <pre><code><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">'express'</span>;
+<span class="keyword">import</span> crypto <span class="keyword">from</span> <span class="string">'crypto'</span>;
+
+<span class="keyword">const</span> app = <span class="func">express</span>();
+<span class="keyword">const</span> WEBHOOK_SECRET = <span class="string">'your_webhook_secret_32_chars_min'</span>;
+
+<span class="comment">// Important: Use raw body for signature verification</span>
+app.<span class="func">use</span>(<span class="string">'/webhooks/gaas'</span>, express.<span class="func">raw</span>({ type: <span class="string">'application/json'</span> }));
+
+app.<span class="func">post</span>(<span class="string">'/webhooks/gaas'</span>, (req, res) => {
+  <span class="keyword">const</span> signatureHeader = req.headers[<span class="string">'x-gaas-signature'</span>];
+  <span class="keyword">if</span> (!signatureHeader || !signatureHeader.startsWith(<span class="string">'sha256='</span>)) {
+    <span class="keyword">return</span> res.<span class="func">status</span>(401).<span class="func">send</span>(<span class="string">'Missing or invalid signature'</span>);
+  }
+
+  <span class="keyword">const</span> expectedSig = signatureHeader.slice(7); <span class="comment">// Remove "sha256=" prefix</span>
+
+  <span class="comment">// Compute HMAC-SHA256 of raw body</span>
+  <span class="keyword">const</span> computedSig = crypto
+    .<span class="func">createHmac</span>(<span class="string">'sha256'</span>, WEBHOOK_SECRET)
+    .<span class="func">update</span>(req.body)
+    .<span class="func">digest</span>(<span class="string">'hex'</span>);
+
+  <span class="comment">// Constant-time comparison</span>
+  <span class="keyword">if</span> (!crypto.<span class="func">timingSafeEqual</span>(Buffer.<span class="func">from</span>(expectedSig), Buffer.<span class="func">from</span>(computedSig))) {
+    <span class="keyword">return</span> res.<span class="func">status</span>(401).<span class="func">send</span>(<span class="string">'Invalid signature'</span>);
+  }
+
+  <span class="comment">// Signature valid, parse and process event</span>
+  <span class="keyword">const</span> payload = JSON.<span class="func">parse</span>(req.body.toString());
+  <span class="keyword">const</span> eventType = payload.event;
+
+  <span class="keyword">if</span> (eventType === <span class="string">'created'</span>) {
+    <span class="func">handleEscalationCreated</span>(payload);
+  } <span class="keyword">else if</span> (eventType === <span class="string">'completed'</span>) {
+    <span class="func">handleEscalationCompleted</span>(payload);
+  }
+
+  res.<span class="func">json</span>({ status: <span class="string">'received'</span> });
+});</code></pre>
+
+    <h3>Java (Spring Boot)</h3>
+    <pre><code><span class="keyword">import</span> org.springframework.web.bind.annotation.*;
+<span class="keyword">import</span> javax.crypto.Mac;
+<span class="keyword">import</span> javax.crypto.spec.SecretKeySpec;
+<span class="keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="keyword">import</span> java.security.MessageDigest;
+
+<span class="keyword">@RestController</span>
+<span class="keyword">public class</span> WebhookController {
+    <span class="keyword">private static final</span> String WEBHOOK_SECRET = <span class="string">"your_webhook_secret_32_chars_min"</span>;
+
+    <span class="keyword">@PostMapping</span>(<span class="string">"/webhooks/gaas"</span>)
+    <span class="keyword">public</span> Map&lt;String, String&gt; <span class="func">handleWebhook</span>(
+        <span class="keyword">@RequestHeader</span>(<span class="string">"X-GaaS-Signature"</span>) String signatureHeader,
+        <span class="keyword">@RequestBody</span> String rawBody
+    ) <span class="keyword">throws</span> Exception {
+        <span class="keyword">if</span> (signatureHeader == <span class="keyword">null</span> || !signatureHeader.startsWith(<span class="string">"sha256="</span>)) {
+            <span class="keyword">throw new</span> <span class="func">ResponseStatusException</span>(HttpStatus.UNAUTHORIZED, <span class="string">"Invalid signature"</span>);
+        }
+
+        String expectedSig = signatureHeader.substring(7); <span class="comment">// Remove "sha256="</span>
+
+        <span class="comment">// Compute HMAC-SHA256</span>
+        Mac hmac = Mac.<span class="func">getInstance</span>(<span class="string">"HmacSHA256"</span>);
+        SecretKeySpec key = <span class="keyword">new</span> <span class="func">SecretKeySpec</span>(
+            WEBHOOK_SECRET.<span class="func">getBytes</span>(StandardCharsets.UTF_8),
+            <span class="string">"HmacSHA256"</span>
+        );
+        hmac.<span class="func">init</span>(key);
+        <span class="keyword">byte</span>[] hash = hmac.<span class="func">doFinal</span>(rawBody.<span class="func">getBytes</span>(StandardCharsets.UTF_8));
+        String computedSig = <span class="func">bytesToHex</span>(hash);
+
+        <span class="comment">// Constant-time comparison</span>
+        <span class="keyword">if</span> (!MessageDigest.<span class="func">isEqual</span>(expectedSig.<span class="func">getBytes</span>(), computedSig.<span class="func">getBytes</span>())) {
+            <span class="keyword">throw new</span> <span class="func">ResponseStatusException</span>(HttpStatus.UNAUTHORIZED, <span class="string">"Invalid signature"</span>);
+        }
+
+        <span class="comment">// Process event</span>
+        ObjectMapper mapper = <span class="keyword">new</span> <span class="func">ObjectMapper</span>();
+        Map&lt;String, Object&gt; payload = mapper.<span class="func">readValue</span>(rawBody, Map.<span class="keyword">class</span>);
+        String eventType = (String) payload.<span class="func">get</span>(<span class="string">"event"</span>);
+
+        <span class="keyword">return</span> Map.<span class="func">of</span>(<span class="string">"status"</span>, <span class="string">"received"</span>);
+    }
+
+    <span class="keyword">private static</span> String <span class="func">bytesToHex</span>(<span class="keyword">byte</span>[] bytes) {
+        StringBuilder sb = <span class="keyword">new</span> <span class="func">StringBuilder</span>();
+        <span class="keyword">for</span> (<span class="keyword">byte</span> b : bytes) {
+            sb.<span class="func">append</span>(String.<span class="func">format</span>(<span class="string">"%02x"</span>, b));
+        }
+        <span class="keyword">return</span> sb.<span class="func">toString</span>();
+    }
+}</code></pre>
+
+    <div class="warning">
+      <strong>Security Note:</strong> Always use constant-time comparison functions (<code>hmac.compare_digest</code> in Python, <code>crypto.timingSafeEqual</code> in Node.js, <code>MessageDigest.isEqual</code> in Java) to prevent timing attacks when comparing signatures.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Retry Policy</h2>
+    <p>
+      If your webhook endpoint returns a non-2xx status code or times out, GaaS automatically retries delivery:
+    </p>
+
+    <ul>
+      <li><strong>Attempt 1:</strong> Immediate delivery</li>
+      <li><strong>Attempt 2:</strong> After 5 seconds</li>
+      <li><strong>Attempt 3:</strong> After 25 seconds (exponential backoff)</li>
+    </ul>
+
+    <p>
+      After 3 failed attempts, the delivery is marked as failed. You can view delivery status via <code>GET /v1/escalations/webhooks/{webhook_id}/deliveries</code>.
+    </p>
+
+    <div class="note">
+      <strong>Webhook endpoint requirements:</strong> Your endpoint must respond within 5 seconds and return a 2xx status code (typically <code>200 OK</code>). For long-running tasks, acknowledge the webhook immediately and process asynchronously (queue-based processing recommended).
+    </div>
+
+    <hr class="divider">
+
+    <h2>Testing Webhooks</h2>
+    <p>
+      For local development, use <strong>ngrok</strong> or <strong>webhook.site</strong> to expose your localhost to the internet:
+    </p>
+
+    <h3>Using ngrok</h3>
+    <pre><code><span class="comment"># Start ngrok tunnel</span>
+ngrok http 3000
+
+<span class="comment"># Register webhook with ngrok URL</span>
+curl -X POST https://api.gaas.is/v1/escalations/webhooks \
+  -H <span class="string">"X-API-Key: your_api_key"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d '{
+    "url": "https://abc123.ngrok.io/webhooks/gaas",
+    "events": ["*"],
+    "secret": "test_secret_32_chars_minimum_len"
+  }'</code></pre>
+
+    <h3>Using webhook.site</h3>
+    <ol>
+      <li>Visit <a class="link" href="https://webhook.site" target="_blank">webhook.site</a></li>
+      <li>Copy your unique URL (e.g., <code>https://webhook.site/abc-123-def</code>)</li>
+      <li>Register that URL as a webhook in GaaS</li>
+      <li>View payloads and headers in real-time on the webhook.site dashboard</li>
+    </ol>
+
+    <hr class="divider">
+
+    <h2>Managing Webhooks</h2>
+
+    <h3>List Webhooks</h3>
+    <pre><code>GET https://api.gaas.is/v1/escalations/webhooks
+X-API-Key: your_api_key</code></pre>
+
+    <h3>Delete Webhook</h3>
+    <pre><code>DELETE https://api.gaas.is/v1/escalations/webhooks/{webhook_id}
+X-API-Key: your_api_key</code></pre>
+
+    <h3>View Delivery History</h3>
+    <pre><code>GET https://api.gaas.is/v1/escalations/webhooks/{webhook_id}/deliveries
+X-API-Key: your_api_key</code></pre>
+
+    <hr class="divider">
+
+    <h2>Best Practices</h2>
+    <ul>
+      <li><strong>Always verify signatures</strong> to prevent spoofing and replay attacks.</li>
+      <li><strong>Use HTTPS</strong> for webhook URLs in production (required for security).</li>
+      <li><strong>Respond quickly</strong> (within 5 seconds) to avoid timeouts. Use async processing for long-running tasks.</li>
+      <li><strong>Make webhook handlers idempotent</strong> — you may receive duplicate events due to retries.</li>
+      <li><strong>Store webhook secrets securely</strong> (environment variables or secrets manager, never in code).</li>
+      <li><strong>Monitor delivery failures</strong> and alert on repeated failures (indicates endpoint downtime).</li>
+      <li><strong>Use wildcard subscriptions</strong> (<code>["*"]</code>) to receive all events, then filter on your end.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Troubleshooting</h2>
+
+    <h3>Webhooks Not Delivered</h3>
+    <p><strong>Cause:</strong> Endpoint unreachable, firewall blocking, or invalid URL.</p>
+    <p><strong>Solution:</strong> Check delivery history for error details. Verify your endpoint is publicly accessible (test with <code>curl</code>). Check firewall/security group rules.</p>
+
+    <h3>Signature Verification Failing</h3>
+    <p><strong>Cause:</strong> Wrong secret, modified body before verification, or encoding mismatch.</p>
+    <p><strong>Solution:</strong> Ensure you're using the raw request body (not parsed JSON). Verify the secret matches exactly. Use UTF-8 encoding.</p>
+
+    <h3>Duplicate Events</h3>
+    <p><strong>Cause:</strong> Webhook retries after timeout or transient failure.</p>
+    <p><strong>Solution:</strong> Make your webhook handler idempotent. Use <code>escalation_id</code> + <code>event</code> + <code>timestamp</code> as a deduplication key.</p>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="getting-started.html">Getting Started</a> — Onboard and submit your first intent</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API key setup and security</li>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>

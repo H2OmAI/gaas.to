@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Billing & Quotas — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Billing &amp; Quotas</h1>
+    <p class="subtitle">
+      Usage-based pricing with automatic quota enforcement and multi-currency support.
+    </p>
+
+    <h2>Pricing Tiers</h2>
+    <p>
+      GaaS offers four pricing tiers based on monthly governance action volume and the number of agents under management:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Price</th>
+          <th>Actions/Month</th>
+          <th>Agents</th>
+          <th>Support</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Developer</strong></td>
+          <td>Free</td>
+          <td>1,000</td>
+          <td>1</td>
+          <td>Community (GitHub)</td>
+        </tr>
+        <tr>
+          <td><strong>Starter</strong></td>
+          <td>$500/month</td>
+          <td>50,000</td>
+          <td>3</td>
+          <td>Email (48h SLA)</td>
+        </tr>
+        <tr>
+          <td><strong>Growth</strong></td>
+          <td>$2,500/month</td>
+          <td>500,000</td>
+          <td>15</td>
+          <td>Email + Slack (12h SLA)</td>
+        </tr>
+        <tr>
+          <td><strong>Enterprise</strong></td>
+          <td>$10,000+/month</td>
+          <td>5,000,000+</td>
+          <td>Unlimited</td>
+          <td>Dedicated account manager + 24/7 on-call</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>What counts as an action?</strong> Every governance decision (intent submission) counts as one action, regardless of verdict (approve, block, modify, escalate). Shadow mode decisions are excluded from quota usage.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Multi-Currency Support</h2>
+    <p>
+      GaaS supports billing in three currencies: <strong>USD</strong>, <strong>EUR</strong>, and <strong>GBP</strong>. Pricing is automatically converted at current exchange rates. Select your preferred currency during checkout or in the billing settings.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>USD</th>
+          <th>EUR</th>
+          <th>GBP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Starter</td>
+          <td>$500</td>
+          <td>€465</td>
+          <td>£390</td>
+        </tr>
+        <tr>
+          <td>Growth</td>
+          <td>$2,500</td>
+          <td>€2,325</td>
+          <td>£1,950</td>
+        </tr>
+        <tr>
+          <td>Enterprise</td>
+          <td>$10,000+</td>
+          <td>€9,300+</td>
+          <td>£7,800+</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Stripe Tax:</strong> GaaS automatically calculates and collects applicable sales tax, VAT, or GST based on your billing address using Stripe Tax. Tax is added to your invoice at checkout.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Usage Enforcement</h2>
+    <p>
+      When you exceed your plan's monthly action quota, GaaS returns an HTTP <code>402 Payment Required</code> error on intent submission:
+    </p>
+
+    <pre><code>POST https://api.gaas.is/v1/intents
+X-API-Key: your_api_key
+
+<span class="comment"># Response (when quota exceeded):</span>
+HTTP/1.1 402 Payment Required
+Content-Type: application/json
+
+{
+  "error": {
+    "code": "quota_exceeded",
+    "message": "Monthly action quota exceeded. Used 50,100 of 50,000 actions. Upgrade your plan or wait for monthly reset.",
+    "current_usage": 50100,
+    "quota_limit": 50000,
+    "reset_date": "2026-03-01T00:00:00Z"
+  }
+}</code></pre>
+
+    <h3>10% Grace Period</h3>
+    <p>
+      GaaS provides a <strong>10% grace buffer</strong> beyond your plan limit before enforcement kicks in. For example, a Starter plan (50,000 actions/month) allows up to 55,000 actions before returning 402 errors. This prevents service disruption from minor overages.
+    </p>
+
+    <div class="warning">
+      <strong>Shadow Mode Exclusion:</strong> Shadow mode intent submissions (<code>?mode=shadow</code>) do not count toward your quota. Use shadow mode freely for testing and calibration without impacting usage limits.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Quota Headers</h2>
+    <p>
+      Every intent submission response includes quota usage headers:
+    </p>
+
+    <pre><code>HTTP/1.1 200 OK
+X-GaaS-Quota-Remaining: 45320
+X-GaaS-Quota-Limit: 50000
+X-GaaS-Quota-Reset: 2026-03-01T00:00:00Z</code></pre>
+
+    <p><strong>Header descriptions:</strong></p>
+    <ul>
+      <li><code>X-GaaS-Quota-Remaining</code> — Actions remaining in current billing period</li>
+      <li><code>X-GaaS-Quota-Limit</code> — Total actions allowed per month (excluding grace)</li>
+      <li><code>X-GaaS-Quota-Reset</code> — Timestamp when quota resets (1st of next month, UTC)</li>
+    </ul>
+
+    <p>
+      Use these headers to track usage in your application and display warnings to users before hitting the quota limit.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Upgrading Your Plan</h2>
+    <p>
+      Upgrade your plan anytime via the dashboard billing page or API:
+    </p>
+
+    <pre><code>POST https://api.gaas.is/v1/billing/upgrade
+X-API-Key: your_api_key
+
+{
+  "new_tier": "growth",
+  "currency": "usd"
+}</code></pre>
+
+    <p>
+      Upgrades take effect immediately. You're charged a prorated amount for the remainder of the current billing period, then the full amount on your next billing date.
+    </p>
+
+    <h3>Downgrading Your Plan</h3>
+    <p>
+      Downgrades take effect at the <strong>end of your current billing period</strong> to avoid service disruption mid-month:
+    </p>
+
+    <pre><code>POST https://api.gaas.is/v1/billing/downgrade
+X-API-Key: your_api_key
+
+{
+  "new_tier": "starter"
+}</code></pre>
+
+    <p>
+      If your current usage exceeds the new tier's quota, you'll receive a warning and must reduce usage before the downgrade completes.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Billing Dashboard</h2>
+    <p>
+      Access the Stripe Customer Portal to manage your subscription:
+    </p>
+
+    <pre><code>GET https://api.gaas.is/v1/billing/portal
+X-API-Key: your_api_key</code></pre>
+
+    <p>
+      The response includes a temporary URL to the Stripe portal where you can:
+    </p>
+    <ul>
+      <li>Update payment methods</li>
+      <li>View invoices and payment history</li>
+      <li>Upgrade or downgrade your plan</li>
+      <li>Update billing address and tax information</li>
+      <li>Cancel your subscription</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Invoices &amp; Payment History</h2>
+    <p>
+      Retrieve past invoices programmatically:
+    </p>
+
+    <pre><code>GET https://api.gaas.is/v1/billing/invoices
+X-API-Key: your_api_key</code></pre>
+
+    <p>Response includes invoice details with PDF download links:</p>
+    <pre><code>{
+  "invoices": [
+    {
+      "invoice_id": "inv_abc123",
+      "amount": 500.00,
+      "currency": "usd",
+      "status": "paid",
+      "period_start": "2026-01-01T00:00:00Z",
+      "period_end": "2026-01-31T23:59:59Z",
+      "paid_at": "2026-02-01T10:00:00Z",
+      "pdf_url": "https://invoice.stripe.com/..."
+    }
+  ]
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>Usage Analytics</h2>
+    <p>
+      Track daily usage for the current billing period:
+    </p>
+
+    <pre><code>GET https://api.gaas.is/v1/billing/usage
+X-API-Key: your_api_key</code></pre>
+
+    <p>Response includes daily breakdown:</p>
+    <pre><code>{
+  "period_start": "2026-02-01T00:00:00Z",
+  "period_end": "2026-02-28T23:59:59Z",
+  "total_actions": 12450,
+  "quota_limit": 50000,
+  "quota_remaining": 37550,
+  "daily_usage": [
+    {"date": "2026-02-01", "actions": 523},
+    {"date": "2026-02-02", "actions": 612},
+    ...
+  ]
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>Enterprise Plans</h2>
+    <p>
+      Enterprise plans include:
+    </p>
+    <ul>
+      <li><strong>Custom action volumes</strong> (5M+ per month)</li>
+      <li><strong>Unlimited agents</strong> under governance</li>
+      <li><strong>Dedicated infrastructure</strong> (isolated deployment option)</li>
+      <li><strong>Custom SLAs</strong> (99.9% uptime guarantee)</li>
+      <li><strong>Volume discounts</strong> (negotiated pricing)</li>
+      <li><strong>Dedicated account manager</strong></li>
+      <li><strong>Priority support</strong> (24/7 on-call, <1h response time)</li>
+      <li><strong>Custom contract terms</strong> (annual prepay, multi-year discounts)</li>
+    </ul>
+
+    <p>
+      Contact <a class="link" href="mailto:sales@gaas.is">sales@gaas.is</a> for enterprise pricing.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Free Developer Tier</h2>
+    <p>
+      The Developer tier is free forever and includes:
+    </p>
+    <ul>
+      <li>1,000 actions per month</li>
+      <li>1 agent under management</li>
+      <li>Full access to all governance features (shadow mode, escalations, learning, webhooks, GDPR compliance)</li>
+      <li>Community support via GitHub issues</li>
+    </ul>
+
+    <p>
+      Perfect for prototyping, small projects, and open-source use cases. No credit card required.
+    </p>
+
+    <hr class="divider">
+
+    <h2>FAQ</h2>
+
+    <h3>What happens if I hit my quota mid-month?</h3>
+    <p>
+      Intent submissions will return <code>402 Payment Required</code> errors. You can either upgrade your plan immediately (prorated billing) or wait until the quota resets on the 1st of the next month.
+    </p>
+
+    <h3>Do shadow mode decisions count toward my quota?</h3>
+    <p>
+      No. Shadow mode (<code>?mode=shadow</code>) is excluded from quota calculations. Use shadow mode freely for testing, calibration, and training without impacting usage.
+    </p>
+
+    <h3>Can I get a refund if I downgrade mid-month?</h3>
+    <p>
+      Downgrades take effect at the end of your billing period, so you'll continue to have access to your current tier's quota until then. No refunds are issued for partial months.
+    </p>
+
+    <h3>How does the 10% grace buffer work?</h3>
+    <p>
+      The grace buffer allows temporary overages without immediate service disruption. For example, a 50K plan allows up to 55K actions. Beyond 55K, you'll receive 402 errors. This prevents outages from minor usage spikes.
+    </p>
+
+    <h3>Are taxes included in the pricing?</h3>
+    <p>
+      No. Prices are exclusive of tax. GaaS uses Stripe Tax to automatically calculate and collect applicable sales tax, VAT, or GST based on your billing address. Tax is itemized separately on invoices.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="rate-limits.html">Rate Limits</a> — Per-endpoint request throttling</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API key setup</li>
+      <li><a class="link" href="shadow-mode.html">Shadow Mode</a> — Test governance without quotas</li>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDPR Compliance — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    .step-label {
+      display: inline-block;
+      background: #1f6feb33;
+      color: #58a6ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>GDPR Compliance</h1>
+    <p class="subtitle">
+      Built-in support for GDPR data subject rights and sub-processor notification automation.
+    </p>
+
+    <h2>Overview</h2>
+    <p>
+      GaaS provides comprehensive support for GDPR compliance, including automated workflows for data subject rights requests (DSARs), consent management, and sub-processor change notifications. All features are accessible via API and the conversational dashboard.
+    </p>
+
+    <p><strong>Supported GDPR Articles:</strong></p>
+    <ul>
+      <li><strong>Article 17</strong> — Right to Erasure ("right to be forgotten")</li>
+      <li><strong>Article 20</strong> — Right to Data Portability</li>
+      <li><strong>Article 22</strong> — Right to Explanation (automated decision-making)</li>
+      <li><strong>Article 28</strong> — Sub-processor Notification (processor-to-controller obligations)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Article 17: Right to Erasure</h2>
+    <p>
+      Data subjects have the right to request deletion of their personal data. GaaS provides a two-step process: <strong>preview</strong> what will be deleted, then <strong>confirm</strong> to execute the erasure.
+    </p>
+
+    <h3>Step 1: Preview Erasure</h3>
+    <p>
+      See exactly what data will be deleted before committing:
+    </p>
+    <pre><code>GET https://api.gaas.is/v1/org/{org_id}/data/erasure-preview
+X-API-Key: your_api_key</code></pre>
+
+    <p>Response includes counts of records to be deleted:</p>
+    <pre><code>{
+  "preview": {
+    "audit_records": 1247,
+    "decisions": 1189,
+    "escalations": 58,
+    "onboarding_records": 3,
+    "api_keys": 2,
+    "webhooks": 4,
+    "drip_subscriptions": 1,
+    "waitlist_entries": 0,
+    "consent_records": 5
+  },
+  "warning": "This action is irreversible. All data will be permanently deleted."
+}</code></pre>
+
+    <h3>Step 2: Confirm Erasure</h3>
+    <p>
+      Execute the deletion (requires admin role):
+    </p>
+    <pre><code>DELETE https://api.gaas.is/v1/org/{org_id}/data/erase
+X-API-Key: your_api_key
+
+{
+  "confirmation": "PERMANENTLY_DELETE_ALL_DATA"
+}</code></pre>
+
+    <p>Response confirms deletion:</p>
+    <pre><code>{
+  "status": "erased",
+  "deleted_counts": {
+    "audit_records": 1247,
+    "decisions": 1189,
+    "escalations": 58,
+    ...
+  },
+  "erased_at": "2026-02-13T10:45:00Z"
+}</code></pre>
+
+    <div class="warning">
+      <strong>Warning:</strong> Erasure is <strong>permanent and irreversible</strong>. All decisions, audit records, policies, escalations, and onboarding data for the organization are deleted. API keys are revoked. This action cannot be undone.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Article 20: Right to Data Portability</h2>
+    <p>
+      Data subjects can request a machine-readable export of all their data. GaaS returns a comprehensive JSON export of all organization data.
+    </p>
+
+    <h3>Full Data Export</h3>
+    <pre><code>GET https://api.gaas.is/v1/org/{org_id}/data/export
+X-API-Key: your_api_key</code></pre>
+
+    <p>Response includes all data in structured JSON format:</p>
+    <pre><code>{
+  "org_id": "org_abc123",
+  "export_timestamp": "2026-02-13T10:50:00Z",
+  "data": {
+    "audit_records": [ ... ],
+    "decisions": [ ... ],
+    "escalations": [ ... ],
+    "onboarding_records": [ ... ],
+    "api_keys": [ ... ],
+    "webhooks": [ ... ],
+    "drip_subscriptions": [ ... ],
+    "consent_records": [ ... ]
+  }
+}</code></pre>
+
+    <h3>Selective Export</h3>
+    <p>
+      Export only specific data categories using query parameters:
+    </p>
+    <pre><code>GET https://api.gaas.is/v1/org/{org_id}/data/export?include=decisions,escalations,audit_records
+X-API-Key: your_api_key</code></pre>
+
+    <p>Available categories: <code>audit_records</code>, <code>decisions</code>, <code>escalations</code>, <code>onboarding</code>, <code>api_keys</code>, <code>webhooks</code>, <code>drip</code>, <code>consent</code></p>
+
+    <hr class="divider">
+
+    <h2>Article 22: Right to Explanation</h2>
+    <p>
+      When GaaS makes an automated decision (block, modify, or escalate an agent action), data subjects have the right to understand why. GaaS provides human-readable explanations derived from the full governance pipeline.
+    </p>
+
+    <h3>Get Decision Explanation</h3>
+    <pre><code>GET https://api.gaas.is/v1/org/{org_id}/decisions/{decision_id}/explanation
+X-API-Key: your_api_key</code></pre>
+
+    <p>Response includes plain-English reasoning:</p>
+    <pre><code>{
+  "decision_id": "dec_abc123",
+  "verdict": "block",
+  "explanation": {
+    "summary": "Action blocked due to critical policy violation: attempted access to regulated patient data without verified consent.",
+    "reasoning_chain": [
+      "Intent validated: Agent 'healthcare_bot' requested ACCESS to PERSON record.",
+      "Context enrichment: Target identified as patient with HIPAA-protected data.",
+      "Policy evaluation: Tier 1 policy 'pol_t1_007' (HIPAA consent gate) returned FAIL.",
+      "Deliberation bypassed due to critical policy fast-fail.",
+      "Final verdict: BLOCK"
+    ],
+    "policies_triggered": [
+      {
+        "policy_id": "pol_t1_007",
+        "name": "HIPAA Consent Verification",
+        "verdict": "fail",
+        "reasoning": "No consent record found for patient ID p_12345 and purpose 'billing_inquiry'."
+      }
+    ],
+    "risk_score": 0.92,
+    "risk_level": "critical"
+  }
+}</code></pre>
+
+    <div class="note">
+      <strong>No Additional Storage Required:</strong> Explanations are derived on-the-fly from existing audit records. GaaS doesn't store duplicate explanation data—everything needed is already in the audit trail.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Consent Management</h2>
+    <p>
+      GaaS tracks user consent for five processing purposes:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Purpose</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>governance</code></td>
+          <td>Intent evaluation and decision-making (required for service)</td>
+        </tr>
+        <tr>
+          <td><code>analytics</code></td>
+          <td>Aggregate usage analytics and dashboard metrics</td>
+        </tr>
+        <tr>
+          <td><code>learning</code></td>
+          <td>Policy calibration and continuous improvement</td>
+        </tr>
+        <tr>
+          <td><code>communications</code></td>
+          <td>Escalation notifications and product updates</td>
+        </tr>
+        <tr>
+          <td><code>third_party_sharing</code></td>
+          <td>Data sharing with sub-processors (e.g., Anthropic for LLM deliberation)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>View Consent Records</h3>
+    <pre><code>GET https://api.gaas.is/v1/org/{org_id}/consent
+X-API-Key: your_api_key</code></pre>
+
+    <h3>Grant Consent</h3>
+    <pre><code>POST https://api.gaas.is/v1/org/{org_id}/consent
+X-API-Key: your_api_key
+
+{
+  "purpose": "learning",
+  "granted": true
+}</code></pre>
+
+    <h3>Revoke Consent</h3>
+    <pre><code>DELETE https://api.gaas.is/v1/org/{org_id}/consent/{consent_id}
+X-API-Key: your_api_key</code></pre>
+
+    <div class="note">
+      <strong>Governance Consent:</strong> Consent for <code>governance</code> is required to use GaaS. Revoking it effectively terminates service. All other consents are optional and can be toggled independently.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Article 28: Sub-processor Notification Automation</h2>
+    <p>
+      Under GDPR Article 28, processors (GaaS) must notify controllers (you) at least 30 days in advance before engaging a new sub-processor or changing an existing one. GaaS automates this entire workflow.
+    </p>
+
+    <h3>How It Works</h3>
+    <div class="step-label">STEP 1</div>
+    <h3>Admin Creates Sub-processor Change</h3>
+    <p>
+      GaaS administrators create a change record when a new sub-processor is added or an existing one is modified:
+    </p>
+    <pre><code>POST https://api.gaas.is/v1/subprocessor/changes
+X-API-Key: admin_api_key
+
+{
+  "name": "Acme AI Services",
+  "purpose": "LLM-based deliberation for governance decisions",
+  "location": "United States",
+  "change_type": "addition",
+  "effective_date": "2026-04-15"
+}</code></pre>
+
+    <div class="step-label">STEP 2</div>
+    <h3>Automated 30-Day Notice</h3>
+    <p>
+      GaaS automatically sends email notifications to all organizations 30 days before the <code>effective_date</code>. The email includes:
+    </p>
+    <ul>
+      <li>Sub-processor name, purpose, and data location</li>
+      <li>Change type (addition, modification, removal)</li>
+      <li>Effective date</li>
+      <li><strong>Objection link</strong> (14-day window to object)</li>
+    </ul>
+
+    <div class="step-label">STEP 3</div>
+    <h3>14-Day Objection Window</h3>
+    <p>
+      Organizations can object to the change by clicking the objection link in the email or visiting:
+    </p>
+    <pre><code>GET https://api.gaas.is/v1/subprocessor/object?token={secure_token}</code></pre>
+
+    <p>
+      This displays an HTML objection form (no authentication required—secured by token). Submitting the form records the objection and triggers a CRM event for manual follow-up.
+    </p>
+
+    <div class="step-label">STEP 4</div>
+    <h3>Change Goes Live</h3>
+    <p>
+      If no objections are received within 14 days, or objections are resolved, the change becomes effective on the <code>effective_date</code>. Organizations are notified of the final status.
+    </p>
+
+    <h3>View Notification History</h3>
+    <pre><code>GET https://api.gaas.is/v1/subprocessor/notifications
+X-API-Key: your_api_key</code></pre>
+
+    <p>Response includes all notifications sent to your organization:</p>
+    <pre><code>{
+  "notifications": [
+    {
+      "notification_id": "spn_abc123",
+      "change_id": "spc_xyz789",
+      "subprocessor_name": "Acme AI Services",
+      "sent_at": "2026-03-15T00:00:00Z",
+      "objection_deadline": "2026-03-29T23:59:59Z",
+      "objected": false,
+      "status": "pending"
+    }
+  ]
+}</code></pre>
+
+    <div class="note">
+      <strong>CRM Integration:</strong> All objections are automatically tracked in your configured CRM (HubSpot or Salesforce) for manual follow-up by your compliance team.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Best Practices</h2>
+    <ul>
+      <li><strong>Preview before erasing:</strong> Always use the <code>/erasure-preview</code> endpoint before executing a deletion.</li>
+      <li><strong>Archive exports:</strong> Store data export JSON files securely for compliance records (7-year retention recommended).</li>
+      <li><strong>Automate DSAR workflows:</strong> Integrate GaaS GDPR endpoints into your internal DSAR ticketing system (Jira, Zendesk) for seamless processing.</li>
+      <li><strong>Monitor objection deadlines:</strong> Set up alerts for sub-processor objection windows to ensure timely response.</li>
+      <li><strong>Document consent changes:</strong> Maintain an audit trail of all consent grants/revocations (GaaS does this automatically).</li>
+      <li><strong>Test erasure in staging:</strong> Verify erasure workflows in a test environment before executing in production.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Compliance Certifications</h2>
+    <p>
+      GaaS is designed to support your GDPR compliance efforts:
+    </p>
+    <ul>
+      <li><strong>SOC 2 Type II</strong> audit in progress (Q2 2026)</li>
+      <li><strong>ISO 27001</strong> certification planned (Q3 2026)</li>
+      <li><strong>Data Processing Agreement</strong> available on request (contact: legal@gaas.is)</li>
+      <li><strong>Sub-processor registry</strong> maintained in compliance docs (available to enterprise customers)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API key setup and multi-tenancy</li>
+      <li><a class="link" href="webhooks.html">Webhooks</a> — Real-time event notifications</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Authentication</h1>
+    <p class="subtitle">
+      API key-based authentication with multi-tenancy and org-scoped isolation.
+    </p>
+
+    <h2>Overview</h2>
+    <p>
+      GaaS uses API keys for authentication. Every request to the governance API (except <a class="link" href="#pre-auth">pre-auth endpoints</a>) must include an <code>X-API-Key</code> header. API keys are bound to your organization and provide automatic multi-tenant isolation across all resources.
+    </p>
+
+    <div class="note">
+      <strong>Production vs. Open Mode:</strong> In production, you must provision an API key via the <a class="link" href="getting-started.html">quickstart endpoint</a> or dashboard. In local development, if no API keys are configured, GaaS runs in open mode (no authentication required).
+    </div>
+
+    <hr class="divider">
+
+    <h2>Obtaining an API Key</h2>
+    <p>
+      The fastest way to get an API key is through the quickstart endpoint:
+    </p>
+    <pre><code>POST https://api.gaas.is/v1/onboarding/quickstart
+Content-Type: application/json
+
+{
+  "organization": {
+    "name": "Your Company",
+    "domain_url": "https://yourcompany.com",
+    "description": "Brief description of your use case"
+  },
+  "agents": [
+    {
+      "name": "agent-name",
+      "framework": "langchain",
+      "action_types": ["COMMUNICATE", "ACCESS"],
+      "domains": ["industry"]
+    }
+  ]
+}</code></pre>
+
+    <p>
+      The response includes your API key in the <code>api_key</code> field:
+    </p>
+    <pre><code>{
+  "membrane_id": "mem_abc123...",
+  "api_key": "gsk_live_org_a1b2c3d4e5f6...",
+  "status": "shadow"
+}</code></pre>
+
+    <div class="warning">
+      <strong>Store your API key securely.</strong> Treat it like a password. Never commit it to version control or expose it in client-side code. Use environment variables or a secrets manager in production.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Using Your API Key</h2>
+    <p>
+      Include your API key in the <code>X-API-Key</code> header on every request:
+    </p>
+
+    <h3>Python (gaas_sdk)</h3>
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient
+
+<span class="keyword">async with</span> <span class="func">GaaSClient</span>(
+    <span class="string">"https://api.gaas.is"</span>,
+    headers={<span class="string">"X-API-Key"</span>: <span class="string">"gsk_live_org_a1b2c3d4e5f6..."</span>},
+) <span class="keyword">as</span> client:
+    response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)</code></pre>
+
+    <h3>TypeScript (@gaas/sdk)</h3>
+    <pre><code><span class="keyword">import</span> { GaaSClient } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
+  baseUrl: <span class="string">'https://api.gaas.is'</span>,
+  headers: { <span class="string">'X-API-Key'</span>: <span class="string">'gsk_live_org_a1b2c3d4e5f6...'</span> },
+});
+
+<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);</code></pre>
+
+    <h3>Java (com.gaas.sdk)</h3>
+    <pre><code><span class="keyword">import</span> com.gaas.sdk.GaaSClient;
+
+GaaSClient client = GaaSClient.<span class="func">builder</span>()
+    .<span class="func">baseUrl</span>(<span class="string">"https://api.gaas.is"</span>)
+    .<span class="func">apiKey</span>(<span class="string">"gsk_live_org_a1b2c3d4e5f6..."</span>)
+    .<span class="func">build</span>();
+
+GaaSResponse response = client.<span class="func">submitIntent</span>(intent);</code></pre>
+
+    <h3>cURL</h3>
+    <pre><code>curl -X POST https://api.gaas.is/v1/intents \
+  -H <span class="string">"X-API-Key: gsk_live_org_a1b2c3d4e5f6..."</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d '{"intent": {...}}'</code></pre>
+
+    <hr class="divider">
+
+    <h2>API Key Format</h2>
+    <p>
+      GaaS API keys follow this format:
+    </p>
+    <pre><code>gsk_&lt;environment&gt;_&lt;scope&gt;_&lt;random&gt;</code></pre>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>gsk_</code></td>
+          <td>Prefix (GaaS Key)</td>
+          <td><code>gsk_</code></td>
+        </tr>
+        <tr>
+          <td><code>environment</code></td>
+          <td>Deployment environment</td>
+          <td><code>live</code>, <code>shadow</code>, <code>test</code></td>
+        </tr>
+        <tr>
+          <td><code>scope</code></td>
+          <td>Access scope</td>
+          <td><code>org</code> (most common)</td>
+        </tr>
+        <tr>
+          <td><code>random</code></td>
+          <td>Unique identifier (32+ chars)</td>
+          <td><code>a1b2c3d4e5f6...</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      Example: <code>gsk_live_org_a1b2c3d4e5f6g7h8i9j0...</code>
+    </p>
+
+    <hr class="divider">
+
+    <h2>Multi-Tenancy</h2>
+    <p>
+      Every API key is bound to an <strong>organization ID</strong> (<code>org_id</code>). All resources—decisions, escalations, policies, audit records, webhooks, and more—are automatically scoped to your organization.
+    </p>
+
+    <p><strong>This means:</strong></p>
+    <ul>
+      <li>You can only access data for your own organization</li>
+      <li>Cross-organization queries are automatically blocked</li>
+      <li>Audit trails, learning data, and onboarding records are isolated by <code>org_id</code></li>
+      <li>Shadow mode, quotas, and billing are org-scoped</li>
+    </ul>
+
+    <div class="note">
+      <strong>How is org_id determined?</strong> Your <code>org_id</code> is automatically extracted from your API key and injected into the request context. You don't need to pass it manually—it's handled transparently by the middleware.
+    </div>
+
+    <hr class="divider">
+
+    <h2 id="pre-auth">Pre-Auth Endpoints</h2>
+    <p>
+      Some endpoints do not require authentication (marked <strong>pre-auth</strong> in the API reference). These are typically public-facing endpoints for initial onboarding, email verification, or unsubscribe flows:
+    </p>
+
+    <ul>
+      <li><code>POST /v1/onboarding/quickstart</code> — Provision your first API key</li>
+      <li><code>POST /v1/waitlist/join</code> — Join the waitlist</li>
+      <li><code>POST /v1/waitlist/verify</code> — Verify email address</li>
+      <li><code>POST /v1/waitlist/unsubscribe</code> — Unsubscribe from waitlist</li>
+      <li><code>GET /v1/drip/unsubscribe</code> — Unsubscribe from drip campaigns</li>
+      <li><code>GET /v1/subprocessor/object</code> — GDPR objection form (token-gated)</li>
+      <li><code>POST /v1/subprocessor/object</code> — Submit objection</li>
+      <li><code>POST /webhooks/resend</code> — Email provider webhook receiver</li>
+    </ul>
+
+    <p>
+      All other endpoints require a valid <code>X-API-Key</code> header.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Key Rotation &amp; Revocation</h2>
+    <p>
+      To rotate your API key:
+    </p>
+    <ol>
+      <li>Generate a new key via the dashboard or <code>POST /v1/keys</code> (admin only)</li>
+      <li>Update your application's environment variables to use the new key</li>
+      <li>Deploy the updated configuration</li>
+      <li>Revoke the old key via <code>DELETE /v1/keys/{key_id}</code></li>
+    </ol>
+
+    <div class="warning">
+      <strong>Zero-downtime rotation:</strong> Provision the new key before revoking the old one. Both keys will work during the transition period, allowing you to update configurations without service interruption.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Best Practices</h2>
+    <ul>
+      <li><strong>Never hardcode API keys</strong> in source code. Use environment variables (<code>GAAS_API_KEY</code>) or a secrets manager (AWS Secrets Manager, HashiCorp Vault).</li>
+      <li><strong>Use separate keys</strong> for development, staging, and production environments.</li>
+      <li><strong>Rotate keys regularly</strong> (every 90 days recommended) or immediately if compromised.</li>
+      <li><strong>Monitor key usage</strong> via the dashboard to detect anomalies (unexpected IP addresses, traffic spikes).</li>
+      <li><strong>Restrict access</strong> to key storage systems using IAM roles or RBAC.</li>
+      <li><strong>Revoke unused keys</strong> promptly to minimize attack surface.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Troubleshooting</h2>
+
+    <h3>401 Unauthorized</h3>
+    <p><strong>Cause:</strong> Missing or invalid API key.</p>
+    <p><strong>Solution:</strong> Verify that the <code>X-API-Key</code> header is present and matches a valid, non-revoked key.</p>
+
+    <h3>403 Forbidden</h3>
+    <p><strong>Cause:</strong> API key is valid, but you lack permissions for the requested operation (e.g., admin-only endpoint).</p>
+    <p><strong>Solution:</strong> Check your user role in the dashboard. Contact your organization admin to request elevated permissions.    </p>
+
+    <h3>Open Mode Not Working</h3>
+    <p><strong>Cause:</strong> API keys or <code>GAAS_API_KEYS</code> env var are configured, disabling open mode.</p>
+    <p><strong>Solution:</strong> Remove all API keys and unset <code>GAAS_API_KEYS</code> to enable open mode (local development only).</p>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="getting-started.html">Getting Started</a> — Onboard and obtain your first API key</li>
+      <li><a class="link" href="billing-and-quotas.html">Billing &amp; Quotas</a> — Usage limits and enforcement</li>
+      <li><a class="link" href="rate-limits.html">Rate Limits</a> — Per-endpoint request limits</li>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>
