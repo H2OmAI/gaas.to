@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Level Agreement — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.9375rem;
+    }
+
+    th {
+      text-align: left;
+      color: #8b949e;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid #1e2533;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+      table { font-size: 0.8125rem; }
+      th, td { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="api-reference.html">API Reference</a>
+      <a href="sdks.html">SDKs</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Service Level Agreement</h1>
+    <p class="subtitle">Last updated: February 2026</p>
+
+    <p>
+      This Service Level Agreement ("SLA") describes the availability commitments, support
+      response times, and service credit policies for the GaaS platform. SLA commitments
+      apply only to paid plans with active subscriptions.
+    </p>
+
+    <h2>1. Availability by Tier</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Uptime Guarantee</th>
+          <th>Response Time</th>
+          <th>Support Channel</th>
+          <th>SLA Credits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Developer</td>
+          <td>Best effort</td>
+          <td>No guarantee</td>
+          <td>Community</td>
+          <td>N/A</td>
+        </tr>
+        <tr>
+          <td>Starter</td>
+          <td>99.5%</td>
+          <td>&lt; 24 hours</td>
+          <td>Email</td>
+          <td>10% monthly credit</td>
+        </tr>
+        <tr>
+          <td>Growth</td>
+          <td>99.9%</td>
+          <td>&lt; 4 hours</td>
+          <td>Priority email</td>
+          <td>25% monthly credit</td>
+        </tr>
+        <tr>
+          <td>Enterprise</td>
+          <td>99.99%</td>
+          <td>&lt; 1 hour</td>
+          <td>Dedicated engineer</td>
+          <td>100% monthly credit</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Definitions</h2>
+
+    <p>
+      <strong>Downtime</strong> is defined as a period during which the GaaS governance API
+      returns non-200 status codes on the <code>/health/ready</code> endpoint for 5 or more
+      consecutive checks at 60-second intervals (i.e., at least 5 minutes of sustained
+      unavailability).
+    </p>
+
+    <p>
+      <strong>Monthly Uptime Percentage</strong> is calculated as:
+      (total minutes in month &minus; downtime minutes) &divide; total minutes in month &times; 100.
+    </p>
+
+    <p>
+      <strong>Response Time</strong> refers to the initial acknowledgment of a support request,
+      measured during business hours (Monday&ndash;Friday, 9:00 AM&ndash;6:00 PM Pacific Time)
+      unless otherwise stated. Enterprise plans include 24/7 support coverage.
+    </p>
+
+    <h2>3. Exclusions</h2>
+
+    <p>The following are excluded from SLA calculations:</p>
+    <ul>
+      <li>Scheduled maintenance announced at least 48 hours in advance via email or status page</li>
+      <li>Force majeure events (natural disasters, government actions, widespread internet outages)</li>
+      <li>Issues caused by customer-side configuration, code, or network connectivity</li>
+      <li>Third-party service outages (LLM providers, DNS, cloud infrastructure) beyond reasonable redundancy measures</li>
+      <li>Beta features, preview functionality, or shadow mode pipelines</li>
+      <li>Usage exceeding documented rate limits or resource quotas</li>
+    </ul>
+
+    <h2>4. SLA Credit Process</h2>
+
+    <p>
+      To request SLA credits, submit a claim to
+      <a class="link" href="mailto:support@gaas.is">support@gaas.is</a>
+      within 30 calendar days of the incident. Your claim must include:
+    </p>
+    <ul>
+      <li>The affected time window (start and end timestamps in UTC)</li>
+      <li>Description of the impact observed</li>
+      <li>Any relevant logs, error messages, or evidence</li>
+    </ul>
+
+    <p>
+      Upon verification, credits are applied to the next billing cycle. Credits do not exceed
+      the applicable credit percentage of the monthly subscription fee for the affected month.
+      Credits are not transferable, cannot be converted to cash, and do not carry over between
+      billing periods.
+    </p>
+
+    <h2>5. Credit Calculation</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Uptime Achieved</th>
+          <th>Starter Credit</th>
+          <th>Growth Credit</th>
+          <th>Enterprise Credit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&lt; SLA target but &ge; 99.0%</td>
+          <td>10%</td>
+          <td>10%</td>
+          <td>25%</td>
+        </tr>
+        <tr>
+          <td>&lt; 99.0% but &ge; 95.0%</td>
+          <td>10%</td>
+          <td>25%</td>
+          <td>50%</td>
+        </tr>
+        <tr>
+          <td>&lt; 95.0%</td>
+          <td>10%</td>
+          <td>25%</td>
+          <td>100%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>6. Monitoring and Reporting</h2>
+
+    <p>
+      Platform health is continuously monitored via the
+      <code>/health/ready</code> endpoint, which reports on database connectivity,
+      circuit breaker state, LLM provider availability, and connector status.
+      Current system status is available at
+      <a class="link" href="https://the.gaas.is/status">the.gaas.is/status</a>.
+    </p>
+
+    <p>
+      Prometheus metrics are exposed at <code>/metrics</code> for integration with
+      customer monitoring tools. Key metrics include
+      <code>gaas_http_request_duration_seconds</code>,
+      <code>gaas_decisions_total</code>, and
+      <code>gaas_errors_total</code>.
+    </p>
+
+    <h2>7. Changes to This SLA</h2>
+
+    <p>
+      We may update this SLA from time to time. Material changes that reduce service
+      commitments will be communicated at least 30 days in advance via email to the
+      account owner. Continued use of the service after the effective date constitutes
+      acceptance of the updated SLA.
+    </p>
+
+    <div class="note">
+      <strong>Note:</strong> For custom SLA requirements, Enterprise customers should
+      contact their dedicated account manager or reach out to
+      <a class="link" href="mailto:support@gaas.is">support@gaas.is</a>.
+    </div>
+
+    <hr class="divider">
+
+    <p>
+      <a class="link" href="https://the.gaas.is/pricing">View pricing</a> &nbsp;&middot;&nbsp;
+      <a class="link" href="https://the.gaas.is/contact">Contact us</a> &nbsp;&middot;&nbsp;
+      <a class="link" href="https://the.gaas.is/status">System status</a>
+    </p>
+  </main>
+
+  <footer>
+    <p>Governance as a Service &mdash; <a href="https://gaas.is">gaas.is</a></p>
+  </footer>
+</body>
+</html>
