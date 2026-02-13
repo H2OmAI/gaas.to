@@ -471,6 +471,10 @@
 
     <h2>Transitioning to Live</h2>
 
+    <p>
+      When you're ready to activate enforcement, follow this migration checklist:
+    </p>
+
     <div class="step-label">STEP 1</div>
     <h3>Review Shadow Data</h3>
     <p>
@@ -489,7 +493,23 @@
     </p>
 
     <div class="step-label">STEP 3</div>
-    <h3>Activate</h3>
+    <h3>Verify Coverage</h3>
+    <p>
+      Check shadow statistics to ensure you've collected sufficient data across all agent action patterns:
+    </p>
+    <pre><code>GET /v1/membranes/{membrane_id}/shadow/stats</code></pre>
+    <p>
+      Aim for at least 100 shadow decisions covering all critical action types before activating live mode.
+    </p>
+
+    <div class="step-label">STEP 4</div>
+    <h3>Notify Stakeholders</h3>
+    <p>
+      Alert your team that governance enforcement will begin. Ensure operators know how to review escalations and handle blocked actions.
+    </p>
+
+    <div class="step-label">STEP 5</div>
+    <h3>Activate Live Mode</h3>
     <p>
       When confident, switch to live mode:
     </p>

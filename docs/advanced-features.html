@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Features — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Advanced Features</h1>
+    <p class="subtitle">
+      Optimize performance and reduce latency with bulk submission, field filtering, idempotency, ETag caching, and API versioning.
+    </p>
+
+    <h2>Bulk Intent Submission</h2>
+    <p>
+      Submit up to 50 intents concurrently in a single API call. The pipeline processes all intents in parallel via <code>asyncio.gather</code>, and partial failures don't abort the batch — each result includes either a decision or an error.
+    </p>
+
+    <h3>Endpoint</h3>
+    <pre><code>POST https://api.gaas.is/v1/intents/batch</code></pre>
+
+    <h3>Request Body</h3>
+    <pre><code>{
+  "intents": [
+    { "agent": {...}, "action": {...}, "payload": {...}, ... },
+    { "agent": {...}, "action": {...}, "payload": {...}, ... },
+    { "agent": {...}, "action": {...}, "payload": {...}, ... }
+  ]
+}</code></pre>
+
+    <h3>Response Structure</h3>
+    <pre><code>{
+  "results": [
+    { "success": true, "intent_id": "int_001", "decision": {...} },
+    { "success": true, "intent_id": "int_002", "decision": {...} },
+    { "success": false, "intent_id": "int_003", "error": {...} }
+  ],
+  "total": 3,
+  "succeeded": 2,
+  "failed": 1
+}</code></pre>
+
+    <h3>Python (gaas_sdk)</h3>
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent
+
+<span class="keyword">async with</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_key"</span>}) <span class="keyword">as</span> client:
+    intents = [<span class="func">build_intent</span>(...) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="func">range</span>(10)]
+    response = <span class="keyword">await</span> client.<span class="func">submit_intents_bulk</span>(intents)
+
+    <span class="comment"># Handle partial failures</span>
+    <span class="keyword">for</span> result <span class="keyword">in</span> response.results:
+        <span class="keyword">if</span> result.success:
+            <span class="func">print</span>(<span class="string">f"Intent {result.intent_id}: {result.decision.verdict}"</span>)
+        <span class="keyword">else</span>:
+            <span class="func">print</span>(<span class="string">f"Intent {result.intent_id} failed: {result.error}"</span>)</code></pre>
+
+    <h3>TypeScript (@gaas/sdk)</h3>
+    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
+  baseUrl: <span class="string">'https://api.gaas.is'</span>,
+  headers: { <span class="string">'X-API-Key'</span>: <span class="string">'your_key'</span> },
+});
+
+<span class="keyword">const</span> intents = <span class="keyword">new</span> <span class="func">Array</span>(10).<span class="func">fill</span>(null).<span class="func">map</span>(() => <span class="func">buildIntent</span>({...}));
+<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntentsBulk</span>(intents);
+
+response.results.<span class="func">forEach</span>((result) => {
+  <span class="keyword">if</span> (result.success) {
+    console.<span class="func">log</span>(<span class="string">`Intent ${result.intentId}: ${result.decision.verdict}`</span>);
+  } <span class="keyword">else</span> {
+    console.<span class="func">error</span>(<span class="string">`Intent ${result.intentId} failed: ${result.error}`</span>);
+  }
+});</code></pre>
+
+    <h3>Java (com.gaas.sdk)</h3>
+    <pre><code><span class="keyword">import</span> com.gaas.sdk.*;
+
+<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, <span class="string">"your_key"</span>);
+<span class="type">List</span>&lt;<span class="type">IntentDeclaration</span>&gt; intents = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+<span class="comment">// ... populate intents ...</span>
+
+<span class="type">BulkIntentResponse</span> response = client.<span class="func">submitIntentsBulk</span>(intents);
+
+<span class="keyword">for</span> (<span class="type">IntentResult</span> result : response.<span class="func">getResults</span>()) {
+  <span class="keyword">if</span> (result.<span class="func">isSuccess</span>()) {
+    System.out.<span class="func">println</span>(<span class="string">"Intent "</span> + result.<span class="func">getIntentId</span>() + <span class="string">": "</span> + result.<span class="func">getDecision</span>().<span class="func">getVerdict</span>());
+  } <span class="keyword">else</span> {
+    System.err.<span class="func">println</span>(<span class="string">"Intent "</span> + result.<span class="func">getIntentId</span>() + <span class="string">" failed: "</span> + result.<span class="func">getError</span>());
+  }
+}</code></pre>
+
+    <div class="note">
+      <strong>Rate limiting:</strong> Bulk submissions count as a single request against the <code>intent</code> tier rate limit (20 requests/minute). The rate limiter does not multiply by the number of intents in the batch.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Field Filtering (Sparse Responses)</h2>
+    <p>
+      Reduce bandwidth and improve mobile performance by requesting only specific fields from the response. Works on <strong>all endpoints</strong> — no per-route configuration needed.
+    </p>
+
+    <h3>Usage</h3>
+    <p>
+      Append a <code>?fields=</code> query parameter with comma-separated dot-notation paths:
+    </p>
+    <pre><code>GET https://api.gaas.is/v1/intents/{id}/decision?fields=decision.verdict,decision.risk_assessment.score</code></pre>
+
+    <h3>Response</h3>
+    <pre><code>{
+  "decision": {
+    "verdict": "APPROVE",
+    "risk_assessment": {
+      "score": 0.23
+    }
+  }
+}</code></pre>
+
+    <p>
+      The response includes an <code>X-GaaS-Fields-Filtered: true</code> header when filtering is active. Error responses (4xx/5xx) pass through unfiltered.
+    </p>
+
+    <h3>Python (gaas_sdk)</h3>
+    <pre><code>response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(
+    intent,
+    fields=<span class="string">"decision.verdict,decision.risk_assessment.score"</span>
+)</code></pre>
+
+    <h3>TypeScript (@gaas/sdk)</h3>
+    <pre><code><span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent, {
+  fields: <span class="string">'decision.verdict,decision.risk_assessment.score'</span>,
+});</code></pre>
+
+    <h3>Java (com.gaas.sdk)</h3>
+    <pre><code><span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent, <span class="string">"decision.verdict,decision.risk_assessment.score"</span>);</code></pre>
+
+    <div class="note">
+      <strong>Use case:</strong> Mobile apps or slow networks where you only need the verdict and risk score, not the full reasoning chain, modifications, or audit trail.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Idempotency</h2>
+    <p>
+      Prevent duplicate processing of the same intent by including an idempotency key. GaaS supports two approaches: header-based (recommended) and body-based (legacy, backward-compatible).
+    </p>
+
+    <h3>Header-Based Idempotency (Recommended)</h3>
+    <p>
+      Include an <code>Idempotency-Key</code> header with a unique identifier (e.g., UUID). If the same key is submitted within the TTL window, GaaS returns the cached response without re-executing the pipeline.
+    </p>
+    <pre><code>POST https://api.gaas.is/v1/intents
+Idempotency-Key: unique-key-123
+Content-Type: application/json
+
+{ "intent": {...} }</code></pre>
+
+    <p>
+      When a cached response is returned, the response includes an <code>Idempotent-Replayed: true</code> header.
+    </p>
+
+    <h3>Body-Based Idempotency (Legacy)</h3>
+    <p>
+      Alternatively, include an <code>idempotency_key</code> field in the intent payload:
+    </p>
+    <pre><code>{
+  "intent": {
+    "agent": {...},
+    "action": {...},
+    "payload": {...},
+    "idempotency_key": "unique-key-123"
+  }
+}</code></pre>
+
+    <h3>Python (gaas_sdk)</h3>
+    <pre><code><span class="comment"># Header-based (recommended)</span>
+response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(
+    intent,
+    headers={<span class="string">"Idempotency-Key"</span>: <span class="string">"unique-key-123"</span>}
+)
+
+<span class="comment"># Body-based (legacy)</span>
+intent = <span class="func">build_intent</span>(..., idempotency_key=<span class="string">"unique-key-123"</span>)
+response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)</code></pre>
+
+    <h3>TypeScript (@gaas/sdk)</h3>
+    <pre><code><span class="comment">// Header-based (recommended)</span>
+<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent, {
+  headers: { <span class="string">'Idempotency-Key'</span>: <span class="string">'unique-key-123'</span> },
+});
+
+<span class="comment">// Body-based (legacy)</span>
+<span class="keyword">const</span> intent = <span class="func">buildIntent</span>({ ..., idempotencyKey: <span class="string">'unique-key-123'</span> });
+<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);</code></pre>
+
+    <h3>Java (com.gaas.sdk)</h3>
+    <pre><code><span class="comment">// Header-based (recommended)</span>
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; headers = <span class="keyword">new</span> <span class="type">HashMap</span>&lt;&gt;();
+headers.<span class="func">put</span>(<span class="string">"Idempotency-Key"</span>, <span class="string">"unique-key-123"</span>);
+<span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent, headers);
+
+<span class="comment">// Body-based (legacy)</span>
+<span class="type">IntentDeclaration</span> intent = <span class="type">IntentBuilder</span>.<span class="func">create</span>()
+    .<span class="func">idempotencyKey</span>(<span class="string">"unique-key-123"</span>)
+    .<span class="comment">/* ... */</span>
+    .<span class="func">build</span>();
+<span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent);</code></pre>
+
+    <div class="warning">
+      <strong>TTL and cleanup:</strong> Idempotency keys expire after a configurable TTL (default: 24 hours). Expired keys are automatically purged.
+    </div>
+
+    <hr class="divider">
+
+    <h2>ETag Caching (HTTP Conditional Requests)</h2>
+    <p>
+      Save bandwidth and reduce latency by using HTTP conditional requests. GaaS supports <code>ETag</code> and <code>If-None-Match</code> headers for 304 Not Modified responses.
+    </p>
+
+    <h3>How It Works</h3>
+    <ol>
+      <li>Make a request to a cacheable endpoint (e.g., <code>GET /v1/membranes/{id}</code>)</li>
+      <li>GaaS returns an <code>ETag</code> header with a cache validator (e.g., <code>ETag: "abc123"</code>)</li>
+      <li>On subsequent requests, include <code>If-None-Match: "abc123"</code></li>
+      <li>If the resource hasn't changed, GaaS returns <code>304 Not Modified</code> with no body</li>
+      <li>If the resource has changed, GaaS returns <code>200 OK</code> with the updated resource and a new <code>ETag</code></li>
+    </ol>
+
+    <h3>Example</h3>
+    <pre><code><span class="comment"># First request</span>
+GET /v1/membranes/mem_abc123
+<span class="comment"># Response: 200 OK, ETag: "xyz789", { ... }</span>
+
+<span class="comment"># Subsequent request (no changes)</span>
+GET /v1/membranes/mem_abc123
+If-None-Match: "xyz789"
+<span class="comment"># Response: 304 Not Modified (no body)</span>
+
+<span class="comment"># Subsequent request (resource changed)</span>
+GET /v1/membranes/mem_abc123
+If-None-Match: "xyz789"
+<span class="comment"># Response: 200 OK, ETag: "new456", { ... }</span></code></pre>
+
+    <h3>Caching Strategy</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Endpoint Type</th>
+          <th>Cache-Control</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Immutable (historical data)</td>
+          <td><code>max-age=2592000, immutable</code> (30 days)</td>
+          <td>Audit records, decisions</td>
+        </tr>
+        <tr>
+          <td>Semi-stable (infrequent updates)</td>
+          <td><code>max-age=3600, private</code> (1 hour)</td>
+          <td>Membranes, agent profiles</td>
+        </tr>
+        <tr>
+          <td>Volatile (real-time data)</td>
+          <td><code>no-cache, must-revalidate</code></td>
+          <td>Escalations, live metrics</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <h2>API Versioning</h2>
+    <p>
+      All API routes are mounted under the <code>/v1/</code> prefix. This allows for future backward-incompatible changes to be introduced under <code>/v2/</code> while preserving existing client integrations.
+    </p>
+
+    <h3>Current Version</h3>
+    <pre><code>https://api.gaas.is/v1/intents
+https://api.gaas.is/v1/escalations
+https://api.gaas.is/v1/dashboard/...</code></pre>
+
+    <h3>Backward Compatibility</h3>
+    <p>
+      GaaS follows semantic versioning for the API:
+    </p>
+    <ul>
+      <li><strong>Patch releases</strong> (v1.0.1) — Bug fixes, no breaking changes</li>
+      <li><strong>Minor releases</strong> (v1.1.0) — New endpoints, optional fields, backward-compatible additions</li>
+      <li><strong>Major releases</strong> (v2.0.0) — Breaking changes, mounted under <code>/v2/</code></li>
+    </ul>
+
+    <p>
+      The API version is included in the <code>X-GaaS-API-Version</code> response header on all requests.
+    </p>
+
+    <div class="note">
+      <strong>Migration notice:</strong> When a new major version is released, the previous version will be supported for a minimum of 12 months. Deprecation notices will be included in the <code>Deprecation</code> and <code>Sunset</code> HTTP headers.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="getting-started.html">Getting Started</a> — Onboard and integrate with the API</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API keys and security</li>
+      <li><a class="link" href="rate-limits.html">Rate Limits</a> — Per-endpoint throttling</li>
+      <li><a class="link" href="sdks.html">SDKs</a> — Python, TypeScript, and Java clients</li>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+</body>
+</html>

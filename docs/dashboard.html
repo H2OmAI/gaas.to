@@ -366,12 +366,43 @@
       Governance operations through natural language. Ask questions, review escalations, explore decisions, run backtests &mdash; all in a chat interface.
     </p>
 
+    <h2>Authentication &amp; Access</h2>
+    <p>
+      The dashboard requires authentication before you can access governance operations. GaaS supports multiple authentication methods:
+    </p>
+    <ul>
+      <li><strong>Email &amp; Password</strong> &mdash; Standard account creation with bcrypt-hashed credentials</li>
+      <li><strong>Google OAuth</strong> &mdash; Sign in with your Google account</li>
+      <li><strong>GitHub OAuth</strong> &mdash; Sign in with your GitHub account</li>
+      <li><strong>Two-Factor Authentication (2FA/MFA)</strong> &mdash; Optional TOTP-based MFA for enhanced security. Set up via authenticator apps (Google Authenticator, Authy, 1Password). Includes 10 single-use backup codes.</li>
+    </ul>
+    <p>
+      Access the dashboard at <a class="link" href="https://the.gaas.is">the.gaas.is</a>. First-time users can sign up with email or OAuth providers.
+    </p>
+
+    <h3>Role-Based Access Control (RBAC)</h3>
+    <p>
+      Users are assigned one of three roles within their organization:
+    </p>
+    <ul>
+      <li><strong>Admin</strong> &mdash; Full access to all governance operations, team management, billing, and organization settings</li>
+      <li><strong>Operator</strong> &mdash; Can review escalations, submit feedback, run backtests, and view all governance data (no billing or team management)</li>
+      <li><strong>Viewer</strong> &mdash; Read-only access to decisions, metrics, and audit trails (cannot approve escalations or modify configurations)</li>
+    </ul>
+
+    <h3>Team Management</h3>
+    <p>
+      Admins can invite team members, assign roles, and manage organization membership through the dashboard. Users can belong to multiple organizations and switch context via the organization selector in the dashboard header.
+    </p>
+
+    <hr class="divider">
+
     <h2>Chat, Not Dashboards</h2>
     <p>
       Traditional governance dashboards bury critical signals under page navigation. GaaS takes a different approach: you talk to your governance system. Ask "what happened overnight?" and get a summary with data. Say "review that top escalation" and get the context package with approve/deny options. No clicks through menus. No tab switching.
     </p>
     <p>
-      The dashboard is powered by Claude, with 43 tools that map to the full GaaS API. Claude fetches live data, generates visual artifacts inline, and takes actions on your behalf &mdash; all within the conversation.
+      The dashboard is powered by Claude, with 49 tools that map to the full GaaS API. Claude fetches live data, generates visual artifacts inline, and takes actions on your behalf &mdash; all within the conversation.
     </p>
 
     <hr class="divider">
@@ -432,6 +463,7 @@
         <li><strong>Notification rules</strong> &mdash; configure alerts for escalation timeouts, risk thresholds, and anomalies</li>
         <li><strong>Metrics history</strong> &mdash; historical metrics snapshots for trend analysis over time</li>
         <li><strong>Metrics snapshot</strong> &mdash; trigger on-demand metrics snapshot capture</li>
+        <li><strong>Billing page</strong> &mdash; view current plan, usage, invoices, and manage subscription</li>
       </ul>
     </div>
 

@@ -240,17 +240,17 @@
     <pre><code>pip install gaas-sdk</code></pre>
 
     <h3>Submit an Intent</h3>
-    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent, ActionType, TargetType
 
 <span class="keyword">async with</span> <span class="func">GaaSClient</span>(
-    <span class="string">"https://api.gaas.to"</span>,
+    <span class="string">"https://api.gaas.is"</span>,
     headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_key"</span>},
 ) <span class="keyword">as</span> client:
     intent = <span class="func">build_intent</span>(
         agent_id=<span class="string">"billing_bot"</span>,
-        action_type=<span class="string">"communicate"</span>,
+        action_type=ActionType.COMMUNICATE,
         verb=<span class="string">"send_email"</span>,
-        target_type=<span class="string">"person"</span>,
+        target_type=TargetType.PERSON,
         target_identifier=<span class="string">"patient@example.com"</span>,
         summary=<span class="string">"Send billing statement to patient"</span>,
         content={<span class="string">"recipient"</span>: <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>: <span class="string">"email"</span>},
@@ -269,23 +269,81 @@
     <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClientSync
 
 <span class="keyword">with</span> <span class="func">GaaSClientSync</span>(
-    <span class="string">"https://api.gaas.to"</span>,
+    <span class="string">"https://api.gaas.is"</span>,
     headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_key"</span>},
 ) <span class="keyword">as</span> client:
     response = client.<span class="func">submit_intent</span>(intent)</code></pre>
 
+    <h3>Bulk Submission</h3>
+    <p>
+      Submit up to 50 intents concurrently with partial failure support:
+    </p>
+    <pre><code>intents = [<span class="func">build_intent</span>(...) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="func">range</span>(10)]
+response = <span class="keyword">await</span> client.<span class="func">submit_intents_bulk</span>(intents)
+
+<span class="keyword">for</span> result <span class="keyword">in</span> response.data.results:
+    <span class="keyword">if</span> result.success:
+        <span class="func">print</span>(<span class="string">f"Decision: </span>{result.decision.verdict}<span class="string">"</span>)
+    <span class="keyword">else</span>:
+        <span class="func">print</span>(<span class="string">f"Error: </span>{result.error}<span class="string">"</span>)</code></pre>
+
+    <h3>Field Filtering</h3>
+    <p>
+      Request only specific fields to reduce response size:
+    </p>
+    <pre><code>response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(
+    intent,
+    fields=<span class="string">"verdict,reasoning.summary,risk_assessment.overall_score"</span>
+)</code></pre>
+
+    <h3>Idempotency</h3>
+    <p>
+      Prevent duplicate submissions with idempotency keys (header-based recommended):
+    </p>
+    <pre><code><span class="comment"># Header-based (recommended)</span>
+response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(
+    intent,
+    headers={<span class="string">"Idempotency-Key"</span>: <span class="string">"unique-key-123"</span>}
+)
+
+<span class="comment"># Body-based (legacy)</span>
+intent = <span class="func">build_intent</span>(
+    idempotency_key=<span class="string">"unique-key-123"</span>,
+    agent_id=<span class="string">"my-agent"</span>,
+    <span class="comment"># ...</span>
+)</code></pre>
+
     <h3>Error Handling</h3>
-    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSValidationError, GaaSConnectionError
+    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> (
+    GaaSValidationError,
+    GaaSAuthenticationError,
+    GaaSQuotaExceededError,
+    GaaSRateLimitError,
+    GaaSConnectionError,
+)
 
 <span class="keyword">try</span>:
     response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)
+<span class="keyword">except</span> <span class="type">GaaSAuthenticationError</span>:
+    <span class="func">print</span>(<span class="string">"Invalid API key"</span>)
+<span class="keyword">except</span> <span class="type">GaaSQuotaExceededError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(<span class="string">f"Quota exceeded. Upgrade plan or wait until: </span>{e.details.reset_time}<span class="string">"</span>)
+<span class="keyword">except</span> <span class="type">GaaSRateLimitError</span> <span class="keyword">as</span> e:
+    <span class="comment"># Exponential backoff recommended</span>
+    retry_after = e.details.get(<span class="string">"retry_after_seconds"</span>, 60)
+    <span class="keyword">await</span> asyncio.<span class="func">sleep</span>(retry_after)
 <span class="keyword">except</span> <span class="type">GaaSValidationError</span> <span class="keyword">as</span> e:
     <span class="func">print</span>(<span class="string">f"Validation failed: </span>{e.message}<span class="string">"</span>)
 <span class="keyword">except</span> <span class="type">GaaSConnectionError</span>:
     <span class="func">print</span>(<span class="string">"Could not reach GaaS server"</span>)</code></pre>
-    <p>
-      Exception classes: <code>GaaSValidationError</code> (422), <code>GaaSSemanticError</code> (422), <code>GaaSNotFoundError</code> (404), <code>GaaSConflictError</code> (409), <code>GaaSServerError</code> (500), <code>GaaSConnectionError</code> (network).
-    </p>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li><strong>Rate Limiting:</strong> Implement exponential backoff for 429 errors. Default limit: 100 requests/minute per organization.</li>
+      <li><strong>Quota Monitoring:</strong> Check <code>X-GaaS-Quota-Remaining</code> response header to track quota usage proactively.</li>
+      <li><strong>Idempotency:</strong> Always use idempotency keys for critical actions to prevent duplicate processing on retry.</li>
+      <li><strong>Error Retry:</strong> Retry 5xx server errors with exponential backoff. Do not retry 4xx client errors (except 429).</li>
+    </ul>
 
     <hr class="divider">
 
@@ -297,18 +355,18 @@
     <pre><code>npm install @gaas/sdk</code></pre>
 
     <h3>Submit an Intent</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent, ActionType, TargetType } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
 
 <span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
-  baseUrl: <span class="string">'https://api.gaas.to'</span>,
+  baseUrl: <span class="string">'https://api.gaas.is'</span>,
   headers: { <span class="string">'X-API-Key'</span>: <span class="string">'your_key'</span> },
 });
 
 <span class="keyword">const</span> intent = <span class="func">buildIntent</span>({
   agentId: <span class="string">'billing_bot'</span>,
-  actionType: <span class="string">'communicate'</span>,
+  actionType: ActionType.Communicate,
   verb: <span class="string">'send_email'</span>,
-  targetType: <span class="string">'person'</span>,
+  targetType: TargetType.Person,
   targetIdentifier: <span class="string">'patient@example.com'</span>,
   summary: <span class="string">'Send billing statement to patient'</span>,
   content: { recipient: <span class="string">'patient@example.com'</span>, channel: <span class="string">'email'</span> },
@@ -360,7 +418,7 @@
     <h3>Submit an Intent</h3>
     <pre><code><span class="keyword">import</span> com.gaas.sdk.*;
 
-<span class="keyword">try</span> (<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.to"</span>, <span class="string">"your_key"</span>)) {
+<span class="keyword">try</span> (<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, <span class="string">"your_key"</span>)) {
     <span class="type">IntentDeclaration</span> intent = <span class="type">IntentBuilder</span>.<span class="func">create</span>()
         .<span class="func">agentId</span>(<span class="string">"billing_bot"</span>)
         .<span class="func">actionType</span>(ActionType.COMMUNICATE)

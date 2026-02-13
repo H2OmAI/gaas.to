@@ -222,6 +222,10 @@ Content-Type: application/json
       <strong>What is a membrane?</strong> Your governance membrane is the complete set of policies, risk thresholds, delegation limits, and configurations that define how GaaS governs your agents. See <a class="link" href="onboarding.html">Onboarding</a> for the full lifecycle.
     </div>
 
+    <div class="note">
+      <strong>API Key Required.</strong> Save the API key returned from quickstart &mdash; you'll need it for all subsequent requests. Include it in the <code>X-API-Key</code> header when submitting intents.
+    </div>
+
     <hr class="divider">
 
     <!-- STEP 2 -->
@@ -231,11 +235,15 @@ Content-Type: application/json
       Before your agent takes an action, have it declare the intent to GaaS and act on the decision.
     </p>
 
+    <div class="note">
+      <strong>Quota Limits.</strong> Each plan has monthly action quotas. Free tier allows 1,000 actions/month. Exceeding your quota returns a <code>402 Payment Required</code> error. See <a class="link" href="billing-and-quotas.html">Billing &amp; Quotas</a> for details.
+    </div>
+
     <h3>Python</h3>
     <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent
 
 <span class="keyword">async with</span> <span class="func">GaaSClient</span>(
-    <span class="string">"http://localhost:8000"</span>,
+    <span class="string">"https://api.gaas.is"</span>,
     headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_api_key"</span>},
 ) <span class="keyword">as</span> client:
     <span class="comment"># Declare what the agent wants to do</span>
@@ -263,7 +271,7 @@ Content-Type: application/json
     <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
 
 <span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
-  baseUrl: <span class="string">'http://localhost:8000'</span>,
+  baseUrl: <span class="string">'https://api.gaas.is'</span>,
   headers: { <span class="string">'X-API-Key'</span>: <span class="string">'your_api_key'</span> },
 });
 
@@ -318,6 +326,14 @@ Content-Type: application/json
     <p>
       Live mode can be reverted to shadow at any time with a single call. All audit records are preserved across both modes.
     </p>
+
+    <hr class="divider">
+
+    <h2>Troubleshooting</h2>
+    <h3>Common Errors</h3>
+    <p><strong>401 Unauthorized</strong> &mdash; Invalid or missing API key. Check that you're including <code>X-API-Key</code> in the request headers with the key from quickstart.</p>
+    <p><strong>402 Payment Required</strong> &mdash; Monthly quota exceeded. Upgrade your plan or wait until the quota resets at the start of the next billing period.</p>
+    <p><strong>429 Too Many Requests</strong> &mdash; Rate limit exceeded. GaaS enforces per-organization rate limits (default: 100 requests/minute). Implement exponential backoff and retry after the period specified in the <code>Retry-After</code> header.</p>
 
     <hr class="divider">
 

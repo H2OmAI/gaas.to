@@ -293,8 +293,12 @@
 
     <h2>Anomaly Alerting</h2>
     <p>
-      Beyond passive metrics, GaaS actively monitors operational health and fires alerts when thresholds are exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check, dispatching events through the notification engine.
+      Beyond passive metrics, GaaS actively monitors operational health and fires alerts when thresholds are exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check (every 60 seconds), dispatching events through the notification engine.
     </p>
+
+    <div class="note">
+      <strong>Warm-up period.</strong> The anomaly monitor uses ephemeral rolling windows for detection. Allow approximately 5 minutes after startup for accurate anomaly detection as the windows populate with baseline data.
+    </div>
 
     <h3>Event Types</h3>
     <table>
@@ -406,6 +410,31 @@ Content-Type: application/json
     <div class="note">
       <strong>Dashboard integration.</strong> You can also create and manage notification rules through the <a class="link" href="dashboard.html">conversational dashboard</a> using natural language.
     </div>
+
+    <hr class="divider">
+
+    <h2>Metrics Persistence &amp; History</h2>
+    <p>
+      In addition to real-time Prometheus metrics, GaaS persists hourly snapshots for historical trend analysis.
+    </p>
+
+    <h3>Metrics History</h3>
+    <p>
+      Retrieve historical metrics snapshots:
+    </p>
+    <pre><code>GET /v1/dashboard/metrics/history?hours=24&amp;limit=100</code></pre>
+    <p>
+      Returns timestamped snapshots containing block rate, average risk, latency percentiles, decision counts, and escalation counts. Useful for generating compliance reports and trend analysis.
+    </p>
+
+    <h3>Manual Snapshot</h3>
+    <p>
+      Trigger an on-demand metrics snapshot:
+    </p>
+    <pre><code>POST /v1/dashboard/metrics/snapshot</code></pre>
+    <p>
+      Creates an immediate snapshot of current metrics. Useful for capturing baseline before configuration changes or after incident resolution.
+    </p>
 
     <hr class="divider">
 
