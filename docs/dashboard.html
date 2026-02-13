@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
   <title>Conversational Dashboard &mdash; GaaS Documentation</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,6 +16,16 @@
       min-height: 100vh;
     }
 
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     header {
       border-bottom: 1px solid #1e2533;
       padding: 1.5rem 2rem;
@@ -24,14 +35,8 @@
     }
 
     header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
       text-decoration: none;
     }
-
-    header .logo span { color: #58a6ff; }
 
     header nav a {
       color: #8b949e;
@@ -351,8 +356,9 @@
   </style>
 </head>
 <body>
+<canvas id="meshCanvas"></canvas>
   <header>
-    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
     <nav>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
@@ -630,5 +636,6 @@ npm run dev</code></pre>
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="constellation.js"></script>
 </body>
 </html>
