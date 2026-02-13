@@ -371,7 +371,7 @@
       Traditional governance dashboards bury critical signals under page navigation. GaaS takes a different approach: you talk to your governance system. Ask "what happened overnight?" and get a summary with data. Say "review that top escalation" and get the context package with approve/deny options. No clicks through menus. No tab switching.
     </p>
     <p>
-      The dashboard is powered by Claude, with 39 tools that map to the full GaaS API. Claude fetches live data, generates visual artifacts inline, and takes actions on your behalf &mdash; all within the conversation.
+      The dashboard is powered by Claude, with 43 tools that map to the full GaaS API. Claude fetches live data, generates visual artifacts inline, and takes actions on your behalf &mdash; all within the conversation.
     </p>
 
     <hr class="divider">
@@ -396,7 +396,7 @@
         <div class="flow-icon">3</div>
         <div class="flow-content">
           <h3>BFF (Express + Claude)</h3>
-          <p>Backend-for-frontend server. Sends your message to Claude with 39 governance tools. Claude decides which tools to call, executes them against the GaaS API (up to 10 rounds), and streams text and artifacts back.</p>
+          <p>Backend-for-frontend server. Sends your message to Claude with 43 governance tools. Claude decides which tools to call, executes them against the GaaS API (up to 10 rounds), and streams text and artifacts back.</p>
         </div>
       </div>
       <div class="flow-step">
@@ -416,7 +416,7 @@
 
     <h2>What You Can Do</h2>
     <p>
-      The dashboard exposes five categories of governance operations through natural language.
+      The dashboard exposes six categories of governance operations through natural language.
     </p>
 
     <div class="tool-category">
@@ -478,6 +478,16 @@
         <li>Verify SHA-256 hash chain integrity for tamper detection</li>
         <li>Check audit retention policy status and record counts</li>
         <li>Bulk export audit records for compliance (SOC 2, HIPAA) with optional chain verification</li>
+      </ul>
+    </div>
+
+    <div class="tool-category">
+      <h4>Waitlist &amp; Lead Capture <span class="tool-count">4 tools</span></h4>
+      <ul>
+        <li>List and filter waitlist entries by status, with pagination</li>
+        <li>Approve verified waitlist entries for onboarding</li>
+        <li>Reject waitlist entries with reason tracking</li>
+        <li>View waitlist analytics: status breakdown, UTM attribution by source and campaign, signup trends</li>
       </ul>
     </div>
 
@@ -618,9 +628,6 @@ npm run dev</code></pre>
   </main>
 
   <footer>
-    <div style="margin-bottom: 1rem;">
-      <img src="gaas-certified-badge.png" alt="GaaS Certified" style="height: 80px;">
-    </div>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
 </body>
