@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Library — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    ul { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .cta-box {
+      background: linear-gradient(135deg, #1f6feb22 0%, #1f6feb11 100%);
+      border: 1px solid #1f6feb44;
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2.5rem 0;
+      text-align: center;
+    }
+
+    .cta-box h3 {
+      font-size: 1.125rem;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      margin-top: 0;
+    }
+
+    .cta-box p {
+      font-size: 0.9375rem;
+      color: #8b949e;
+      margin-bottom: 1.25rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #1f6feb;
+      color: #fff;
+      padding: 0.75rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: background 0.2s;
+    }
+
+    .cta-button:hover {
+      background: #1a5fd8;
+    }
+
+    .framework-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .framework-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1rem;
+    }
+
+    .framework-card h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.5rem;
+    }
+
+    .framework-card p {
+      font-size: 0.8125rem;
+      color: #8b949e;
+      margin-bottom: 0;
+    }
+
+    .tier-section {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tier-section h3 {
+      margin-top: 0;
+      color: #58a6ff;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      background: #1f6feb33;
+      color: #58a6ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .features-list {
+      margin-top: 1rem;
+    }
+
+    .features-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .features-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #58a6ff;
+      font-weight: bold;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">Gaa<span>S</span></a>
+    <nav>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="api-reference.html">API Reference</a>
+      <a href="policies.html">Policies</a>
+      <a href="https://the.gaas.is">Sign In</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Policy Library</h1>
+    <p class="subtitle">Production-grade governance policies covering major regulatory frameworks and AI safety controls.</p>
+
+    <p>
+      GaaS ships with <strong>16+ pre-built policies</strong> organized into 4 tiers. Each policy evaluates agent actions against compliance requirements,
+      risk thresholds, and organizational rules — returning a binding verdict (approve, modify, escalate, or block) with full reasoning.
+    </p>
+
+    <div class="cta-box">
+      <h3>🔐 Complete Policy Catalog Available to Active Clients</h3>
+      <p>
+        Sign up to access the full policy library with implementation guides, configuration options, and regulatory mappings.
+      </p>
+      <a href="https://the.gaas.is/signup" class="cta-button">Start Free Trial</a>
+    </div>
+
+    <h2>Coverage Overview</h2>
+
+    <div class="tier-section">
+      <h3>Tier 1: Critical Compliance <span class="tier-badge">10 POLICIES</span></h3>
+      <p>
+        Fast-fail policies that block violations of fundamental requirements. These run first in the evaluation pipeline and
+        immediately block actions that violate critical rules — no deliberation required.
+      </p>
+      <ul class="features-list">
+        <li>Unauthorized access prevention</li>
+        <li>Required approval verification</li>
+        <li>Encryption requirement enforcement</li>
+        <li>Sensitive data handling controls</li>
+        <li>Resource isolation validation</li>
+      </ul>
+    </div>
+
+    <div class="tier-section">
+      <h3>Tier 2: Regulatory Frameworks <span class="tier-badge">8 POLICIES</span></h3>
+      <p>
+        Industry-specific compliance policies covering healthcare, finance, privacy, communications, and education.
+        Each policy implements the specific requirements of its regulatory framework.
+      </p>
+      <div class="framework-grid">
+        <div class="framework-card">
+          <h4>HIPAA</h4>
+          <p>Healthcare privacy & patient access rights</p>
+        </div>
+        <div class="framework-card">
+          <h4>PCI-DSS</h4>
+          <p>Payment card data protection</p>
+        </div>
+        <div class="framework-card">
+          <h4>GDPR</h4>
+          <p>EU data protection & privacy</p>
+        </div>
+        <div class="framework-card">
+          <h4>TCPA</h4>
+          <p>Telemarketing consent verification</p>
+        </div>
+        <div class="framework-card">
+          <h4>CCPA</h4>
+          <p>California consumer privacy</p>
+        </div>
+        <div class="framework-card">
+          <h4>FERPA</h4>
+          <p>Education records protection</p>
+        </div>
+        <div class="framework-card">
+          <h4>SOX</h4>
+          <p>Financial reporting controls</p>
+        </div>
+        <div class="framework-card">
+          <h4>EU AI Act</h4>
+          <p>High-risk AI system oversight</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier-section">
+      <h3>Tier 3: Custom Policies <span class="tier-badge">3 POLICIES</span></h3>
+      <p>
+        Organization-specific policies with configurable thresholds, routing rules, and approval workflows.
+        These allow you to define custom governance logic tailored to your business requirements.
+      </p>
+      <ul class="features-list">
+        <li>Clinical AI decision validation with model performance thresholds</li>
+        <li>Transaction approval workflows with dynamic routing</li>
+        <li>Multi-tenant data isolation with namespace verification</li>
+      </ul>
+    </div>
+
+    <div class="tier-section">
+      <h3>Tier 4: Experimental <span class="tier-badge">5 POLICIES</span></h3>
+      <p>
+        Cutting-edge governance for advanced AI systems. These policies address emerging challenges in AI safety,
+        transparency, and coordination.
+      </p>
+      <ul class="features-list">
+        <li>Hallucination detection for LLM outputs</li>
+        <li>Synthetic data provenance tracking</li>
+        <li>Reasoning transparency requirements</li>
+        <li>Multi-agent coordination protocols</li>
+        <li>EU AI Act high-risk system compliance</li>
+      </ul>
+    </div>
+
+    <h2>How Policies Work</h2>
+
+    <h3>Evaluation Pipeline</h3>
+    <p>
+      Every agent action passes through the policy evaluation stage:
+    </p>
+    <ol>
+      <li><strong>Scope Matching:</strong> Policies check if they apply to this action (based on agent, action type, data sensitivity, jurisdiction)</li>
+      <li><strong>Condition Checking:</strong> Applicable policies evaluate their specific requirements against enriched context</li>
+      <li><strong>Verdict Assignment:</strong> Each policy returns PASS, FAIL, CONDITIONAL, or WARN</li>
+      <li><strong>Conflict Resolution:</strong> If multiple policies fire, the most restrictive verdict wins</li>
+      <li><strong>Risk Scoring:</strong> Policies contribute to a 6-dimensional risk score (privacy, security, compliance, ethical, operational, financial)</li>
+    </ol>
+
+    <h3>Verdict Types</h3>
+    <ul>
+      <li><strong>PASS:</strong> Policy requirements are satisfied — action may proceed</li>
+      <li><strong>FAIL:</strong> Critical policy violation — action is immediately blocked (Tier 1 policies only)</li>
+      <li><strong>CONDITIONAL:</strong> Policy requires human judgment — escalate to deliberation panel</li>
+      <li><strong>WARN:</strong> Policy flags a concern but doesn't block — recorded in audit trail</li>
+    </ul>
+
+    <h3>Configuration Options</h3>
+    <p>
+      Tier 3 custom policies support organization-specific configuration:
+    </p>
+    <ul>
+      <li><strong>Thresholds:</strong> Adjust risk tolerance, approval limits, performance minimums</li>
+      <li><strong>Routing Rules:</strong> Define which reviewers handle which types of escalations</li>
+      <li><strong>Approval Workflows:</strong> Configure multi-step approval chains</li>
+      <li><strong>Namespace Mappings:</strong> Define data isolation boundaries</li>
+    </ul>
+
+    <div class="cta-box">
+      <h3>Ready to explore the full policy library?</h3>
+      <p>
+        Active clients get access to complete policy documentation including implementation guides,
+        configuration schemas, regulatory references, and example use cases.
+      </p>
+      <a href="https://the.gaas.is/signup" class="cta-button">Start Free Trial</a>
+      <p style="margin-top: 1rem; margin-bottom: 0;">
+        <a href="mailto:hello@gaas.is" class="link">Book a demo</a> to discuss custom policy development
+      </p>
+    </div>
+
+    <h2>Integration</h2>
+
+    <p>
+      Policies are automatically evaluated as part of the 5-stage governance pipeline. You don't need to manually invoke policies —
+      simply submit intents via the REST API and GaaS handles the rest.
+    </p>
+
+    <p>
+      <strong>Next steps:</strong>
+    </p>
+    <ul>
+      <li><a href="getting-started.html" class="link">Getting Started</a> — Set up your first governance pipeline</li>
+      <li><a href="shadow-mode.html" class="link">Shadow Mode</a> — Test policies without enforcement</li>
+      <li><a href="dashboard.html" class="link">Dashboard</a> — Monitor policy decisions and configure rules</li>
+      <li><a href="https://the.gaas.is" class="link">Sign up</a> — Access the complete policy catalog</li>
+    </ul>
+  </main>
+
+  <footer>
+    &copy; 2026 H2Om. Licensed under BSL 1.1 (converts to Apache 2.0 on 2030-02-12).
+  </footer>
+</body>
+</html>

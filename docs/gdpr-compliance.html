@@ -338,13 +338,13 @@ X-API-Key: your_api_key</code></pre>
     "reasoning_chain": [
       "Intent validated: Agent 'healthcare_bot' requested ACCESS to PERSON record.",
       "Context enrichment: Target identified as patient with HIPAA-protected data.",
-      "Policy evaluation: Tier 1 policy 'pol_t1_007' (HIPAA consent gate) returned FAIL.",
+      "Policy evaluation: Critical compliance policy (HIPAA consent gate) returned FAIL.",
       "Deliberation bypassed due to critical policy fast-fail.",
       "Final verdict: BLOCK"
     ],
     "policies_triggered": [
       {
-        "policy_id": "pol_t1_007",
+        "policy_id": "consent_verification",
         "name": "HIPAA Consent Verification",
         "verdict": "fail",
         "reasoning": "No consent record found for patient ID p_12345 and purpose 'billing_inquiry'."

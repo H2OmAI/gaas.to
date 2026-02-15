@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="favicon.png">
   <title>SDKs &mdash; GaaS Documentation</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -14,16 +13,6 @@
       color: #c9d1d9;
       line-height: 1.6;
       min-height: 100vh;
-    }
-
-    #meshCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
     }
 
     header {
@@ -42,6 +31,7 @@
       text-decoration: none;
     }
 
+    header .logo span { color: #58a6ff; }
 
     header nav a {
       color: #8b949e;
@@ -193,7 +183,6 @@
   </style>
 </head>
 <body>
-<canvas id="meshCanvas"></canvas>
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
@@ -504,6 +493,5 @@ intent = <span class="func">build_intent</span>(
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
-<script src="constellation.js"></script>
 </body>
 </html>
