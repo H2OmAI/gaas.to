@@ -52,13 +52,13 @@
     header nav a:hover { color: #e6edf3; background: #1e2533; }
 
     header nav .nav-cta {
-      background: #1f6feb;
-      color: #fff;
+      background: #00d4aa;
+      color: #050810;
       font-weight: 600;
       margin-left: 0.5rem;
     }
 
-    header nav .nav-cta:hover { background: #388bfd; color: #fff; }
+    header nav .nav-cta:hover { background: #00e6b8; color: #050810; }
 
     /* ── HERO ── */
     .hero {
@@ -74,13 +74,13 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: #1f6feb18;
-      border: 1px solid #1f6feb44;
+      background: rgba(0, 212, 170, 0.08);
+      border: 1px solid rgba(0, 212, 170, 0.27);
       border-radius: 100px;
       padding: 0.3rem 1rem;
       font-size: 0.75rem;
       font-weight: 600;
-      color: #58a6ff;
+      color: #00d4aa;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       margin-bottom: 1.75rem;
@@ -110,7 +110,7 @@
 
     .hero h1 em {
       font-style: normal;
-      background: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
+      background: linear-gradient(135deg, #00d4aa 0%, #00ffcc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -135,17 +135,18 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: #1f6feb;
-      color: #fff;
+      background: #00d4aa;
+      color: #050810;
       padding: 0.75rem 1.75rem;
       border-radius: 8px;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9375rem;
-      transition: background 0.15s, transform 0.15s;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 20px rgba(0, 212, 170, 0.25);
     }
 
-    .btn-primary:hover { background: #388bfd; transform: translateY(-1px); }
+    .btn-primary:hover { background: #00e6b8; transform: translateY(-1px); box-shadow: 0 0 28px rgba(0, 212, 170, 0.4); }
 
     .btn-secondary {
       display: inline-flex;
@@ -162,7 +163,7 @@
       transition: border-color 0.15s, color 0.15s, transform 0.15s;
     }
 
-    .btn-secondary:hover { border-color: #58a6ff; color: #58a6ff; transform: translateY(-1px); }
+    .btn-secondary:hover { border-color: #00d4aa; color: #00d4aa; transform: translateY(-1px); }
 
     /* ── PIPELINE FLOW ── */
     .pipeline-section {
@@ -208,11 +209,11 @@
       width: 1.75rem;
       height: 1.75rem;
       border-radius: 50%;
-      background: #1f6feb18;
-      border: 1px solid #1f6feb44;
+      background: rgba(0, 212, 170, 0.08);
+      border: 1px solid rgba(0, 212, 170, 0.27);
       font-size: 0.75rem;
       font-weight: 700;
-      color: #58a6ff;
+      color: #00d4aa;
       margin-bottom: 0.6rem;
     }
 
@@ -294,7 +295,7 @@
     }
 
     /* Per-section icon accent colours */
-    .icon-blue   { background: #1f6feb18; color: #58a6ff; }
+    .icon-blue   { background: rgba(0, 212, 170, 0.08); color: #00d4aa; }
     .icon-purple { background: #a371f718; color: #a371f7; }
     .icon-teal   { background: #23863618; color: #3fb950; }
     .icon-orange { background: #ffa65718; color: #ffa657; }
@@ -352,7 +353,7 @@
       user-select: none;
     }
 
-    .qs-tab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
+    .qs-tab.active { color: #00d4aa; border-bottom-color: #00d4aa; }
 
     .qs-pane { display: none; padding: 1.25rem 1.5rem; }
     .qs-pane.active { display: block; }
@@ -392,6 +393,29 @@
     footer a { color: #484f58; text-decoration: none; }
     footer a:hover { color: #8b949e; }
 
+    .cert-seal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0, 212, 170, 0.07);
+      border: 1px solid rgba(0, 212, 170, 0.22);
+      border-radius: 100px;
+      padding: 0.3rem 0.85rem 0.3rem 0.6rem;
+      color: #00d4aa !important;
+      text-decoration: none !important;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    .cert-seal:hover {
+      background: rgba(0, 212, 170, 0.12);
+      box-shadow: 0 0 12px rgba(0, 212, 170, 0.2);
+      color: #00d4aa !important;
+    }
+
     @media (max-width: 700px) {
       .pipeline-flow { flex-direction: column; }
       .pipe-stage + .pipe-stage::before { top: 0; bottom: auto; left: 10%; right: 10%; width: auto; height: 1px; }
@@ -407,11 +431,11 @@
 <canvas id="meshCanvas"></canvas>
 
 <header>
-  <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
+  <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:120px; filter: drop-shadow(0 0 15px rgba(0,212,170,0.15));"></a>
   <nav>
     <a href="https://gaas.is">Home</a>
     <a href="https://github.com/H2OmAI">GitHub</a>
-    <a href="https://the.gaas.is" class="nav-cta">Sign In &rarr;</a>
+    <a href="https://the.gaas.is/login" class="nav-cta">Sign In &rarr;</a>
   </nav>
 </header>
 
@@ -466,7 +490,7 @@
 <!-- QUICK-START -->
 <div class="content">
   <div class="section-group">
-    <div class="section-label" style="color:#58a6ff;">Quick Start</div>
+    <div class="section-label" style="color:#00d4aa;">Quick Start</div>
     <div class="quickstart">
       <div class="qs-tabs">
         <div class="qs-tab active" onclick="showTab('python')">Python</div>
@@ -521,7 +545,7 @@ console.<span class="fn">log</span>(decision.verdict); <span class="cm">// APPRO
 
   <!-- START HERE -->
   <div class="section-group">
-    <div class="section-label" style="color:#58a6ff;">Start Here</div>
+    <div class="section-label" style="color:#00d4aa;">Start Here</div>
     <div class="card-grid two-col">
       <a href="getting-started.html" class="doc-card">
         <div class="card-icon icon-blue">🚀</div>
@@ -703,6 +727,13 @@ console.<span class="fn">log</span>(decision.verdict); <span class="cm">// APPRO
 
 <footer>
   <span>&copy; 2026 <a href="https://gaas.is">H2Om</a> &mdash; BSL 1.1 &rarr; Apache 2.0 on 2030-02-12</span>
+  <a href="https://gaas.is" class="cert-seal" title="Governance as a Service — Certified Infrastructure">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 1L2 3.5v4.5C2 11.1 4.6 13.9 8 15c3.4-1.1 6-3.9 6-7V3.5L8 1z" fill="rgba(0,212,170,0.15)" stroke="#00d4aa" stroke-width="1.25"/>
+      <path d="M5.5 8.25l1.75 1.75 3.25-3.25" stroke="#00d4aa" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    GaaS Certified
+  </a>
   <span>
     <a href="https://gaas.is">gaas.is</a> &nbsp;&middot;&nbsp;
     <a href="https://the.gaas.is">Dashboard</a> &nbsp;&middot;&nbsp;
