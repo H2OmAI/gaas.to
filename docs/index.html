@@ -15,391 +15,709 @@
       line-height: 1.6;
       min-height: 100vh;
     }
+
     #meshCanvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 0;
       pointer-events: none;
     }
 
     header {
+      position: relative;
+      z-index: 10;
       border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
+      padding: 1.25rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: rgba(10,14,23,0.7);
+      backdrop-filter: blur(12px);
     }
 
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-    }
+    header .logo { text-decoration: none; }
 
-    header .logo span { color: #58a6ff; }
+    header nav { display: flex; align-items: center; gap: 0.25rem; }
 
     header nav a {
       color: #8b949e;
       text-decoration: none;
-      margin-left: 1.5rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
       font-size: 0.875rem;
+      transition: color 0.15s, background 0.15s;
     }
 
-    header nav a:hover { color: #e6edf3; }
+    header nav a:hover { color: #e6edf3; background: #1e2533; }
 
-    main {
-      max-width: 720px;
+    header nav .nav-cta {
+      background: #1f6feb;
+      color: #fff;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    header nav .nav-cta:hover { background: #388bfd; color: #fff; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      color: #8b949e;
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 1.5rem;
-    }
-
-    .pipeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: 3rem;
-    }
-
-    .stage {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid #1e2533;
-    }
-
-    .stage:last-child { border-bottom: none; }
-
-    .stage-number {
-      flex-shrink: 0;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #58a6ff;
-    }
-
-    .stage-content h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 0.25rem;
-    }
-
-    .stage-content p {
-      font-size: 0.875rem;
-      color: #8b949e;
-    }
-
-    .coming-soon {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 2rem;
+      padding: 5rem 2rem 3.5rem;
       text-align: center;
     }
 
-    .coming-soon h3 {
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1f6feb18;
+      border: 1px solid #1f6feb44;
+      border-radius: 100px;
+      padding: 0.3rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #58a6ff;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #3fb950;
+      box-shadow: 0 0 6px #3fb950;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: #e6edf3;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: #8b949e;
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1f6feb;
+      color: #fff;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .btn-primary:hover { background: #388bfd; transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: #c9d1d9;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: border-color 0.15s, color 0.15s, transform 0.15s;
+    }
+
+    .btn-secondary:hover { border-color: #58a6ff; color: #58a6ff; transform: translateY(-1px); }
+
+    /* ── PIPELINE FLOW ── */
+    .pipeline-section {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+
+    .pipeline-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      background: #0d1117;
+      border: 1px solid #1e2533;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .pipe-stage {
+      flex: 1;
+      padding: 1.5rem 1.25rem;
+      position: relative;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .pipe-stage:hover { background: #161b22; }
+
+    .pipe-stage + .pipe-stage::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 20%; bottom: 20%;
+      width: 1px;
+      background: #1e2533;
+    }
+
+    .pipe-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: #1f6feb18;
+      border: 1px solid #1f6feb44;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-bottom: 0.6rem;
+    }
+
+    .pipe-stage h3 {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+
+    .pipe-stage p {
+      font-size: 0.75rem;
+      color: #6e7681;
+      line-height: 1.5;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    .section-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    .section-group { margin-bottom: 3.5rem; }
+
+    /* Card grid — 2 col default, 3 col for smaller cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: #1e2533;
+      border: 1px solid #1e2533;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-grid.two-col {
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    }
+
+    .doc-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.4rem 1.5rem;
+      background: #0d1117;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .doc-card:hover { background: #161b22; }
+
+    .doc-card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
+
+    .card-icon {
+      flex-shrink: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1rem;
+    }
+
+    /* Per-section icon accent colours */
+    .icon-blue   { background: #1f6feb18; color: #58a6ff; }
+    .icon-purple { background: #a371f718; color: #a371f7; }
+    .icon-teal   { background: #23863618; color: #3fb950; }
+    .icon-orange { background: #ffa65718; color: #ffa657; }
+    .icon-red    { background: #ff7b7218; color: #ff7b72; }
+    .icon-gray   { background: #8b949e18; color: #8b949e; }
+    .icon-green  { background: #3fb95018; color: #56d364; }
+
+    .card-body { flex: 1; min-width: 0; }
+
+    .card-body h3 {
+      font-size: 0.9375rem;
       font-weight: 600;
       color: #e6edf3;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.2rem;
     }
 
-    .coming-soon p {
+    .card-body p {
+      font-size: 0.8125rem;
+      color: #6e7681;
+      line-height: 1.5;
+    }
+
+    .card-arrow {
+      flex-shrink: 0;
+      color: #30363d;
       font-size: 0.875rem;
-      color: #8b949e;
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s;
+      align-self: center;
     }
 
-    .coming-soon a {
-      color: #58a6ff;
-      text-decoration: none;
+    /* ── QUICK-START CODE BLOCK ── */
+    .quickstart {
+      background: #0d1117;
+      border: 1px solid #1e2533;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
     }
 
-    .coming-soon a:hover { text-decoration: underline; }
+    .qs-tabs {
+      display: flex;
+      border-bottom: 1px solid #1e2533;
+      padding: 0 1rem;
+    }
 
+    .qs-tab {
+      padding: 0.65rem 1rem;
+      font-size: 0.8125rem;
+      color: #6e7681;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+
+    .qs-tab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
+
+    .qs-pane { display: none; padding: 1.25rem 1.5rem; }
+    .qs-pane.active { display: block; }
+
+    .qs-pane pre {
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      color: #e6edf3;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .qs-pane .cm  { color: #8b949e; }
+    .qs-pane .kw  { color: #ff7b72; }
+    .qs-pane .st  { color: #a5d6ff; }
+    .qs-pane .fn  { color: #d2a8ff; }
+    .qs-pane .nu  { color: #79c0ff; }
+
+    /* ── FOOTER ── */
     footer {
-      max-width: 720px;
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 2rem;
       border-top: 1px solid #1e2533;
       font-size: 0.8rem;
       color: #484f58;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     footer a { color: #484f58; text-decoration: none; }
     footer a:hover { color: #8b949e; }
 
-    @media (max-width: 600px) {
-      h1 { font-size: 1.75rem; }
-      main { padding: 2.5rem 1.25rem; }
+    @media (max-width: 700px) {
+      .pipeline-flow { flex-direction: column; }
+      .pipe-stage + .pipe-stage::before { top: 0; bottom: auto; left: 10%; right: 10%; width: auto; height: 1px; }
+      .hero { padding: 3.5rem 1.25rem 2.5rem; }
+      .content { padding: 0 1.25rem 3rem; }
+      .pipeline-section { padding: 0 1.25rem; }
+      .card-grid, .card-grid.two-col { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 <canvas id="meshCanvas"></canvas>
-  <header>
-    <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
-    <nav>
-      <a href="https://gaas.is">Home</a>
-      <a href="https://github.com/H2OmAI">GitHub</a>
-    </nav>
-  </header>
 
-  <main>
-    <h1>Governance as a Service</h1>
-    <p class="subtitle">
-      A structured governance layer for autonomous AI agents.
-      Every action passes through a five-stage pipeline before execution.
-    </p>
+<header>
+  <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
+  <nav>
+    <a href="https://gaas.is">Home</a>
+    <a href="https://github.com/H2OmAI">GitHub</a>
+    <a href="https://the.gaas.is" class="nav-cta">Sign In &rarr;</a>
+  </nav>
+</header>
 
-    <h2>The Pipeline</h2>
-    <div class="pipeline">
-      <div class="stage">
-        <div class="stage-number">1</div>
-        <div class="stage-content">
-          <h3>Intent Declaration</h3>
-          <p>The agent declares what it wants to do. The intent is validated for completeness, coherence, and semantic correctness before anything else happens.</p>
-        </div>
-      </div>
-      <div class="stage">
-        <div class="stage-number">2</div>
-        <div class="stage-content">
-          <h3>Context Enrichment</h3>
-          <p>The system gathers surrounding context&mdash;historical data, related entities, environmental signals&mdash;to give the governance engine a full picture of the request.</p>
-        </div>
-      </div>
-      <div class="stage">
-        <div class="stage-number">3</div>
-        <div class="stage-content">
-          <h3>Policy Evaluation</h3>
-          <p>The enriched intent is evaluated against a configurable policy framework. Tier&nbsp;1 critical violations trigger an immediate block; other policies produce verdicts and risk scores.</p>
-        </div>
-      </div>
-      <div class="stage">
-        <div class="stage-number">4</div>
-        <div class="stage-content">
-          <h3>Deliberation</h3>
-          <p>A panel of specialized agents deliberates on the intent through multiple rounds, weighing trade-offs and reaching consensus on whether to approve, condition, or escalate the action.</p>
-        </div>
-      </div>
-      <div class="stage">
-        <div class="stage-number">5</div>
-        <div class="stage-content">
-          <h3>Decision + Audit</h3>
-          <p>A final governance decision is assembled with full reasoning, conditions, and a complete audit trail. Every decision is recorded for compliance and learning.</p>
-        </div>
-      </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="dot"></span>
+    Production · v0.2.13 · api.gaas.is
+  </div>
+  <h1>Governance for<br><em>Autonomous Agents</em></h1>
+  <p>
+    Every agent action — payment, communication, data access — passes through a
+    five-stage governance pipeline before execution. Compliance built in, not bolted on.
+  </p>
+  <div class="hero-actions">
+    <a href="getting-started.html" class="btn-primary">Get Started &rarr;</a>
+    <a href="api-reference.html" class="btn-secondary">API Reference</a>
+  </div>
+</section>
+
+<!-- PIPELINE FLOW -->
+<div class="pipeline-section">
+  <div class="pipeline-flow">
+    <div class="pipe-stage">
+      <div class="pipe-num">1</div>
+      <h3>Intent Declaration</h3>
+      <p>Agent declares action. Validated for completeness and semantic correctness.</p>
     </div>
+    <div class="pipe-stage">
+      <div class="pipe-num">2</div>
+      <h3>Context Enrichment</h3>
+      <p>12 production connectors pull live identity, security, and domain signals.</p>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-num">3</div>
+      <h3>Policy Evaluation</h3>
+      <p>33 policies across 4 tiers. Tier&nbsp;1 violations fast-fail. Risk scored in 6 dimensions.</p>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-num">4</div>
+      <h3>Deliberation</h3>
+      <p>6-agent LLM panel deliberates ambiguous cases through up to 3 consensus rounds.</p>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-num">5</div>
+      <h3>Decision + Audit</h3>
+      <p>SHA-256 hash-chained audit record. Every decision stored, reasoned, and retrievable.</p>
+    </div>
+  </div>
+</div>
 
-    <h2>Documentation</h2>
-    <div class="pipeline">
-      <a href="getting-started.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Getting Started</h3>
-            <p>Onboard, integrate, and go live in three steps.</p>
-          </div>
+<!-- QUICK-START -->
+<div class="content">
+  <div class="section-group">
+    <div class="section-label" style="color:#58a6ff;">Quick Start</div>
+    <div class="quickstart">
+      <div class="qs-tabs">
+        <div class="qs-tab active" onclick="showTab('python')">Python</div>
+        <div class="qs-tab" onclick="showTab('typescript')">TypeScript</div>
+        <div class="qs-tab" onclick="showTab('curl')">cURL</div>
+      </div>
+      <div class="qs-pane active" id="tab-python"><pre>
+<span class="kw">from</span> gaas_sdk <span class="kw">import</span> GaaSClient, build_intent
+
+<span class="kw">async with</span> <span class="fn">GaaSClient</span>(<span class="st">"https://api.gaas.is"</span>, api_key=<span class="st">"gsk_..."</span>) <span class="kw">as</span> client:
+    intent = <span class="fn">build_intent</span>(
+        agent_id=<span class="st">"my-agent-v1"</span>,
+        action_type=<span class="st">"TRANSACT"</span>,
+        verb=<span class="st">"initiate_payment"</span>,
+        target=<span class="st">"vendor_account_9912"</span>,
+        summary=<span class="st">"Pay invoice INV-2026-0044 for SaaS services"</span>,
+    )
+    decision = <span class="kw">await</span> client.<span class="fn">submit_intent</span>(intent)
+    <span class="fn">print</span>(decision.verdict)  <span class="cm"># APPROVE | BLOCK | ESCALATE</span>
+</pre></div>
+      <div class="qs-pane" id="tab-typescript"><pre>
+<span class="kw">import</span> { GaaSClient, buildIntent } <span class="kw">from</span> <span class="st">'@gaas/sdk'</span>;
+
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">GaaSClient</span>({ baseUrl: <span class="st">'https://api.gaas.is'</span>, apiKey: <span class="st">'gsk_...'</span> });
+
+<span class="kw">const</span> intent = <span class="fn">buildIntent</span>({
+  agentId: <span class="st">'my-agent-v1'</span>,
+  actionType: <span class="st">'TRANSACT'</span>,
+  verb: <span class="st">'initiate_payment'</span>,
+  target: <span class="st">'vendor_account_9912'</span>,
+  summary: <span class="st">'Pay invoice INV-2026-0044 for SaaS services'</span>,
+});
+
+<span class="kw">const</span> decision = <span class="kw">await</span> client.<span class="fn">submitIntent</span>(intent);
+console.<span class="fn">log</span>(decision.verdict); <span class="cm">// APPROVE | BLOCK | ESCALATE</span>
+</pre></div>
+      <div class="qs-pane" id="tab-curl"><pre>
+<span class="fn">curl</span> -X POST https://api.gaas.is/v1/intents \
+  -H <span class="st">"X-API-Key: gsk_..."</span> \
+  -H <span class="st">"Content-Type: application/json"</span> \
+  -d <span class="st">'{
+    "intent": {
+      "agent": { "id": "my-agent-v1" },
+      "action": { "type": "TRANSACT", "verb": "initiate_payment",
+                  "target": { "identifier": "vendor_account_9912" } },
+      "payload": { "summary": "Pay invoice INV-2026-0044" }
+    }
+  }'</span>
+</pre></div>
+    </div>
+  </div>
+
+  <!-- START HERE -->
+  <div class="section-group">
+    <div class="section-label" style="color:#58a6ff;">Start Here</div>
+    <div class="card-grid two-col">
+      <a href="getting-started.html" class="doc-card">
+        <div class="card-icon icon-blue">🚀</div>
+        <div class="card-body">
+          <h3>Getting Started</h3>
+          <p>Quickstart, API key provisioning, your first governance decision.</p>
         </div>
+        <span class="card-arrow">›</span>
       </a>
-      <a href="intent-api.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Intent Declaration API</h3>
-            <p>Endpoints, action types, and governance decisions.</p>
-          </div>
+      <a href="api-reference.html" class="doc-card">
+        <div class="card-icon icon-blue">📐</div>
+        <div class="card-body">
+          <h3>API Reference</h3>
+          <p>Complete OpenAPI spec — all endpoints, request and response schemas.</p>
         </div>
+        <span class="card-arrow">›</span>
       </a>
-      <a href="api-reference.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>API Reference</h3>
-            <p>Complete OpenAPI specification &mdash; all endpoints with request and response schemas.</p>
-          </div>
+      <a href="onboarding.html" class="doc-card">
+        <div class="card-icon icon-blue">🏗</div>
+        <div class="card-body">
+          <h3>Onboarding</h3>
+          <p>Intake, UCM builder, membrane generation, and the shadow → live lifecycle.</p>
         </div>
+        <span class="card-arrow">›</span>
       </a>
-      <a href="policies.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Policy Library</h3>
-            <p>16+ governance policies covering HIPAA, PCI-DSS, GDPR, and more. Sign up to access the full catalog.</p>
-          </div>
+      <a href="sdks.html" class="doc-card">
+        <div class="card-icon icon-blue">📦</div>
+        <div class="card-body">
+          <h3>SDKs</h3>
+          <p>Python, TypeScript, and Java client libraries with full intent builder support.</p>
         </div>
-      </a>
-      <a href="onboarding.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Onboarding</h3>
-            <p>Context intake, membrane generation, shadow mode, and going live.</p>
-          </div>
-        </div>
-      </a>
-      <a href="dashboard.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Conversational Dashboard</h3>
-            <p>Governance operations through natural language &mdash; powered by Claude.</p>
-          </div>
-        </div>
-      </a>
-      <a href="sdks.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>SDKs</h3>
-            <p>Python, TypeScript, and Java client libraries for intent submission.</p>
-          </div>
-        </div>
-      </a>
-      <a href="shadow-mode.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Shadow Mode</h3>
-            <p>Full pipeline evaluation without enforcement &mdash; test governance on real traffic.</p>
-          </div>
-        </div>
-      </a>
-      <a href="observability.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Observability &amp; Alerting</h3>
-            <p>Structured logging, Prometheus metrics, distributed tracing, and anomaly alerting.</p>
-          </div>
-        </div>
-      </a>
-      <a href="load-testing.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Load Testing</h3>
-            <p>k6 smoke, load, and stress tests for the governance pipeline &mdash; CI-gated between staging and production.</p>
-          </div>
-        </div>
-      </a>
-      <a href="authentication.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Authentication</h3>
-            <p>API keys, multi-tenancy, and security best practices.</p>
-          </div>
-        </div>
-      </a>
-      <a href="webhooks.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Webhooks</h3>
-            <p>Real-time event notifications with HMAC-SHA256 verification.</p>
-          </div>
-        </div>
-      </a>
-      <a href="gdpr-compliance.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>GDPR Compliance</h3>
-            <p>Data subject rights (Articles 17, 20, 22) and sub-processor notifications.</p>
-          </div>
-        </div>
-      </a>
-      <a href="billing-and-quotas.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Billing &amp; Quotas</h3>
-            <p>4-tier pricing, usage enforcement, and multi-currency support.</p>
-          </div>
-        </div>
-      </a>
-      <a href="rate-limits.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Rate Limits</h3>
-            <p>Per-endpoint request throttling and 429 handling.</p>
-          </div>
-        </div>
-      </a>
-      <a href="connectors.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Connectors</h3>
-            <p>12 production connectors — Okta, SIEM, Stripe, GitHub, Slack, Datadog, and more.</p>
-          </div>
-        </div>
-      </a>
-      <a href="a2a.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>A2A &amp; Agent Networks</h3>
-            <p>A2A Protocol v0.3, Agent Trust Registry, and AP2 agentic payment governance.</p>
-          </div>
-        </div>
-      </a>
-      <a href="advanced-features.html" style="text-decoration:none;color:inherit;">
-        <div class="stage">
-          <div class="stage-number">&rarr;</div>
-          <div class="stage-content">
-            <h3>Advanced Features</h3>
-            <p>Bulk submission, field filtering, idempotency, ETag caching, and performance optimizations.</p>
-          </div>
-        </div>
+        <span class="card-arrow">›</span>
       </a>
     </div>
+  </div>
 
-    <div class="coming-soon">
-      <h3>More on the Way</h3>
-      <p>Policy authoring guides, deployment runbooks, and connector configuration references are in progress.<br>
-      Visit <a href="https://gaas.is">gaas.is</a> for an overview of the project.</p>
+  <!-- CORE PIPELINE -->
+  <div class="section-group">
+    <div class="section-label" style="color:#a371f7;">Core Pipeline</div>
+    <div class="card-grid">
+      <a href="intent-api.html" class="doc-card">
+        <div class="card-icon icon-purple">⚡</div>
+        <div class="card-body">
+          <h3>Intent Declaration API</h3>
+          <p>Action types, shadow mode, batch submission, and governance verdicts.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="policies.html" class="doc-card">
+        <div class="card-icon icon-purple">🛡</div>
+        <div class="card-body">
+          <h3>Policy Library</h3>
+          <p>33 policies — HIPAA, GDPR, PCI-DSS, SOX, AP2, EU AI Act, and more.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="connectors.html" class="doc-card">
+        <div class="card-icon icon-purple">🔌</div>
+        <div class="card-body">
+          <h3>Connectors</h3>
+          <p>12 production integrations — Okta, SIEM, Stripe, GitHub, Slack, Datadog.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="a2a.html" class="doc-card">
+        <div class="card-icon icon-purple">🤖</div>
+        <div class="card-body">
+          <h3>A2A &amp; Agent Networks</h3>
+          <p>A2A Protocol v0.3, Agent Trust Registry, AP2 payment governance.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="shadow-mode.html" class="doc-card">
+        <div class="card-icon icon-purple">👁</div>
+        <div class="card-body">
+          <h3>Shadow Mode</h3>
+          <p>Full pipeline evaluation, zero enforcement. Test on live traffic safely.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="dashboard.html" class="doc-card">
+        <div class="card-icon icon-purple">💬</div>
+        <div class="card-body">
+          <h3>Conversational Dashboard</h3>
+          <p>Governance operations via natural language — powered by Claude.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
     </div>
-  </main>
+  </div>
 
-  <footer>
-    <a href="https://gaas.is">&copy; H2Om</a>
-  </footer>
+  <!-- PLATFORM & OPS -->
+  <div class="section-group">
+    <div class="section-label" style="color:#ffa657;">Platform &amp; Operations</div>
+    <div class="card-grid">
+      <a href="observability.html" class="doc-card">
+        <div class="card-icon icon-orange">📊</div>
+        <div class="card-body">
+          <h3>Observability &amp; Alerting</h3>
+          <p>Structured logging, Prometheus metrics, OTel tracing, anomaly detection.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="webhooks.html" class="doc-card">
+        <div class="card-icon icon-orange">🔔</div>
+        <div class="card-body">
+          <h3>Webhooks</h3>
+          <p>HMAC-signed event delivery for decisions, escalations, and quota events.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="authentication.html" class="doc-card">
+        <div class="card-icon icon-orange">🔑</div>
+        <div class="card-body">
+          <h3>Authentication</h3>
+          <p>API keys, multi-tenancy, OAuth, MFA, and org isolation.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="rate-limits.html" class="doc-card">
+        <div class="card-icon icon-orange">🚦</div>
+        <div class="card-body">
+          <h3>Rate Limits</h3>
+          <p>Per-endpoint sliding-window throttling and 429 backoff patterns.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="advanced-features.html" class="doc-card">
+        <div class="card-icon icon-orange">⚙️</div>
+        <div class="card-body">
+          <h3>Advanced Features</h3>
+          <p>Bulk submission, field filtering, idempotency, caching, read replicas.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="load-testing.html" class="doc-card">
+        <div class="card-icon icon-orange">🧪</div>
+        <div class="card-body">
+          <h3>Load Testing</h3>
+          <p>k6 smoke, load, and stress profiles — CI-gated between staging and production.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE & BILLING -->
+  <div class="section-group">
+    <div class="section-label" style="color:#3fb950;">Compliance &amp; Billing</div>
+    <div class="card-grid">
+      <a href="gdpr-compliance.html" class="doc-card">
+        <div class="card-icon icon-teal">⚖️</div>
+        <div class="card-body">
+          <h3>GDPR Compliance</h3>
+          <p>Data subject rights (Arts. 17, 20, 22), consent management, sub-processor automation.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="billing-and-quotas.html" class="doc-card">
+        <div class="card-icon icon-teal">💳</div>
+        <div class="card-body">
+          <h3>Billing &amp; Quotas</h3>
+          <p>4-tier pricing, usage enforcement, multi-currency, Stripe Tax.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+      <a href="sla.html" class="doc-card">
+        <div class="card-icon icon-teal">📋</div>
+        <div class="card-body">
+          <h3>SLA</h3>
+          <p>Availability commitments, credit tiers, and incident definitions by plan.</p>
+        </div>
+        <span class="card-arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<footer>
+  <span>&copy; 2026 <a href="https://gaas.is">H2Om</a> &mdash; BSL 1.1 &rarr; Apache 2.0 on 2030-02-12</span>
+  <span>
+    <a href="https://gaas.is">gaas.is</a> &nbsp;&middot;&nbsp;
+    <a href="https://the.gaas.is">Dashboard</a> &nbsp;&middot;&nbsp;
+    <a href="https://github.com/H2OmAI">GitHub</a>
+  </span>
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.qs-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.qs-pane').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+</script>
 <script src="constellation.js"></script>
 </body>
 </html>
