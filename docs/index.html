@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
   <title>GaaS Documentation — Governance as a Service by H2Om</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,6 +14,15 @@
       color: #c9d1d9;
       line-height: 1.6;
       min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
     header {
@@ -159,8 +169,9 @@
   </style>
 </head>
 <body>
+<canvas id="meshCanvas"></canvas>
   <header>
-    <a class="logo" href="index.html" style="text-decoration:none;">G<span>aa</span>S</a>
+    <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:70px;"></a>
     <nav>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -389,5 +400,6 @@
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="constellation.js"></script>
 </body>
 </html>

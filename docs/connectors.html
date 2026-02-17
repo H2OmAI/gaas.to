@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
   <title>Connectors — GaaS Documentation</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,6 +14,15 @@
       color: #c9d1d9;
       line-height: 1.6;
       min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
     header {
@@ -223,6 +233,7 @@
   </style>
 </head>
 <body>
+<canvas id="meshCanvas"></canvas>
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
@@ -560,5 +571,6 @@ connectors:
   <footer>
     &copy; 2026 H2Om. Licensed under BSL 1.1 (converts to Apache 2.0 on 2030-02-12).
   </footer>
+<script src="constellation.js"></script>
 </body>
 </html>
