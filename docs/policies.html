@@ -221,8 +221,9 @@
     <p class="subtitle">Production-grade governance policies covering major regulatory frameworks and AI safety controls.</p>
 
     <p>
-      GaaS ships with <strong>16+ pre-built policies</strong> organized into 4 tiers. Each policy evaluates agent actions against compliance requirements,
-      risk thresholds, and organizational rules — returning a binding verdict (approve, modify, escalate, or block) with full reasoning.
+      GaaS ships with <strong>33 pre-built policies</strong> organized into 4 tiers plus an AP2 payment governance layer.
+      Each policy evaluates agent actions against compliance requirements, risk thresholds, and organizational rules —
+      returning a binding verdict (approve, modify, escalate, or block) with full reasoning.
     </p>
 
     <div class="cta-box">
@@ -320,6 +321,46 @@
       </ul>
     </div>
 
+    <div class="tier-section" style="border-color: #3fb95033;">
+      <h3 style="color: #3fb950;">AP2: Agentic Payment Governance <span class="tier-badge" style="background:#1a6b2e33;color:#3fb950;border:1px solid #3fb95044;">7 POLICIES</span></h3>
+      <p>
+        Specialized policies for autonomous agent payments, implementing the Agentic Payment Protocol (AP2).
+        These policies govern the full lifecycle of agent-initiated transactions — from mandate validation through
+        regulatory compliance and fraud detection.
+      </p>
+      <div class="framework-grid">
+        <div class="framework-card">
+          <h4>Mandate Validity</h4>
+          <p>Verifies a valid payment mandate exists before any transaction proceeds</p>
+        </div>
+        <div class="framework-card">
+          <h4>Mandate Conditions</h4>
+          <p>Enforces merchant category, geographic scope, and validity window</p>
+        </div>
+        <div class="framework-card">
+          <h4>HNP Threshold</h4>
+          <p>High Net Payment check — routes large transactions to human review</p>
+        </div>
+        <div class="framework-card">
+          <h4>Cumulative Spend</h4>
+          <p>Tracks rolling spend against daily and monthly mandate limits</p>
+        </div>
+        <div class="framework-card">
+          <h4>PCI-DSS</h4>
+          <p>Payment card data protection and channel compliance</p>
+        </div>
+        <div class="framework-card">
+          <h4>PSD2 SCA</h4>
+          <p>EU Strong Customer Authentication with exemption logic</p>
+        </div>
+        <div class="framework-card">
+          <h4>AML Velocity</h4>
+          <p>Anti-money laundering pattern detection across rolling windows</p>
+        </div>
+      </div>
+      <p style="margin-top:0.75rem;margin-bottom:0;">See the <a href="a2a.html" class="link">A2A &amp; Agent Networks</a> page for mandate management and the AP2 governance model.</p>
+    </div>
+
     <h2>How Policies Work</h2>
 
     <h3>Evaluation Pipeline</h3>
@@ -377,6 +418,8 @@
     </p>
     <ul>
       <li><a href="getting-started.html" class="link">Getting Started</a> — Set up your first governance pipeline</li>
+      <li><a href="connectors.html" class="link">Connectors</a> — Data sources that feed policy evaluation</li>
+      <li><a href="a2a.html" class="link">A2A &amp; Agent Networks</a> — AP2 payment policies and multi-agent governance</li>
       <li><a href="shadow-mode.html" class="link">Shadow Mode</a> — Test policies without enforcement</li>
       <li><a href="dashboard.html" class="link">Dashboard</a> — Monitor policy decisions and configure rules</li>
       <li><a href="https://the.gaas.is" class="link">Sign up</a> — Access the complete policy catalog</li>

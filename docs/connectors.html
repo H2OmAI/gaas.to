@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connectors — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    /* Category label */
+    .cat-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .cat-communications { background: #2d1b6933; color: #a371f7; border: 1px solid #a371f744; }
+    .cat-crm           { background: #0d4a9c33; color: #58a6ff; border: 1px solid #58a6ff44; }
+    .cat-payment       { background: #1a6b2e33; color: #3fb950; border: 1px solid #3fb95044; }
+    .cat-identity      { background: #6b3a1a33; color: #ffa657; border: 1px solid #ffa65744; }
+    .cat-security      { background: #6b1a1a33; color: #ff7b72; border: 1px solid #ff7b7244; }
+    .cat-developer     { background: #1a4a6b33; color: #79c0ff; border: 1px solid #79c0ff44; }
+    .cat-organizational{ background: #4a3a1a33; color: #e3b341; border: 1px solid #e3b34144; }
+    .cat-operations    { background: #1a3a4a33; color: #56d364; border: 1px solid #56d36444; }
+    .cat-a2a           { background: #3a1a4a33; color: #d2a8ff; border: 1px solid #d2a8ff44; }
+
+    /* Connector card */
+    .connector-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .connector-card .connector-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .connector-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+
+    .connector-card p.desc {
+      font-size: 0.875rem;
+      color: #8b949e;
+      margin-bottom: 0.75rem;
+    }
+
+    .connector-card ul {
+      margin-bottom: 0;
+    }
+
+    .connector-card ul li {
+      font-size: 0.875rem;
+      color: #8b949e;
+    }
+
+    .confidence {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: #56d364;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+    }
+
+    .section-intro {
+      background: #0d1117;
+      border: 1px solid #1e2533;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: #8b949e;
+    }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Connectors</h1>
+    <p class="subtitle">
+      Production-grade integrations that enrich every agent intent with real-world context before governance evaluation.
+    </p>
+
+    <p>
+      Stage 2 of the governance pipeline — Context Enrichment — pulls live signals from the systems your agents actually operate in.
+      Each connector implements the <code>ResilientConnector</code> base with automatic retries, configurable timeouts, and a circuit breaker
+      that gracefully degrades when a data source is unavailable.
+    </p>
+    <p>
+      GaaS ships with <strong>12 production connectors</strong> spanning communications, identity, security, developer tooling, payments, and multi-agent networks.
+      Connectors run in parallel — enrichment adds minimal latency while maximising context fidelity.
+    </p>
+
+    <div class="note">
+      <strong>Configuration:</strong> Set <code>GAAS_CONNECTOR_CONFIG</code> to a YAML or JSON config file path, and
+      <code>GAAS_CONNECTOR_MODE</code> to <code>production</code>, <code>mock</code>, or <code>mixed</code>.
+      Mock connectors are used automatically in development and testing &mdash; the pipeline logic is identical in both modes.
+    </div>
+
+    <hr class="divider">
+
+    <!-- COMMUNICATIONS -->
+    <h2>Communications</h2>
+    <div class="section-intro">
+      Call and messaging metadata used to verify TCPA consent, check opt-out status, and assess communication channel risk.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Twilio</h3>
+        <span class="cat-label cat-communications">COMMUNICATIONS</span>
+        <span class="confidence">confidence 0.88</span>
+      </div>
+      <p class="desc">Fetches call and SMS metadata, consent records, and opt-out status from your Twilio account.</p>
+      <ul>
+        <li>Call and SMS logs for the target phone number</li>
+        <li>Opt-out / STOP keyword status</li>
+        <li>Messaging service compliance flags</li>
+        <li>Used by: TCPA Consent Verification policy (pol_t2_002)</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- CRM -->
+    <h2>CRM</h2>
+    <div class="section-intro">
+      Customer relationship data to verify account status, permission sets, and relationship context for agent actions.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Salesforce</h3>
+        <span class="cat-label cat-crm">CRM</span>
+        <span class="confidence">confidence 0.91</span>
+      </div>
+      <p class="desc">Retrieves account, contact, and opportunity records along with field-level permissions.</p>
+      <ul>
+        <li>Account and contact record data</li>
+        <li>Permission sets and sharing rules</li>
+        <li>Opportunity stage and financial exposure</li>
+        <li>Custom governance metadata fields</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PAYMENT -->
+    <h2>Payment</h2>
+    <div class="section-intro">
+      Payment system signals to enforce mandate validity, spending limits, and fraud detection before transactional actions proceed.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Stripe</h3>
+        <span class="cat-label cat-payment">PAYMENT</span>
+        <span class="confidence">confidence 0.93</span>
+      </div>
+      <p class="desc">Retrieves payment method status, fraud signals, customer risk scores, and transaction history.</p>
+      <ul>
+        <li>Customer payment method and risk metadata</li>
+        <li>Stripe Radar fraud signals and rules</li>
+        <li>Subscription and charge history</li>
+        <li>Used by: PCI-DSS (pol_t2_003), PSD2 SCA (ap2_psd2), AML velocity (ap2_aml)</li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>AP2 Mandate</h3>
+        <span class="cat-label cat-a2a">A2A</span>
+        <span class="confidence">confidence 0.97</span>
+      </div>
+      <p class="desc">Validates payment mandates and tracks cumulative agent spending for AP2 agentic payment governance.</p>
+      <ul>
+        <li>Mandate existence, scope, and validity window</li>
+        <li>Cumulative spend tracking against mandate limits</li>
+        <li>HNP (High Net Payment) threshold verification</li>
+        <li>Merchant trust and category codes</li>
+        <li>Used by: all 7 AP2 payment policies</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- IDENTITY -->
+    <h2>Identity</h2>
+    <div class="section-intro">
+      Identity provider data to verify authentication strength, MFA status, group memberships, and workforce credentials before granting access or executing high-risk actions.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Okta</h3>
+        <span class="cat-label cat-identity">IDENTITY</span>
+        <span class="confidence">confidence 0.94</span>
+      </div>
+      <p class="desc">Retrieves user identity, MFA enrollment, group memberships, and authentication session context from Okta.</p>
+      <ul>
+        <li>User profile and account status (active/locked/suspended)</li>
+        <li>MFA factors enrolled and last verification timestamp</li>
+        <li>Group and role memberships</li>
+        <li>OAuth 2.0 application access grants</li>
+        <li>Recent authentication events</li>
+        <li>Used by: Identity Verification (pol_t1_003), MFA enforcement policies</li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Workday</h3>
+        <span class="cat-label cat-identity">IDENTITY / HR</span>
+        <span class="confidence">confidence 0.89</span>
+      </div>
+      <p class="desc">Retrieves workforce records, active employment status, certifications, and training history from Workday HCM.</p>
+      <ul>
+        <li>Employee status, department, and job classification</li>
+        <li>Active certifications and expiry dates</li>
+        <li>Required training completion status</li>
+        <li>Manager reporting chain for approval routing</li>
+        <li>Used by: Clinical AI Oversight (pol_t3_001), HIPAA training requirements</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SECURITY -->
+    <h2>Security</h2>
+    <div class="section-intro">
+      Security event streams used to block agent actions during active threats, policy violations, or when the acting identity appears in security alerts.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>SIEM</h3>
+        <span class="cat-label cat-security">SECURITY</span>
+        <span class="confidence">confidence 0.92</span>
+      </div>
+      <p class="desc">Queries your SIEM for active security events, alerts, and threat intelligence related to the agent's identity and target.</p>
+      <ul>
+        <li>Active security alerts for the acting user or agent</li>
+        <li>Recent failed authentication events</li>
+        <li>Threat intelligence matches (IP, user, entity)</li>
+        <li>Supports: Splunk, IBM QRadar, Microsoft Sentinel</li>
+        <li>Used by: Unauthorized Access Prevention (pol_t1_001), Data Exfiltration Detection</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DEVELOPER -->
+    <h2>Developer</h2>
+    <div class="section-intro">
+      Source control and developer platform signals to enforce branch protection, code review requirements, and access controls for infrastructure-touching agent actions.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>GitHub</h3>
+        <span class="cat-label cat-developer">DEVELOPER</span>
+        <span class="confidence">confidence 0.90</span>
+      </div>
+      <p class="desc">Retrieves repository metadata, branch protection rules, and organization-level security posture from the GitHub API.</p>
+      <ul>
+        <li>Repository visibility, fork status, and permissions</li>
+        <li>Branch protection rules (required reviews, status checks, signed commits)</li>
+        <li>Organization 2FA enforcement status</li>
+        <li>Recent commit and deployment activity</li>
+        <li>Rate limit handling: 5,000 req/hr with automatic backoff</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ORGANIZATIONAL -->
+    <h2>Organizational</h2>
+    <div class="section-intro">
+      Workplace platform data for communication channel controls, team membership verification, and SLA-aware support routing.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Slack</h3>
+        <span class="cat-label cat-organizational">ORGANIZATIONAL</span>
+        <span class="confidence">confidence 0.89</span>
+      </div>
+      <p class="desc">Retrieves workspace security settings, user account status, team memberships, and channel access permissions from Slack.</p>
+      <ul>
+        <li>Workspace-level 2FA and SSO enforcement status</li>
+        <li>User admin status and account state</li>
+        <li>Team memberships and channel access</li>
+        <li>Direct message and channel communication logs (metadata only)</li>
+        <li>Used by: Multi-Tenant Data Isolation (pol_t3_003), communication audit policies</li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Zendesk</h3>
+        <span class="cat-label cat-organizational">ORGANIZATIONAL</span>
+        <span class="confidence">confidence 0.86</span>
+      </div>
+      <p class="desc">Fetches support ticket context, SLA breach status, and requester information to inform agent escalation decisions.</p>
+      <ul>
+        <li>Ticket priority, status, and SLA compliance</li>
+        <li>Requester tier and previous interaction history</li>
+        <li>Breach alerts and escalation flags</li>
+        <li>Used by: customer-facing agent routing and priority policies</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- OPERATIONS -->
+    <h2>Operations</h2>
+    <div class="section-intro">
+      Observability platform data to block agent actions when production systems are degraded, SLO error budgets are exhausted, or active incidents are in progress.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Datadog</h3>
+        <span class="cat-label cat-operations">OPERATIONS</span>
+        <span class="confidence">confidence 0.92</span>
+      </div>
+      <p class="desc">Queries SLO error budgets, monitor states, and active incidents to assess production health before agent actions proceed.</p>
+      <ul>
+        <li>SLO status and remaining error budget</li>
+        <li>Active monitor alerts and severity</li>
+        <li>Incident status (P1/P2 active incidents)</li>
+        <li>Service dependency health checks</li>
+        <li>Used by: Transaction Approval Limits (pol_t3_002), high-stakes CONTROL actions</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- A2A -->
+    <h2>Agent-to-Agent</h2>
+    <div class="section-intro">
+      Trust and reputation signals for multi-agent systems. When one AI agent delegates to another, GaaS verifies the trust chain before allowing the delegated action to proceed.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>A2A Registry</h3>
+        <span class="cat-label cat-a2a">A2A</span>
+        <span class="confidence">confidence 0.95</span>
+      </div>
+      <p class="desc">Queries the Agent Trust Registry to score the acting agent's reputation, delegation chain depth, and accumulated violations.</p>
+      <ul>
+        <li>Agent trust score (0.0–1.0) from historical interactions</li>
+        <li>Delegation chain depth and verified path</li>
+        <li>Policy violation history and suspension status</li>
+        <li>Registered capabilities and permitted action types</li>
+        <li>Used by: Multi-Agent Coordination (pol_t4_004), A2A governance proxy</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Resilience Model</h2>
+    <p>
+      All production connectors share a common resilience pattern via the <code>ResilientConnector</code> base class:
+    </p>
+    <ul>
+      <li><strong>Retry:</strong> Up to 3 attempts with exponential backoff on transient failures (5xx, timeouts)</li>
+      <li><strong>Timeout:</strong> Configurable per-connector (default 5s). Prevents slow upstream from blocking the pipeline</li>
+      <li><strong>Circuit breaker:</strong> Opens after consecutive failures; enters HALF-OPEN after a cooldown period. Failed connectors return cached or empty context — governance continues rather than halting</li>
+      <li><strong>Error classification:</strong> HTTP 4xx errors (auth failure, not found) are returned as structured <code>ConnectorResult</code> with <code>status: FAILED</code>; network/timeout errors trigger the retry and circuit-breaker path</li>
+    </ul>
+
+    <pre><code><span style="color:#8b949e"># Example connector configuration (GAAS_CONNECTOR_CONFIG)</span>
+connectors:
+  okta:
+    domain: your-org.okta.com
+    client_id: ${OKTA_CLIENT_ID}
+    client_secret: ${OKTA_CLIENT_SECRET}
+    timeout_seconds: 5
+    max_retries: 3
+
+  siem:
+    provider: splunk          # splunk | qradar | sentinel
+    host: splunk.internal.example.com
+    port: 8089
+    token: ${SPLUNK_TOKEN}
+    timeout_seconds: 8
+
+  github:
+    token: ${GITHUB_TOKEN}   # Personal access token or GitHub App
+    org: your-org</code></pre>
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="intent-api.html">Intent Declaration API</a> — How enriched context flows into governance decisions</li>
+      <li><a class="link" href="policies.html">Policy Library</a> — Policies that consume connector data</li>
+      <li><a class="link" href="a2a.html">A2A &amp; Agent Networks</a> — Agent trust registry and multi-agent governance</li>
+      <li><a class="link" href="shadow-mode.html">Shadow Mode</a> — Test connectors against live traffic without enforcement</li>
+    </ul>
+  </main>
+
+  <footer>
+    &copy; 2026 H2Om. Licensed under BSL 1.1 (converts to Apache 2.0 on 2030-02-12).
+  </footer>
+</body>
+</html>

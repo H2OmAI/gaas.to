@@ -491,12 +491,79 @@ https://api.gaas.is/v1/dashboard/...</code></pre>
 
     <hr class="divider">
 
+    <hr class="divider">
+
+    <h2>Performance Optimizations</h2>
+    <p>
+      Phase 1 performance infrastructure is live in production at <code>api.gaas.is</code> as of February 2026.
+      These optimizations reduce latency and payload size without any changes to your integration.
+    </p>
+
+    <h3>GZip Response Compression</h3>
+    <p>
+      All API responses are automatically compressed (minimum 1 KB, compression level 6).
+      This reduces typical payload sizes by 60–70% for list and dashboard endpoints.
+    </p>
+    <table>
+      <thead><tr><th>Endpoint type</th><th>Typical uncompressed</th><th>Typical compressed</th></tr></thead>
+      <tbody>
+        <tr><td>Decision list</td><td>~15 KB</td><td>~4.5 KB</td></tr>
+        <tr><td>Audit trail</td><td>~40 KB</td><td>~11 KB</td></tr>
+        <tr><td>Dashboard metrics</td><td>~8 KB</td><td>~2.5 KB</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Multi-Tier Caching</h3>
+    <p>
+      Frequently accessed resources (agent profiles, governance membranes) are cached at two layers:
+    </p>
+    <ul>
+      <li><strong>L1 — In-memory LRU cache:</strong> Sub-millisecond reads for hot data. Auto-invalidated on writes.</li>
+      <li><strong>L2 — Redis cache:</strong> Shared across instances. Agent profiles cached for 1 hour; membranes for 15 minutes. Graceful degradation if Redis is unavailable.</li>
+    </ul>
+    <p>
+      Cache performance is exposed via Prometheus metrics: <code>gaas_cache_hits_total</code>, <code>gaas_cache_misses_total</code>,
+      and <code>gaas_cache_operation_duration_seconds</code>.
+    </p>
+
+    <h3>Read Replicas</h3>
+    <p>
+      Read-heavy operations (decision history, audit exports, dashboard queries) are automatically routed to a
+      read replica when one is configured. The primary database handles all writes.
+      Configure via environment variables:
+    </p>
+    <pre><code>GAAS_DATABASE_REPLICA_URL=postgres://replica-host:5432/gaas
+GAAS_READ_REPLICA_ENABLED=true</code></pre>
+    <p>
+      If the replica is unavailable, GaaS falls back to the primary automatically — no downtime, no configuration changes required.
+    </p>
+
+    <h3>Pipeline Latency Optimizations</h3>
+    <p>
+      The governance pipeline runs several internal optimizations that reduce end-to-end latency:
+    </p>
+    <table>
+      <thead><tr><th>Optimization</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>Parallel policy evaluation within tiers</td><td>−50% Stage 3 latency</td></tr>
+        <tr><td>Scope pre-indexing (action_type, sensitivity, target)</td><td>−50% candidate filtering time</td></tr>
+        <tr><td>Shadow mode deliberation bypass</td><td>−80% shadow pipeline latency</td></tr>
+        <tr><td>Round 3 early exit on unanimous consensus (&gt;0.9)</td><td>−60% latency on clear-cut cases</td></tr>
+        <tr><td>Deliberation threshold raised to 0.65</td><td>−30% deliberation rate</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Performance targets (Phase 1):</strong> p95 latency &lt;500 ms (down from 800 ms), payload size −70% with GZip, cache hit rate &gt;90% after warm-up, primary DB load −70% with read replicas active.
+    </div>
+
     <h2>Related Pages</h2>
     <ul>
       <li><a class="link" href="getting-started.html">Getting Started</a> — Onboard and integrate with the API</li>
       <li><a class="link" href="authentication.html">Authentication</a> — API keys and security</li>
       <li><a class="link" href="rate-limits.html">Rate Limits</a> — Per-endpoint throttling</li>
       <li><a class="link" href="sdks.html">SDKs</a> — Python, TypeScript, and Java clients</li>
+      <li><a class="link" href="observability.html">Observability</a> — Prometheus metrics including cache and query monitoring</li>
       <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
     </ul>
   </main>

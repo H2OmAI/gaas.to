@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2A &amp; Agent Networks — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    .endpoint {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .endpoint .method {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      margin-right: 0.5rem;
+    }
+
+    .method-post { background: #1f6feb33; color: #58a6ff; }
+    .method-get  { background: #23863633; color: #3fb950; }
+    .method-put  { background: #6b3a1a33; color: #ffa657; }
+    .method-del  { background: #6b1a1a33; color: #ff7b72; }
+
+    .endpoint .path {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.875rem;
+      color: #e6edf3;
+    }
+
+    .endpoint .desc {
+      margin-top: 0.5rem;
+      font-size: 0.8125rem;
+      color: #8b949e;
+    }
+
+    .policy-row {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .policy-id {
+      flex-shrink: 0;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.75rem;
+      color: #8b949e;
+      padding-top: 0.1rem;
+    }
+
+    .policy-info h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.2rem;
+    }
+
+    .policy-info p {
+      font-size: 0.8125rem;
+      color: #8b949e;
+      margin: 0;
+    }
+
+    .tier-badge {
+      flex-shrink: 0;
+      margin-left: auto;
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .tier-1 { background: #6b1a1a33; color: #ff7b72; border: 1px solid #ff7b7244; }
+    .tier-2 { background: #6b3a1a33; color: #ffa657; border: 1px solid #ffa65744; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>A2A &amp; Agent Networks</h1>
+    <p class="subtitle">
+      GaaS as the governance control plane for multi-agent systems &mdash; covering the A2A Protocol v0.3, Agent Trust Registry, and AP2 Agentic Payment Governance.
+    </p>
+
+    <p>
+      When AI agents talk to each other, delegate tasks, or execute financial transactions autonomously, governance becomes non-negotiable.
+      GaaS implements the <strong>Agent-to-Agent (A2A) Protocol v0.3</strong> specification, acting as a governance proxy between agents:
+      every inter-agent call passes through the same 5-stage pipeline as a human-facing action.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Agent Card</h2>
+    <p>
+      GaaS publishes a machine-readable agent card at a well-known URL so that other A2A-compatible systems can discover its capabilities,
+      supported authentication methods, and governance endpoints.
+    </p>
+    <pre><code>GET /.well-known/agent.json</code></pre>
+    <pre><code>{
+  "name": "GaaS Governance Agent",
+  "version": "0.3.0",
+  "description": "Governance as a Service — A2A-native control plane for autonomous agent networks",
+  "url": "https://api.gaas.is",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": true,
+    "stateTransitionHistory": true
+  },
+  "skills": [
+    {
+      "id": "governance.evaluate",
+      "name": "Governance Evaluation",
+      "description": "Evaluate an agent action intent against active governance policies"
+    },
+    {
+      "id": "governance.proxy",
+      "name": "A2A Governance Proxy",
+      "description": "Route and govern inter-agent task delegation"
+    }
+  ],
+  "authentication": {
+    "schemes": ["Bearer", "OAuth2", "mTLS"]
+  }
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>A2A Gateway</h2>
+    <p>
+      The A2A gateway exposes a JSON-RPC 2.0 endpoint that any A2A-compliant agent can call directly.
+      Requests are automatically translated into GaaS intent declarations, run through the full governance pipeline,
+      and translated back into A2A-compliant responses.
+    </p>
+
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/a2a</span>
+      <p class="desc">A2A JSON-RPC 2.0 gateway — handles all A2A protocol methods.</p>
+    </div>
+
+    <h3>Supported JSON-RPC Methods</h3>
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>tasks/send</code></td><td>Submit a task for governance evaluation and execution</td></tr>
+        <tr><td><code>tasks/get</code></td><td>Retrieve the current status and result of a task</td></tr>
+        <tr><td><code>tasks/cancel</code></td><td>Request cancellation of a pending or in-progress task</td></tr>
+        <tr><td><code>tasks/sendSubscribe</code></td><td>Submit a task and subscribe to streaming status updates</td></tr>
+        <tr><td><code>tasks/resubscribe</code></td><td>Reconnect to an existing task stream</td></tr>
+        <tr><td><code>tasks/pushNotification/set</code></td><td>Register an HMAC-signed webhook for task status changes</td></tr>
+        <tr><td><code>tasks/pushNotification/get</code></td><td>Retrieve current push notification configuration</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Example: A2A Task Submission</h3>
+    <pre><code>POST /v1/a2a
+Content-Type: application/json
+Authorization: Bearer &lt;agent_token&gt;
+
+{
+  "jsonrpc": "2.0",
+  "id": "req_001",
+  "method": "tasks/send",
+  "params": {
+    "id": "task_abc123",
+    "message": {
+      "role": "user",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Transfer $2,500 to vendor account V-9912 for invoice #INV-2026-0044"
+        }
+      ]
+    },
+    "metadata": {
+      "agent_id": "procurement_agent_v1",
+      "delegated_by": "orchestrator_agent",
+      "delegation_depth": 1
+    }
+  }
+}</code></pre>
+
+    <p>
+      The gateway translates this into a <code>TRANSACT</code> intent, runs it through the governance pipeline
+      (including AP2 mandate verification), and returns a JSON-RPC result containing the governance decision.
+    </p>
+
+    <pre><code>{
+  "jsonrpc": "2.0",
+  "id": "req_001",
+  "result": {
+    "id": "task_abc123",
+    "status": {
+      "state": "completed"
+    },
+    "artifacts": [
+      {
+        "type": "governance_decision",
+        "decision": {
+          "verdict": "approve",
+          "risk_assessment": { "score": 0.18, "level": "LOW" },
+          "ap2_context": {
+            "mandate_id": "mnd_vendor_9912",
+            "remaining_budget": 47500.00,
+            "psd2_sca_required": false
+          }
+        }
+      }
+    ]
+  }
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>Agent Trust Registry</h2>
+    <p>
+      The Agent Trust Registry is GaaS's decentralized reputation system for autonomous agents.
+      Every agent that interacts with the platform accumulates a trust score based on governance outcomes,
+      policy violations, and human review results.
+    </p>
+
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/agents</span>
+      <p class="desc">Register a new agent in the trust registry</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/agents/{agent_id}</span>
+      <p class="desc">Retrieve an agent's profile, trust score, and interaction history</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/agents/{agent_id}/interactions</span>
+      <p class="desc">List all governance decisions for a specific agent</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-put">PUT</span>
+      <span class="path">/v1/agents/{agent_id}/capabilities</span>
+      <p class="desc">Update the registered capabilities and permitted action types for an agent</p>
+    </div>
+
+    <h3>Trust Score</h3>
+    <p>
+      Trust scores range from <code>0.0</code> (untrusted) to <code>1.0</code> (fully trusted).
+      New agents start at <code>0.5</code> and build reputation through approved actions and positive human review outcomes.
+      Violations, blocks, and escalations reduce the score.
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Score Range</th><th>Trust Level</th><th>Effect</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0.85 – 1.0</td><td>High</td><td>Fast-path approval for low-risk actions</td></tr>
+        <tr><td>0.65 – 0.84</td><td>Standard</td><td>Normal governance pipeline</td></tr>
+        <tr><td>0.40 – 0.64</td><td>Elevated scrutiny</td><td>Additional deliberation rounds required</td></tr>
+        <tr><td>0.0 – 0.39</td><td>Low / Suspended</td><td>All actions require human review or are blocked</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <h2>A2A Authentication</h2>
+    <p>
+      The A2A gateway supports four authentication schemes, matching the A2A Protocol v0.3 specification:
+    </p>
+    <ul>
+      <li><strong>Bearer Token:</strong> Standard JWT token in the <code>Authorization: Bearer</code> header, validated against the agent registry</li>
+      <li><strong>OAuth 2.0:</strong> Client credentials flow for service-to-service authentication; access tokens are cached for their TTL</li>
+      <li><strong>mTLS:</strong> Mutual TLS for high-security environments; the client certificate's CN is mapped to an agent identity</li>
+      <li><strong>GaaS API Key:</strong> Standard <code>X-API-Key</code> header — compatible with existing integrations, automatically associated with an agent profile</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Governance Proxy</h2>
+    <p>
+      For agents that delegate work to other agents, GaaS acts as a transparent governance proxy.
+      The orchestrating agent registers the target agent endpoint; GaaS intercepts outbound calls,
+      evaluates the intent, and forwards approved requests — all without modifying the agent's code.
+    </p>
+
+    <pre><code><span style="color:#8b949e"># Register a downstream agent for governance proxying</span>
+POST /v1/agents
+{
+  "agent_id": "fulfillment_agent_v2",
+  "endpoint": "https://fulfillment.internal/a2a",
+  "capabilities": ["TRANSACT", "COMMUNICATE", "MODIFY"],
+  "trust_level": "standard",
+  "proxy_governance": true
+}</code></pre>
+
+    <p>
+      Once registered, any A2A call your orchestrator makes to <code>fulfillment_agent_v2</code> is automatically
+      routed through the GaaS governance pipeline. If the action is approved, GaaS forwards the original request
+      to the downstream agent and returns its response. If blocked or escalated, GaaS returns a governance decision
+      and does not contact the downstream agent.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Cross-Org Policy Federation</h2>
+    <p>
+      Enterprise customers with multiple GaaS organizations (e.g., separate production and data-science orgs)
+      can configure bidirectional policy federation. When an agent from org A calls into org B's governed scope,
+      GaaS evaluates the intent against a merged policy set from both organizations.
+    </p>
+
+    <div class="note">
+      <strong>Federation scope:</strong> Policy federation is available on the Growth and Enterprise tiers.
+      Contact <a href="mailto:hello@gaas.is" class="link">hello@gaas.is</a> to configure a federation agreement between organizations.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Push Notifications</h2>
+    <p>
+      Agents can register webhook endpoints to receive real-time updates on task status changes,
+      governance decisions, and escalation events. Push notifications are HMAC-SHA256 signed
+      using the agent's registered secret.
+    </p>
+
+    <pre><code>POST /v1/a2a
+{
+  "jsonrpc": "2.0",
+  "method": "tasks/pushNotification/set",
+  "params": {
+    "id": "task_abc123",
+    "pushNotificationConfig": {
+      "url": "https://your-agent.example.com/webhooks/gaas",
+      "authentication": {
+        "schemes": ["Bearer"],
+        "credentials": "your_webhook_secret"
+      }
+    }
+  }
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>AP2 Payment Governance</h2>
+    <p>
+      The <strong>Agentic Payment Protocol (AP2)</strong> extends GaaS with seven payment-specific policies
+      that govern autonomous agent transactions. AP2 is designed around the emerging reality that AI agents
+      will execute payments autonomously on behalf of users &mdash; and those payments require the same compliance
+      safeguards as human-initiated transactions.
+    </p>
+
+    <h3>Tier 1 AP2 Policies (Fast-Fail)</h3>
+    <p>These four policies run first and immediately block invalid or out-of-scope payment requests:</p>
+
+    <div class="policy-row">
+      <span class="policy-id">ap2_t1_001</span>
+      <div class="policy-info">
+        <h4>Mandate Validity</h4>
+        <p>Verifies that a valid payment mandate exists for the agent, the target merchant, and the requested amount. No mandate = immediate block.</p>
+      </div>
+      <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="policy-row">
+      <span class="policy-id">ap2_t1_002</span>
+      <div class="policy-info">
+        <h4>Mandate Conditions</h4>
+        <p>Checks that all conditions attached to the mandate are satisfied — validity window, allowed merchant categories, and geographic restrictions.</p>
+      </div>
+      <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="policy-row">
+      <span class="policy-id">ap2_t1_003</span>
+      <div class="policy-info">
+        <h4>HNP Threshold</h4>
+        <p>High Net Payment threshold check. Transactions above the mandate's HNP limit require explicit human approval regardless of trust score.</p>
+      </div>
+      <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="policy-row">
+      <span class="policy-id">ap2_t1_004</span>
+      <div class="policy-info">
+        <h4>Cumulative Spend Limit</h4>
+        <p>Tracks total spend against the mandate's rolling limit (daily / monthly). Rejects transactions that would exceed the limit.</p>
+      </div>
+      <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+
+    <h3>Tier 2 AP2 Policies (Regulatory)</h3>
+    <p>These three policies enforce payment regulation compliance:</p>
+
+    <div class="policy-row">
+      <span class="policy-id">ap2_pci</span>
+      <div class="policy-info">
+        <h4>PCI-DSS Compliance</h4>
+        <p>Verifies that cardholder data is handled in-scope, encryption is enforced, and the transaction channel meets PCI-DSS requirements.</p>
+      </div>
+      <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="policy-row">
+      <span class="policy-id">ap2_psd2</span>
+      <div class="policy-info">
+        <h4>PSD2 Strong Customer Authentication</h4>
+        <p>Enforces SCA requirements for EU/EEA transactions. Determines whether SCA exemption applies (low-value, trusted beneficiary, low-risk TRA).</p>
+      </div>
+      <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="policy-row">
+      <span class="policy-id">ap2_aml</span>
+      <div class="policy-info">
+        <h4>AML Velocity</h4>
+        <p>Anti-money laundering velocity check. Flags unusual transaction frequency, amount clustering, or structuring patterns within the rolling window.</p>
+      </div>
+      <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+
+    <h3>Submitting an AP2-governed Payment Intent</h3>
+    <pre><code>POST /v1/intents
+X-API-Key: your_api_key
+
+{
+  "intent": {
+    "agent": {
+      "id": "procurement_agent_v1",
+      "framework": "custom"
+    },
+    "action": {
+      "type": "TRANSACT",
+      "verb": "initiate_payment",
+      "target": {
+        "type": "ACCOUNT",
+        "identifier": "vendor_account_V9912",
+        "sensitivity": "REGULATED"
+      }
+    },
+    "payload": {
+      "summary": "Pay vendor invoice INV-2026-0044 for SaaS services",
+      "content": {
+        "amount_usd": 2500.00,
+        "currency": "USD",
+        "merchant_category": "7372",
+        "mandate_id": "mnd_vendor_9912"
+      }
+    },
+    "estimated_impact": {
+      "reversible": false,
+      "financial_exposure_usd": 2500.00,
+      "regulatory_domains": ["PCI-DSS", "PSD2", "AML"]
+    }
+  }
+}</code></pre>
+
+    <hr class="divider">
+
+    <h2>AP2 Mandate Management</h2>
+    <p>
+      Mandates define the authorized scope for agent payments. A mandate specifies which agent may transact,
+      on whose behalf, with which merchants, up to what limits, and for what period.
+    </p>
+
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/ap2/mandates</span>
+      <p class="desc">Create a new payment mandate authorizing an agent to transact</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/ap2/mandates/{mandate_id}</span>
+      <p class="desc">Retrieve mandate details, remaining budget, and validity status</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/ap2/mandates</span>
+      <p class="desc">List all mandates for the organization, with optional status filter</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-del">DELETE</span>
+      <span class="path">/v1/ap2/mandates/{mandate_id}</span>
+      <p class="desc">Revoke a mandate immediately — any in-flight transactions using this mandate are blocked</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/ap2/mandates/{mandate_id}/transactions</span>
+      <p class="desc">List all governed transactions executed under a mandate</p>
+    </div>
+
+    <h3>Mandate Schema</h3>
+    <pre><code>{
+  "mandate_id": "mnd_vendor_9912",
+  "agent_id": "procurement_agent_v1",
+  "authorized_by": "user_cfo_01",
+  "scope": {
+    "merchant_categories": ["7372", "7371"],
+    "max_single_transaction_usd": 5000.00,
+    "daily_limit_usd": 10000.00,
+    "monthly_limit_usd": 50000.00,
+    "hnp_threshold_usd": 10000.00,
+    "currency": "USD",
+    "geographic_scope": ["US", "EU"]
+  },
+  "valid_from": "2026-01-01T00:00:00Z",
+  "valid_until": "2026-12-31T23:59:59Z",
+  "status": "active",
+  "cumulative_spend_usd": 2500.00,
+  "remaining_daily_budget_usd": 7500.00
+}</code></pre>
+
+    <div class="warning">
+      <strong>Revocation propagation:</strong> When a mandate is revoked, the change propagates to all GaaS governance nodes within 60 seconds.
+      For immediate enforcement in distributed deployments, use the force-revoke flag:
+      <code>DELETE /v1/ap2/mandates/{id}?force=true</code>.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="connectors.html">Connectors</a> — A2A Registry and AP2 Mandate connectors</li>
+      <li><a class="link" href="intent-api.html">Intent Declaration API</a> — The core governance entry point</li>
+      <li><a class="link" href="policies.html">Policy Library</a> — Full policy catalog including AP2 and Tier 4 AI safety policies</li>
+      <li><a class="link" href="webhooks.html">Webhooks</a> — Event-driven notifications for governance decisions</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API keys and A2A auth schemes</li>
+    </ul>
+  </main>
+
+  <footer>
+    &copy; 2026 H2Om. Licensed under BSL 1.1 (converts to Apache 2.0 on 2030-02-12).
+  </footer>
+</body>
+</html>

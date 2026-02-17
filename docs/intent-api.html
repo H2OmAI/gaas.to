@@ -316,6 +316,34 @@ X-API-Key: your_api_key
       Include an <code>Idempotency-Key</code> header on intent submissions to prevent duplicate processing. If the same key is reused within 24 hours with the same content, the original decision is returned. Using the same key with different content returns a 409 conflict.
     </p>
 
+    <h2>Bulk Submission</h2>
+    <p>
+      Submit up to 50 intents in a single API call using the batch endpoint. Intents are evaluated in parallel;
+      partial failures don't abort the batch. See <a href="advanced-features.html" style="color:#58a6ff;">Advanced Features</a> for full documentation.
+    </p>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/intents/batch</span>
+      <p class="desc">Submit up to 50 intents concurrently. Counts as a single rate-limit request.</p>
+    </div>
+
+    <h2>A2A Gateway</h2>
+    <p>
+      AI agents can submit intents directly via the <strong>Agent-to-Agent (A2A) Protocol v0.3</strong> JSON-RPC gateway.
+      A2A requests are automatically translated into GaaS intent declarations, governed by the full pipeline, and translated back into
+      A2A-compliant responses. This makes GaaS the governance control plane for multi-agent networks without requiring code changes in individual agents.
+    </p>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/a2a</span>
+      <p class="desc">A2A Protocol v0.3 JSON-RPC gateway. See the <a href="a2a.html" style="color:#58a6ff;">A2A &amp; Agent Networks</a> page.</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/.well-known/agent.json</span>
+      <p class="desc">Machine-readable agent card — capabilities, auth schemes, and skill definitions for A2A discovery.</p>
+    </div>
+
     <h2>SDKs</h2>
     <p>
       Official SDKs for Python, TypeScript, and Java handle authentication, request construction, and response parsing. See the <a href="sdks.html" style="color:#58a6ff;">SDKs</a> page or the <a href="getting-started.html" style="color:#58a6ff;">Getting Started</a> guide for usage examples.
