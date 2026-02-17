@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>Compliance — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      border-bottom: 1px solid #1e2533;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,14,23,0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    header .logo { text-decoration: none; }
+
+    header nav { display: flex; align-items: center; gap: 0.25rem; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    header nav a:hover { color: #e6edf3; background: #1e2533; }
+
+    header nav .nav-cta {
+      background: #00d4aa;
+      color: #050810;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    header nav .nav-cta:hover { background: #00e6b8; color: #050810; }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: #e6edf3;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    .info-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .info-box .info-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .info-box .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .info-box .info-label {
+      font-size: 0.75rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .info-box .info-value {
+      font-weight: 600;
+      color: #e6edf3;
+    }
+
+    .info-box .info-value.danger { color: #ff7b72; }
+    .info-box .info-value.warning-text { color: #d29922; }
+    .info-box .info-value.success { color: #3fb950; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+    .prop { color: #79c0ff; }
+    .num { color: #3fb950; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    }
+
+    .badge-fail { background: #2d1117; color: #ff7b72; border: 1px solid #ff7b7240; }
+    .badge-conditional { background: #1c1600; color: #d29922; border: 1px solid #d2992240; }
+    .badge-critical { background: #2d1117; color: #ff7b72; border: 1px solid #ff7b7240; }
+
+    .endpoint-list {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .endpoint-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #1e2533;
+      font-size: 0.875rem;
+    }
+
+    .endpoint-list li:last-child { border-bottom: none; }
+
+    .method {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+      flex-shrink: 0;
+    }
+
+    .method-get { background: #0d3d2b; color: #3fb950; border: 1px solid #3fb95040; }
+    .method-post { background: #1c1600; color: #d29922; border: 1px solid #d2992240; }
+
+    .endpoint-path {
+      color: #79c0ff;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+      font-size: 0.8rem;
+    }
+
+    .endpoint-desc { color: #8b949e; }
+
+    .cta-box {
+      background: linear-gradient(135deg, #0d1f2d 0%, #0d1117 100%);
+      border: 1px solid #1f6feb40;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+
+    .cta-box h3 {
+      font-size: 1.125rem;
+      color: #e6edf3;
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-box p {
+      color: #8b949e;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: #00d4aa;
+      color: #050810;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.65rem 1.75rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    .cta-btn:hover {
+      background: #00e6b8;
+      box-shadow: 0 0 16px rgba(0, 212, 170, 0.25);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    .cert-seal {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.15s, filter 0.15s;
+    }
+
+    .cert-seal:hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.3));
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+
+<header>
+  <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:120px; filter: drop-shadow(0 0 15px rgba(0,212,170,0.15));"></a>
+  <nav>
+    <a href="https://gaas.is">Home</a>
+    <a href="https://github.com/H2OmAI">GitHub</a>
+    <a href="https://the.gaas.is/login" class="nav-cta">Sign In &rarr;</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Compliance</h1>
+  <p class="subtitle">
+    EU AI Act enforcement, Governance Proof Tokens, SR 11-7 model inventory, and the Policy Registry — all in v0.3.0.
+  </p>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION 1: EU AI ACT                                    -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2>EU AI Act Compliance</h2>
+    <p>
+      The EU AI Act becomes fully enforceable on <strong>August 2, 2026</strong>. GaaS implements five governance policies covering Articles 9 through 15, giving high-risk AI deployments a compliance-ready audit trail from day one.
+    </p>
+
+    <div class="info-box">
+      <div class="info-meta">
+        <div class="info-item">
+          <span class="info-label">Enforcement Date</span>
+          <span class="info-value warning-text">August 2, 2026</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Maximum Fine</span>
+          <span class="info-value danger">&euro;30M</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Turnover Cap</span>
+          <span class="info-value danger">6% global annual turnover</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Implemented Policies</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Policy ID</th>
+          <th>Article</th>
+          <th>Name</th>
+          <th>Failure Mode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>pol_euaia_001</code></td>
+          <td>Art. 9</td>
+          <td>Risk Management System</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+        </tr>
+        <tr>
+          <td><code>pol_euaia_002</code></td>
+          <td>Art. 10</td>
+          <td>Data Governance &amp; Management</td>
+          <td><span class="badge badge-conditional">CONDITIONAL</span></td>
+        </tr>
+        <tr>
+          <td><code>pol_euaia_003</code></td>
+          <td>Art. 13</td>
+          <td>Transparency &amp; Information</td>
+          <td><span class="badge badge-conditional">CONDITIONAL</span></td>
+        </tr>
+        <tr>
+          <td><code>pol_euaia_004</code></td>
+          <td>Art. 14</td>
+          <td>Human Oversight</td>
+          <td><span class="badge badge-fail">FAIL</span> <span class="badge badge-critical">CRITICAL</span></td>
+        </tr>
+        <tr>
+          <td><code>pol_euaia_005</code></td>
+          <td>Art. 15</td>
+          <td>Accuracy, Robustness &amp; Cybersecurity</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>High-Risk Domains:</strong> These policies activate automatically when the intent target falls within a high-risk domain: <code>healthcare</code>, <code>critical_infrastructure</code>, <code>education</code>, <code>employment</code>, <code>essential_services</code>, <code>law_enforcement</code>, <code>migration</code>, <code>justice</code>.
+    </div>
+
+    <h3>API Endpoints</h3>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/eu-ai-act</span>
+        <span class="endpoint-desc">— Current compliance status for your organisation</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/eu-ai-act/report</span>
+        <span class="endpoint-desc">— Full compliance report with policy-level detail</span>
+      </li>
+    </ul>
+
+    <h3>Compliance Status Response</h3>
+<pre><code><span class="comment">// GET https://api.gaas.is/v1/compliance/eu-ai-act</span>
+<span class="comment">// X-API-Key: your_api_key</span>
+
+{
+  <span class="prop">"org_id"</span>: <span class="string">"org_abc123"</span>,
+  <span class="prop">"as_of"</span>: <span class="string">"2026-08-02T00:00:00Z"</span>,
+  <span class="prop">"overall_status"</span>: <span class="string">"compliant"</span>,
+  <span class="prop">"policies"</span>: {
+    <span class="prop">"pol_euaia_001"</span>: { <span class="prop">"status"</span>: <span class="string">"pass"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 9"</span>, <span class="prop">"checks_passed"</span>: <span class="num">4</span>, <span class="prop">"checks_total"</span>: <span class="num">4</span> },
+    <span class="prop">"pol_euaia_002"</span>: { <span class="prop">"status"</span>: <span class="string">"conditional"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 10"</span>, <span class="prop">"pending_actions"</span>: [<span class="string">"data_lineage_attestation"</span>] },
+    <span class="prop">"pol_euaia_003"</span>: { <span class="prop">"status"</span>: <span class="string">"conditional"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 13"</span>, <span class="prop">"pending_actions"</span>: [<span class="string">"transparency_notice_deployment"</span>] },
+    <span class="prop">"pol_euaia_004"</span>: { <span class="prop">"status"</span>: <span class="string">"pass"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 14"</span>, <span class="prop">"escalation_coverage"</span>: <span class="string">"100%"</span> },
+    <span class="prop">"pol_euaia_005"</span>: { <span class="prop">"status"</span>: <span class="string">"pass"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 15"</span>, <span class="prop">"accuracy_score"</span>: <span class="num">0.97</span> }
+  },
+  <span class="prop">"high_risk_decisions_last_30d"</span>: <span class="num">1482</span>,
+  <span class="prop">"human_oversight_rate"</span>: <span class="string">"100%"</span>
+}</code></pre>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION 2: GOVERNANCE PROOF TOKENS                     -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2>Governance Proof Tokens</h2>
+    <p>
+      Every decision produced by GaaS carries a <strong>Governance Proof Token (GPT)</strong> — an ECDSA P-256 signed artefact that cryptographically binds the verdict, the policies evaluated, and the full audit reference into a single tamper-evident object.
+    </p>
+    <p>
+      Think of it as the exhibit in an AI liability lawsuit: an independently verifiable, court-admissible record proving that governance was applied at decision time.
+    </p>
+
+    <h3>Token Fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>token_id</code></td>
+          <td>Unique stable identifier for the proof token (<code>gpt_</code> prefix)</td>
+        </tr>
+        <tr>
+          <td><code>decision_id</code></td>
+          <td>The decision this token covers</td>
+        </tr>
+        <tr>
+          <td><code>verdict</code></td>
+          <td>Final governance verdict: <code>approve</code>, <code>block</code>, <code>escalate</code>, or <code>modify</code></td>
+        </tr>
+        <tr>
+          <td><code>policies_evaluated</code></td>
+          <td>Count of policies run against the intent</td>
+        </tr>
+        <tr>
+          <td><code>policies_passed</code></td>
+          <td>Count of policies that returned PASS or CONDITIONAL</td>
+        </tr>
+        <tr>
+          <td><code>risk_score</code></td>
+          <td>6-dimensional composite risk score (0.0 – 1.0)</td>
+        </tr>
+        <tr>
+          <td><code>risk_classification</code></td>
+          <td><code>low</code>, <code>medium</code>, <code>high</code>, or <code>critical</code></td>
+        </tr>
+        <tr>
+          <td><code>audit_ref</code></td>
+          <td>Foreign key into the immutable audit record chain</td>
+        </tr>
+        <tr>
+          <td><code>audit_hash</code></td>
+          <td>SHA-256 hash of the referenced audit record for chain verification</td>
+        </tr>
+        <tr>
+          <td><code>gaas_signature</code></td>
+          <td>ECDSA P-256 signature over the token payload (base64url-encoded DER)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      The token is embedded directly in every <code>GovernanceDecision</code> response at the <code>governance_proof_token</code> field — no additional API call required.
+    </p>
+
+    <h3>Verification Endpoint</h3>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/verify/proof/{token_id}</span>
+        <span class="endpoint-desc">— Verify a token by ID. Public endpoint — no API key required.</span>
+      </li>
+    </ul>
+
+    <h3>Example Token</h3>
+<pre><code>{
+  <span class="prop">"governance_proof_token"</span>: {
+    <span class="prop">"token_id"</span>:            <span class="string">"gpt_7xk9mR2pLqN4vBs"</span>,
+    <span class="prop">"decision_id"</span>:         <span class="string">"dec_abc123"</span>,
+    <span class="prop">"verdict"</span>:             <span class="string">"approve"</span>,
+    <span class="prop">"policies_evaluated"</span>:  <span class="num">18</span>,
+    <span class="prop">"policies_passed"</span>:     <span class="num">18</span>,
+    <span class="prop">"risk_score"</span>:          <span class="num">0.12</span>,
+    <span class="prop">"risk_classification"</span>: <span class="string">"low"</span>,
+    <span class="prop">"audit_ref"</span>:           <span class="string">"aud_f3a8c2d1e94b"</span>,
+    <span class="prop">"audit_hash"</span>:          <span class="string">"sha256:a3f1e2d4b9..."</span>,
+    <span class="prop">"issued_at"</span>:           <span class="string">"2026-08-01T14:32:07.421Z"</span>,
+    <span class="prop">"gaas_signature"</span>:      <span class="string">"MEYCIQDx2k...base64url...Q=="</span>
+  }
+}</code></pre>
+
+    <div class="note">
+      <strong>Signature Algorithm:</strong> ECDSA P-256 (modern, compact, FIPS 186-4 compliant). The signature covers the canonical JSON of all fields except <code>gaas_signature</code> itself. Public keys are available at <code>GET /v1/verify/keys</code>.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION 3: SR 11-7 MODEL INVENTORY                     -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2>SR 11-7 Model Inventory</h2>
+    <p>
+      The Federal Reserve's SR 11-7 guidance requires financial institutions to maintain a comprehensive inventory of all models in use, including their validation status, ownership, and purpose. GaaS auto-generates an SR 11-7 compliant model inventory from agent profiles and live audit data — no spreadsheet required.
+    </p>
+
+    <h3>Validation Status Mapping</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>GaaS Agent Status</th>
+          <th>SR 11-7 Validation Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>CERTIFIED</code></td>
+          <td><strong>VALIDATED</strong> — Model has passed full independent validation</td>
+        </tr>
+        <tr>
+          <td><code>VERIFIED</code></td>
+          <td><strong>IN_VALIDATION</strong> — Validation in progress; compensating controls active</td>
+        </tr>
+        <tr>
+          <td><code>REGISTERED</code></td>
+          <td><strong>PENDING_VALIDATION</strong> — Model registered but not yet submitted for validation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>API Endpoints</h3>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/model-inventory</span>
+        <span class="endpoint-desc">— Full SR 11-7 inventory for your organisation</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/model-inventory/{agent_id}</span>
+        <span class="endpoint-desc">— Inventory record for a single agent</span>
+      </li>
+    </ul>
+
+    <h3>Example</h3>
+<pre><code><span class="comment"># GET https://api.gaas.is/v1/model-inventory/agent_fintech_01</span>
+<span class="comment"># X-API-Key: your_api_key</span>
+
+{
+  <span class="prop">"agent_id"</span>:            <span class="string">"agent_fintech_01"</span>,
+  <span class="prop">"model_name"</span>:          <span class="string">"Payment Authorisation Agent v2.3"</span>,
+  <span class="prop">"model_type"</span>:          <span class="string">"decision_engine"</span>,
+  <span class="prop">"owner"</span>:               <span class="string">"treasury@acme-bank.com"</span>,
+  <span class="prop">"purpose"</span>:             <span class="string">"Real-time payment fraud scoring and authorisation"</span>,
+  <span class="prop">"sr117_status"</span>:        <span class="string">"VALIDATED"</span>,
+  <span class="prop">"gaas_status"</span>:         <span class="string">"CERTIFIED"</span>,
+  <span class="prop">"last_validation_date"</span>: <span class="string">"2026-01-15"</span>,
+  <span class="prop">"next_review_date"</span>:    <span class="string">"2026-07-15"</span>,
+  <span class="prop">"decisions_last_90d"</span>:  <span class="num">48391</span>,
+  <span class="prop">"block_rate"</span>:          <span class="num">0.023</span>,
+  <span class="prop">"escalation_rate"</span>:     <span class="num">0.004</span>,
+  <span class="prop">"audit_coverage"</span>:      <span class="string">"100%"</span>
+}</code></pre>
+
+    <div class="note">
+      <strong>Automatic Updates:</strong> The inventory refreshes in real time as decisions flow through the pipeline. Validation status, decision counts, block rates, and escalation rates all reflect live data — no manual entry required.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION 4: POLICY REGISTRY                             -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2>Policy Registry</h2>
+    <p>
+      The Policy Registry is <strong>npm for AI governance</strong> — a curated catalogue of versioned, composable policy packs that you can install into your membrane with a single API call. Packs are maintained by the GaaS team and the community, pinned to a semver, and verified for compatibility before installation.
+    </p>
+
+    <h3>Seed Packs</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Pack ID</th>
+          <th>Description</th>
+          <th>Policies</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>gaas-core-v1</code></td>
+          <td>Foundational governance policies for all AI deployments</td>
+          <td>10</td>
+        </tr>
+        <tr>
+          <td><code>gaas-healthcare-v1</code></td>
+          <td>HIPAA, patient consent, minimum-necessary, emergency access</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td><code>gaas-financial-v1</code></td>
+          <td>PCI DSS, PSD2 SCA, AML velocity, SR 11-7 controls</td>
+          <td>7</td>
+        </tr>
+        <tr>
+          <td><code>gaas-privacy-v1</code></td>
+          <td>GDPR, CCPA, TCPA, FERPA — privacy-by-design governance</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td><code>gaas-eu-ai-act-v1</code></td>
+          <td>EU AI Act Articles 9/10/13/14/15 for high-risk systems</td>
+          <td>5</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>API Endpoints</h3>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/policy-registry</span>
+        <span class="endpoint-desc">— Search and browse available policy packs</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/policy-registry/{pack_id}</span>
+        <span class="endpoint-desc">— Full details and changelog for a specific pack</span>
+      </li>
+      <li>
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/v1/policy-registry/{pack_id}/install</span>
+        <span class="endpoint-desc">— Install a pack into your active membrane</span>
+      </li>
+    </ul>
+
+    <h3>Installing the EU AI Act Pack</h3>
+<pre><code><span class="comment"># Install the EU AI Act pack</span>
+<span class="comment"># POST https://api.gaas.is/v1/policy-registry/gaas-eu-ai-act-v1/install</span>
+<span class="comment"># X-API-Key: your_api_key</span>
+
+{
+  <span class="prop">"membrane_id"</span>: <span class="string">"mem_xyz789"</span>,
+  <span class="prop">"version"</span>:     <span class="string">"1.0.0"</span>
+}
+
+<span class="comment">// Response</span>
+{
+  <span class="prop">"status"</span>:           <span class="string">"installed"</span>,
+  <span class="prop">"pack_id"</span>:          <span class="string">"gaas-eu-ai-act-v1"</span>,
+  <span class="prop">"version"</span>:          <span class="string">"1.0.0"</span>,
+  <span class="prop">"policies_added"</span>:   [<span class="string">"pol_euaia_001"</span>, <span class="string">"pol_euaia_002"</span>, <span class="string">"pol_euaia_003"</span>, <span class="string">"pol_euaia_004"</span>, <span class="string">"pol_euaia_005"</span>],
+  <span class="prop">"membrane_id"</span>:      <span class="string">"mem_xyz789"</span>,
+  <span class="prop">"effective_from"</span>:   <span class="string">"2026-08-01T00:00:00Z"</span>,
+  <span class="prop">"requires_restart"</span>: <span class="keyword">false</span>
+}</code></pre>
+
+    <div class="note">
+      <strong>Zero Downtime:</strong> Policy pack installation is hot-reloaded — your membrane applies the new policies to incoming intents immediately without any service interruption or redeploy.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section>
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="gdpr-compliance.html">GDPR Compliance</a> — Data subject rights, erasure, and sub-processor notifications</li>
+      <li><a class="link" href="policies.html">Policies</a> — Full policy catalogue and tier structure</li>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+      <li><a class="link" href="advanced-features.html">Advanced Features</a> — Audit trail, webhooks, and observability</li>
+    </ul>
+  </section>
+
+  <div class="cta-box">
+    <h3>Ready to achieve EU AI Act compliance?</h3>
+    <p>Provision your governance membrane in under five minutes and have all five EU AI Act policies active before August 2026.</p>
+    <a class="cta-btn" href="https://the.gaas.is/signup">Get started free &rarr;</a>
+  </div>
+</main>
+
+<footer>
+  <span>&copy; 2026 <a href="https://gaas.is">H2Om</a> &mdash; BSL 1.1 &rarr; Apache 2.0 on 2030-02-12</span>
+  <a href="https://gaas.is" class="cert-seal" title="GaaS Certified">
+    <picture>
+      <source srcset="gaas-certified-seal.webp" type="image/webp">
+      <img src="gaas-certified-seal.png" alt="GaaS Certified" style="height:36px; display:block;">
+    </picture>
+  </a>
+  <span>
+    <a href="https://gaas.is">gaas.is</a> &nbsp;&middot;&nbsp;
+    <a href="https://the.gaas.is">Dashboard</a> &nbsp;&middot;&nbsp;
+    <a href="https://github.com/H2OmAI">GitHub</a>
+  </span>
+</footer>
+
+<script src="constellation.js"></script>
+</body>
+</html>

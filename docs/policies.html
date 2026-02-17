@@ -263,10 +263,11 @@
     </div>
 
     <div class="tier-section">
-      <h3>Tier 2: Regulatory Frameworks <span class="tier-badge">8 POLICIES</span></h3>
+      <h3>Tier 2: Regulatory Frameworks <span class="tier-badge">13 POLICIES</span></h3>
       <p>
-        Industry-specific compliance policies covering healthcare, finance, privacy, communications, and education.
-        Each policy implements the specific requirements of its regulatory framework.
+        Industry-specific compliance policies covering healthcare, finance, privacy, communications, education,
+        and EU AI Act obligations. Each policy implements the specific requirements of its regulatory framework.
+        Includes 5 dedicated EU AI Act enforcement policies (pol_euaia_001–005) covering Articles 9–15.
       </p>
       <div class="framework-grid">
         <div class="framework-card">
@@ -417,6 +418,67 @@
       </p>
     </div>
 
+    <h2>Policy Registry</h2>
+
+    <p>
+      The Policy Registry is the discovery and installation layer for policy packs — curated bundles of policies
+      grouped by vertical or regulatory framework. Install a pack with a single API call to activate all included
+      policies for your organization.
+    </p>
+
+    <h3>Seed Packs (built in)</h3>
+    <div class="framework-grid">
+      <div class="framework-card">
+        <h4>gaas-core-v1</h4>
+        <p>10 Tier 1 universal governance policies — applies to all agents</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-eu-ai-act-v1</h4>
+        <p>5 EU AI Act Articles 9–15 enforcement policies (pol_euaia_001–005)</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-financial-v1</h4>
+        <p>SOX + AP2 payment governance + SR 11-7 model risk controls</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-healthcare-v1</h4>
+        <p>HIPAA patient access, minimum necessary, emergency access</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-privacy-v1</h4>
+        <p>GDPR, CCPA, FERPA privacy and data subject rights</p>
+      </div>
+    </div>
+
+    <p style="margin-top: 1rem;">
+      Install a pack:
+    </p>
+    <pre style="background:#0d1117;border:1px solid #1e2533;border-radius:6px;padding:1rem;overflow-x:auto;font-size:0.85rem;"><span style="color:#8b949e"># Activate EU AI Act enforcement for your org</span>
+POST /v1/policy-registry/gaas-eu-ai-act-v1/install
+Authorization: X-API-Key gsk_your_key
+
+<span style="color:#8b949e"># Browse available packs</span>
+GET /v1/policy-registry?vertical=healthcare
+GET /v1/policy-registry?regulation=eu-ai-act</pre>
+
+    <h2>EU AI Act Compliance</h2>
+
+    <p>
+      GaaS ships with built-in enforcement for EU AI Act Articles 9–15 (enforcement date: August 2, 2026).
+      Five dedicated policies block or escalate high-risk AI actions that violate mandatory obligations.
+    </p>
+    <ul class="features-list">
+      <li><strong>pol_euaia_001</strong> — Art. 9 Risk Management: blocks high-risk AI without a documented risk management system</li>
+      <li><strong>pol_euaia_002</strong> — Art. 10 Data Governance: requires training data lineage for regulated data categories</li>
+      <li><strong>pol_euaia_003</strong> — Art. 13 Transparency: enforces explainability on all high-risk AI interactions</li>
+      <li><strong>pol_euaia_004</strong> — Art. 14 Human Oversight: auto-escalates irreversible high-stakes decisions to human review</li>
+      <li><strong>pol_euaia_005</strong> — Art. 15 Accuracy/Robustness: blocks safety-critical actions when context confidence &lt; 0.6</li>
+    </ul>
+    <p>
+      Check your compliance posture: <code style="background:#0d1117;padding:0.1rem 0.4rem;border-radius:3px;font-size:0.85rem;">GET /v1/compliance/eu-ai-act</code>
+      &nbsp;&mdash;&nbsp; <a href="compliance.html" class="link">Full compliance guide &rarr;</a>
+    </p>
+
     <h2>Integration</h2>
 
     <p>
@@ -429,6 +491,7 @@
     </p>
     <ul>
       <li><a href="getting-started.html" class="link">Getting Started</a> — Set up your first governance pipeline</li>
+      <li><a href="compliance.html" class="link">Compliance</a> — EU AI Act, SR 11-7 model inventory, Governance Proof Tokens</li>
       <li><a href="connectors.html" class="link">Connectors</a> — Data sources that feed policy evaluation</li>
       <li><a href="a2a.html" class="link">A2A &amp; Agent Networks</a> — AP2 payment policies and multi-agent governance</li>
       <li><a href="shadow-mode.html" class="link">Shadow Mode</a> — Test policies without enforcement</li>
