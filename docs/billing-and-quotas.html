@@ -213,7 +213,7 @@
 
     <h2>Pricing Tiers</h2>
     <p>
-      GaaS offers four pricing tiers based on monthly governance action volume and the number of agents under management:
+      GaaS offers five pricing tiers based on monthly governance action volume and the number of agents under management:
     </p>
 
     <table>
@@ -228,11 +228,18 @@
       </thead>
       <tbody>
         <tr>
-          <td><strong>Developer</strong></td>
-          <td>Free</td>
+          <td><strong>Free</strong></td>
+          <td>$0</td>
           <td>1,000</td>
           <td>1</td>
           <td>Community (GitHub)</td>
+        </tr>
+        <tr>
+          <td><strong>Developer</strong></td>
+          <td>$99/month</td>
+          <td>10,000</td>
+          <td>3</td>
+          <td>Email</td>
         </tr>
         <tr>
           <td><strong>Starter</strong></td>
@@ -279,6 +286,18 @@
         </tr>
       </thead>
       <tbody>
+        <tr>
+          <td>Free</td>
+          <td>$0</td>
+          <td>€0</td>
+          <td>£0</td>
+        </tr>
+        <tr>
+          <td>Developer</td>
+          <td>$99</td>
+          <td>€92</td>
+          <td>£77</td>
+        </tr>
         <tr>
           <td>Starter</td>
           <td>$500</td>
@@ -328,9 +347,9 @@ Content-Type: application/json
   }
 }</code></pre>
 
-    <h3>10% Grace Period</h3>
+    <h3>Grace Period</h3>
     <p>
-      GaaS provides a <strong>10% grace buffer</strong> beyond your plan limit before enforcement kicks in. For example, a Starter plan (50,000 actions/month) allows up to 55,000 actions before returning 402 errors. This prevents service disruption from minor overages.
+      Paid plans (Developer and above) receive a <strong>10% grace buffer</strong> beyond the plan limit before enforcement kicks in. For example, a Starter plan (50,000 actions/month) allows up to 55,000 actions before returning 402 errors. The <strong>Free tier has no grace buffer</strong> &mdash; enforcement begins immediately at the 1,000-action limit. This prevents service disruption from minor overages on paid plans while maintaining a hard cap on free usage.
     </p>
 
     <div class="warning">
@@ -489,19 +508,21 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Free Developer Tier</h2>
+    <h2>Free Tier</h2>
     <p>
-      The Developer tier is free forever and includes:
+      The Free tier is free forever and includes:
     </p>
     <ul>
-      <li>1,000 actions per month</li>
+      <li>1,000 actions per month (hard cap, no grace buffer)</li>
       <li>1 agent under management</li>
+      <li>7-day audit retention</li>
       <li>Full access to all governance features (shadow mode, escalations, learning, webhooks, GDPR compliance)</li>
       <li>Community support via GitHub issues</li>
     </ul>
 
     <p>
       Perfect for prototyping, small projects, and open-source use cases. No credit card required.
+      Ready to scale? The <strong>Developer plan ($99/mo)</strong> gives you 10x the quota (10,000 actions), 3 agents, 30-day audit retention, and email support.
     </p>
 
     <hr class="divider">
@@ -523,9 +544,9 @@ X-API-Key: your_api_key</code></pre>
       Downgrades take effect at the end of your billing period, so you'll continue to have access to your current tier's quota until then. No refunds are issued for partial months.
     </p>
 
-    <h3>How does the 10% grace buffer work?</h3>
+    <h3>How does the grace buffer work?</h3>
     <p>
-      The grace buffer allows temporary overages without immediate service disruption. For example, a 50K plan allows up to 55K actions. Beyond 55K, you'll receive 402 errors. This prevents outages from minor usage spikes.
+      Paid plans receive a 10% grace buffer that allows temporary overages without immediate service disruption. For example, a 50K plan allows up to 55K actions. Beyond 55K, you'll receive 402 errors. The Free tier has no grace &mdash; enforcement is immediate at the 1,000-action limit.
     </p>
 
     <h3>Are taxes included in the pricing?</h3>
