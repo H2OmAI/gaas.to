@@ -388,18 +388,52 @@ GaaSResponse response = client.<span class="func">submitIntent</span>(intent);</
     <hr class="divider">
 
     <h2>Key Rotation &amp; Revocation</h2>
+
+    <h3>Atomic Rotation (Recommended)</h3>
     <p>
-      To rotate your API key:
+      Use the atomic rotation endpoint to create a new key and revoke the old one in a single transaction — zero risk of key leakage or misconfigured windows:
+    </p>
+    <pre><code>POST https://api.gaas.is/v1/api-keys/{key_id}/rotate
+X-API-Key: your_current_api_key</code></pre>
+    <p>
+      The response includes the new key immediately. The old key is revoked atomically — no overlap window to manage.
+    </p>
+    <pre><code>{
+  "key_id": "key_new_abc123...",
+  "api_key": "gsk_live_org_newkey...",
+  "expires_at": "2026-05-19T00:00:00Z",
+  "rotated_from": "key_old_xyz789..."
+}</code></pre>
+
+    <h3>Manual Rotation</h3>
+    <p>
+      Alternatively, rotate manually for more control over the transition:
     </p>
     <ol>
-      <li>Generate a new key via the dashboard or <code>POST /v1/keys</code> (admin only)</li>
+      <li>Generate a new key via the dashboard or <code>POST /v1/api-keys</code> (admin only)</li>
       <li>Update your application's environment variables to use the new key</li>
       <li>Deploy the updated configuration</li>
-      <li>Revoke the old key via <code>DELETE /v1/keys/{key_id}</code></li>
+      <li>Revoke the old key via <code>DELETE /v1/api-keys/{key_id}</code></li>
     </ol>
 
     <div class="warning">
-      <strong>Zero-downtime rotation:</strong> Provision the new key before revoking the old one. Both keys will work during the transition period, allowing you to update configurations without service interruption.
+      <strong>Zero-downtime rotation:</strong> When using manual rotation, provision the new key before revoking the old one. Both keys will work during the transition period.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Key Expiration &amp; Lifetime</h2>
+    <p>
+      API keys support automatic expiration. When a key's <code>expires_at</code> timestamp is reached, it is rejected at the auth layer — no manual revocation needed.
+    </p>
+    <ul>
+      <li><strong>Configurable max lifetime</strong> — keys cannot be created with a lifetime exceeding <code>GAAS_API_KEY_MAX_LIFETIME_DAYS</code> (default: 90 days)</li>
+      <li><strong>Expired keys return 401</strong> — the response includes an <code>X-GaaS-Key-Expired: true</code> header for easy detection</li>
+      <li><strong>Rotate before expiry</strong> — use the atomic rotation endpoint to seamlessly replace a key before it expires</li>
+    </ul>
+
+    <div class="note">
+      <strong>Best practice:</strong> Set up monitoring to rotate keys at least 7 days before expiry. The dashboard shows key expiration dates and sends alerts as keys approach their lifetime limit.
     </div>
 
     <hr class="divider">
@@ -425,6 +459,10 @@ GaaSResponse response = client.<span class="func">submitIntent</span>(intent);</
     <h3>403 Forbidden</h3>
     <p><strong>Cause:</strong> API key is valid, but you lack permissions for the requested operation (e.g., admin-only endpoint).</p>
     <p><strong>Solution:</strong> Check your user role in the dashboard. Contact your organization admin to request elevated permissions.    </p>
+
+    <h3>401 Unauthorized (Expired Key)</h3>
+    <p><strong>Cause:</strong> Your API key has passed its <code>expires_at</code> timestamp.</p>
+    <p><strong>Solution:</strong> Rotate the key using <code>POST /v1/api-keys/{key_id}/rotate</code> or provision a new key. Check the <code>X-GaaS-Key-Expired: true</code> response header to confirm expiration is the cause.</p>
 
     <h3>Open Mode Not Working</h3>
     <p><strong>Cause:</strong> API keys or <code>GAAS_API_KEYS</code> env var are configured, disabling open mode.</p>
