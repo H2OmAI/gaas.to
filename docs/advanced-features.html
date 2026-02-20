@@ -551,21 +551,18 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
 
     <h3>Pipeline Latency Optimizations</h3>
     <p>
-      The governance pipeline runs several internal optimizations that reduce end-to-end latency:
+      The governance pipeline includes several built-in optimizations that reduce end-to-end latency without any changes to your integration:
     </p>
-    <table>
-      <thead><tr><th>Optimization</th><th>Impact</th></tr></thead>
-      <tbody>
-        <tr><td>Parallel policy evaluation within tiers</td><td>−50% Stage 3 latency</td></tr>
-        <tr><td>Scope pre-indexing (action_type, sensitivity, target)</td><td>−50% candidate filtering time</td></tr>
-        <tr><td>Shadow mode deliberation bypass</td><td>−80% shadow pipeline latency</td></tr>
-        <tr><td>Round 3 early exit on unanimous consensus (&gt;0.9)</td><td>−60% latency on clear-cut cases</td></tr>
-        <tr><td>Deliberation threshold raised to 0.65</td><td>−30% deliberation rate</td></tr>
-      </tbody>
-    </table>
+    <ul>
+      <li><strong>Parallel policy evaluation</strong> &mdash; policies within each tier are evaluated concurrently</li>
+      <li><strong>Smart filtering</strong> &mdash; only applicable policies are evaluated for each intent</li>
+      <li><strong>Shadow mode fast path</strong> &mdash; shadow pipelines skip expensive stages when enforcement isn't needed</li>
+      <li><strong>Early consensus exit</strong> &mdash; deliberation rounds terminate early when agents reach strong agreement</li>
+      <li><strong>Adaptive deliberation</strong> &mdash; only high-risk intents trigger the multi-agent deliberation stage</li>
+    </ul>
 
     <div class="note">
-      <strong>Performance targets (Phase 1):</strong> p95 latency &lt;500 ms (down from 800 ms), payload size −70% with GZip, cache hit rate &gt;90% after warm-up, primary DB load −70% with read replicas active.
+      <strong>Performance targets:</strong> p95 latency &lt;500 ms, payload size &minus;70% with GZip, cache hit rate &gt;90% after warm-up, primary DB load &minus;70% with read replicas active.
     </div>
 
     <h2>Related Pages</h2>

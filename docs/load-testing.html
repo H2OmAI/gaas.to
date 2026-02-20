@@ -329,7 +329,7 @@ k6 run tests/load/stress.js</code></pre>
     </table>
 
     <div class="note">
-      <strong>Deliberation coverage.</strong> The high-financial scenario exceeds the $10,000 delegation limit, triggering 3-round deliberation with 6 specialized agents. This is the most expensive code path and the primary target for latency measurement.
+      <strong>Deliberation coverage.</strong> The high-financial scenario triggers multi-agent deliberation &mdash; the most expensive code path and the primary target for latency measurement.
     </div>
 
     <hr class="divider">
@@ -426,17 +426,6 @@ k6 run tests/load/stress.js</code></pre>
     <div class="note">
       <strong>Rate limiting disabled in CI.</strong> Load tests measure pipeline performance, not rate limiter behavior. The stress test can be run separately with rate limiting enabled to validate backpressure handling.
     </div>
-
-    <hr class="divider">
-
-    <h2>File Structure</h2>
-    <pre><code>tests/load/
-  config.js       &mdash; Base URL, auth, thresholds
-  payloads.js     &mdash; 5 intent factories + weighted random selector
-  helpers.js      &mdash; Request helpers + custom k6 metrics
-  smoke.js        &mdash; 1 VU endpoint validation
-  load.js         &mdash; Sustained multi-scenario load test
-  stress.js       &mdash; Breaking-point stress test</code></pre>
 
     <hr class="divider">
 
