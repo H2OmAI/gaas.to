@@ -301,6 +301,31 @@ X-API-Key: your_api_key
       <strong>Note:</strong> A <code>block</code> returns HTTP 200, not 403. A block is a successful governance decision, not an error. HTTP 4xx codes are reserved for actual request failures.
     </div>
 
+    <h3>Block Notifications &amp; Appeals</h3>
+    <p>
+      When GaaS issues a <code>block</code> verdict, the org admin automatically receives an email notification
+      containing the blocking policy, risk score, regulatory citations, and suggested alternatives.
+      The email includes three click-to-action buttons:
+    </p>
+    <ul>
+      <li><strong>Approve Override</strong> &mdash; records a human-approved exception in the audit trail</li>
+      <li><strong>Deny &amp; Note</strong> &mdash; confirms the block was correct and logs the admin's note</li>
+      <li><strong>View in Dashboard</strong> &mdash; opens the decision detail page</li>
+    </ul>
+    <p>
+      Approving an override does <em>not</em> re-run the pipeline. The agent must resubmit the intent to receive
+      a new governance decision. All appeal actions are recorded in the tamper-evident audit trail.
+    </p>
+
+    <h3>Agent Retry Tracking</h3>
+    <p>
+      When an agent resubmits a previously blocked intent, include the original intent ID in
+      <code>context_provided.prior_intents</code>. GaaS detects the retry, attaches a
+      <code>retry_context</code> object to the decision (with attempt count and prior verdict), and
+      records a reformulation observation for the learning engine. Repeated retries of the same blocked
+      action type surface as actionable insights in the governance dashboard.
+    </p>
+
     <p>
       Decisions include a risk assessment, the list of pipeline stages that executed, and a reference to the full audit record.
     </p>
