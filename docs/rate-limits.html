@@ -199,6 +199,7 @@
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
+      <a href="search.html">Search</a>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -226,7 +227,7 @@
 
     <hr class="divider">
 
-    <h2>Per-Endpoint Rate Limits</h2>
+    <h2 id="per-endpoint-rate-limits">Per-Endpoint Rate Limits</h2>
     <p>
       Different endpoints have different rate limits based on their resource intensity:
     </p>
@@ -280,7 +281,7 @@
 
     <hr class="divider">
 
-    <h2>429 Response Format</h2>
+    <h2 id="429-response-format">429 Response Format</h2>
     <p>
       When you exceed a rate limit, the API returns a <code>429 Too Many Requests</code> response:
     </p>
@@ -321,7 +322,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Rate Limit Scoping</h2>
+    <h2 id="rate-limit-scoping">Rate Limit Scoping</h2>
 
     <h3>Per API Key (org_id)</h3>
     <p>
@@ -335,7 +336,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Handling Rate Limits</h2>
+    <h2 id="handling-rate-limits">Handling Rate Limits</h2>
 
     <h3>Python (gaas_sdk)</h3>
     <pre><code><span class="keyword">import</span> time
@@ -382,7 +383,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Best Practices</h2>
+    <h2 id="best-practices">Best Practices</h2>
 
     <h3>1. Implement Exponential Backoff</h3>
     <p>
@@ -427,7 +428,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Upgrading Rate Limits</h2>
+    <h2 id="upgrading-rate-limits">Upgrading Rate Limits</h2>
     <p>
       Rate limits are <strong>not</strong> tied to pricing tiers—all organizations (including Developer tier) have the same rate limits. This is intentional to ensure fair access.
     </p>
@@ -444,7 +445,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Troubleshooting</h2>
+    <h2 id="troubleshooting">Troubleshooting</h2>
 
     <h3>Getting 429 Errors Despite Low Traffic</h3>
     <p><strong>Cause:</strong> Multiple services or agents sharing the same API key are collectively exceeding the limit.</p>
@@ -472,6 +473,7 @@ Content-Type: application/json
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>
 </html>

@@ -226,6 +226,7 @@
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
+      <a href="search.html">Search</a>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -238,7 +239,7 @@
       k6 scripts for smoke, sustained load, and stress testing &mdash; targeting the governance pipeline, dashboard, and escalation endpoints. Integrated into the deployment pipeline as a gate between staging and production.
     </p>
 
-    <h2>Three Test Profiles</h2>
+    <h2 id="three-test-profiles">Three Test Profiles</h2>
     <div class="flow">
       <div class="flow-step">
         <div class="flow-icon">1</div>
@@ -265,7 +266,7 @@
 
     <hr class="divider">
 
-    <h2>Running Locally</h2>
+    <h2 id="running-locally">Running Locally</h2>
     <p>
       Install <a class="link" href="https://k6.io/docs/get-started/installation/">k6</a>, then start the API in open mode:
     </p>
@@ -290,7 +291,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Payload Mix</h2>
+    <h2 id="payload-mix">Payload Mix</h2>
     <p>
       The load and stress tests select intents from a weighted random pool that exercises all verdict paths through the governance pipeline:
     </p>
@@ -334,7 +335,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Pass/Fail Thresholds</h2>
+    <h2 id="passfail-thresholds">Pass/Fail Thresholds</h2>
     <table>
       <tr>
         <th>Endpoint Group</th>
@@ -375,7 +376,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Custom Metrics</h2>
+    <h2 id="custom-metrics">Custom Metrics</h2>
     <p>
       Beyond standard k6 HTTP metrics, the load tests track governance-specific measurements:
     </p>
@@ -410,7 +411,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>CI Integration</h2>
+    <h2 id="ci-integration">CI Integration</h2>
     <p>
       Load tests run automatically in the deployment pipeline after staging deploy and before production. The GitHub Actions workflow:
     </p>
@@ -429,7 +430,7 @@ k6 run tests/load/stress.js</code></pre>
 
     <hr class="divider">
 
-    <h2>Environment Variables</h2>
+    <h2 id="environment-variables">Environment Variables</h2>
     <table>
       <tr>
         <th>Variable</th>
@@ -472,6 +473,7 @@ k6 run tests/load/stress.js</code></pre>
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>
 </html>

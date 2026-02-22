@@ -199,6 +199,7 @@
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
+      <a href="search.html">Search</a>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -226,7 +227,7 @@
 
     <hr class="divider">
 
-    <h2>Available Events</h2>
+    <h2 id="available-events">Available Events</h2>
     <p>
       GaaS sends webhook notifications for the following escalation lifecycle events:
     </p>
@@ -285,7 +286,7 @@
 
     <hr class="divider">
 
-    <h2>Registering a Webhook</h2>
+    <h2 id="registering-a-webhook">Registering a Webhook</h2>
     <p>
       Create a webhook subscription with a <code>POST</code> request to the webhooks endpoint:
     </p>
@@ -318,7 +319,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Event Payload Structure</h2>
+    <h2 id="event-payload-structure">Event Payload Structure</h2>
     <p>
       When an event occurs, GaaS sends a POST request to your webhook URL with this structure:
     </p>
@@ -346,7 +347,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Signature Verification (HMAC-SHA256)</h2>
+    <h2 id="signature-verification-hmac-sha256">Signature Verification (HMAC-SHA256)</h2>
     <p>
       <strong>Always verify webhook signatures</strong> to ensure requests are from GaaS and haven't been tampered with. The <code>X-GaaS-Signature</code> header contains an HMAC-SHA256 signature of the raw request body.
     </p>
@@ -494,7 +495,7 @@ app.<span class="func">post</span>(<span class="string">'/webhooks/gaas'</span>,
 
     <hr class="divider">
 
-    <h2>Retry Policy</h2>
+    <h2 id="retry-policy">Retry Policy</h2>
     <p>
       If your webhook endpoint returns a non-2xx status code or times out, GaaS automatically retries delivery:
     </p>
@@ -515,7 +516,7 @@ app.<span class="func">post</span>(<span class="string">'/webhooks/gaas'</span>,
 
     <hr class="divider">
 
-    <h2>Testing Webhooks</h2>
+    <h2 id="testing-webhooks">Testing Webhooks</h2>
     <p>
       For local development, use <strong>ngrok</strong> or <strong>webhook.site</strong> to expose your localhost to the internet:
     </p>
@@ -544,7 +545,7 @@ curl -X POST https://api.gaas.is/v1/escalations/webhooks \
 
     <hr class="divider">
 
-    <h2>Managing Webhooks</h2>
+    <h2 id="managing-webhooks">Managing Webhooks</h2>
 
     <h3>List Webhooks</h3>
     <pre><code>GET https://api.gaas.is/v1/escalations/webhooks
@@ -600,6 +601,7 @@ X-API-Key: your_api_key</code></pre>
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>
 </html>

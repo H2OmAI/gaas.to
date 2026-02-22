@@ -1,0 +1,946 @@
+[
+  {
+    "id": "index",
+    "page": "GaaS Documentation",
+    "section": null,
+    "url": "index.html",
+    "body": "Governance as a Service — five-stage governance pipeline for autonomous AI agents. Intent declaration, context enrichment, policy evaluation, deliberation, and tamper-evident audit. Every agent action evaluated before execution.",
+    "tags": ["governance", "pipeline", "agents", "overview", "GaaS", "H2Om"]
+  },
+  {
+    "id": "getting-started",
+    "page": "Getting Started",
+    "section": null,
+    "url": "getting-started.html",
+    "body": "Add governance to your AI agents in three steps: onboard your organization, integrate your agent, review shadow decisions and go live. API key provisioning, membrane generation, Python and TypeScript code samples.",
+    "tags": ["quickstart", "setup", "install", "first steps", "tutorial"]
+  },
+  {
+    "id": "getting-started#onboard-your-organization",
+    "page": "Getting Started",
+    "section": "Onboard Your Organization",
+    "url": "getting-started.html#onboard-your-organization",
+    "body": "POST /v1/onboarding/quickstart — one call handles intake, analysis, membrane generation, and API key provisioning. Provide organization description and agent declarations. Membrane starts in shadow mode automatically.",
+    "tags": ["quickstart endpoint", "API key", "membrane", "organization", "onboard"]
+  },
+  {
+    "id": "getting-started#integrate-your-agent",
+    "page": "Getting Started",
+    "section": "Integrate Your Agent",
+    "url": "getting-started.html#integrate-your-agent",
+    "body": "Submit an intent with POST /v1/intents before every agent action. Provide agent_id, action_type, verb, target, and summary. Act on the verdict: approve, block, escalate, or modify. Use the payload from the decision response, not the original content.",
+    "tags": ["intent", "submit", "verdict", "approve", "block", "escalate", "modify", "Python", "TypeScript"]
+  },
+  {
+    "id": "getting-started#review-shadow-decisions-then-go-live",
+    "page": "Getting Started",
+    "section": "Review Shadow Decisions, Then Go Live",
+    "url": "getting-started.html#review-shadow-decisions-then-go-live",
+    "body": "Shadow mode evaluates every intent through the full pipeline without enforcement. Review would-have-blocked and would-have-modified decisions. Mark false positives. Activate live mode with POST /v1/membranes/{id}/activate. Live mode can be reverted to shadow at any time.",
+    "tags": ["shadow mode", "live mode", "activate", "false positive", "membrane activate"]
+  },
+  {
+    "id": "getting-started#troubleshooting",
+    "page": "Getting Started",
+    "section": "Troubleshooting",
+    "url": "getting-started.html#troubleshooting",
+    "body": "401 Unauthorized: invalid or missing X-API-Key header. 402 Payment Required: monthly quota exceeded. 429 Too Many Requests: rate limit hit, use Retry-After header and exponential backoff.",
+    "tags": ["401", "402", "429", "error", "debug", "quota", "rate limit"]
+  },
+  {
+    "id": "api-reference",
+    "page": "API Reference",
+    "section": null,
+    "url": "api-reference.html",
+    "body": "Complete OpenAPI 3.1 specification for all GaaS REST endpoints. Interactive Redoc UI with request and response schemas, authentication details, and example payloads. Loaded live from api.gaas.is.",
+    "tags": ["OpenAPI", "REST", "endpoints", "Redoc", "swagger", "schema", "spec"]
+  },
+  {
+    "id": "intent-api",
+    "page": "Intent Declaration API",
+    "section": null,
+    "url": "intent-api.html",
+    "body": "The front door to governance. Every agent action begins with POST /v1/intents. Supports COMMUNICATE, TRANSACT, ACCESS, EXECUTE action types. Returns a governance decision with verdict, reasoning, and optionally modified payload.",
+    "tags": ["intent", "POST", "submit", "verdict", "action types", "governance decision"]
+  },
+  {
+    "id": "intent-api#core-concept",
+    "page": "Intent Declaration API",
+    "section": "Core Concept",
+    "url": "intent-api.html#core-concept",
+    "body": "An intent is a structured declaration of what an agent wants to do before it does it. GaaS evaluates the intent through 5 stages and returns a verdict. The agent must act on the verdict — not skip it.",
+    "tags": ["intent", "concept", "declaration", "before execution"]
+  },
+  {
+    "id": "intent-api#submitting-an-intent",
+    "page": "Intent Declaration API",
+    "section": "Submitting an Intent",
+    "url": "intent-api.html#submitting-an-intent",
+    "body": "POST /v1/intents with X-API-Key header. Request body includes agent.id, action.type, action.verb, action.target.identifier, action.target.sensitivity, payload.summary, payload.content, reversible, audience_size.",
+    "tags": ["POST /v1/intents", "request body", "X-API-Key", "agent id", "action type"]
+  },
+  {
+    "id": "intent-api#action-types",
+    "page": "Intent Declaration API",
+    "section": "Action Types",
+    "url": "intent-api.html#action-types",
+    "body": "Four action types: COMMUNICATE (emails, messages, calls), TRANSACT (payments, financial operations), ACCESS (data reads, file access, API calls), EXECUTE (code execution, system commands, agent orchestration).",
+    "tags": ["COMMUNICATE", "TRANSACT", "ACCESS", "EXECUTE", "action type"]
+  },
+  {
+    "id": "intent-api#the-governance-decision",
+    "page": "Intent Declaration API",
+    "section": "The Governance Decision",
+    "url": "intent-api.html#the-governance-decision",
+    "body": "The decision response includes verdict (approve/block/escalate/modify), reasoning string, risk_score, policy_violations array, and optionally modified_payload. When verdict is modify, use modified_payload for execution.",
+    "tags": ["verdict", "approve", "block", "escalate", "modify", "reasoning", "risk score", "policy violations"]
+  },
+  {
+    "id": "intent-api#endpoints",
+    "page": "Intent Declaration API",
+    "section": "Endpoints",
+    "url": "intent-api.html#endpoints",
+    "body": "POST /v1/intents — submit intent. GET /v1/intents — list intents with filters. GET /v1/intents/{id} — retrieve specific intent and its decision. DELETE /v1/intents/{id} — GDPR erasure.",
+    "tags": ["endpoints", "GET /v1/intents", "POST /v1/intents", "list", "retrieve"]
+  },
+  {
+    "id": "intent-api#idempotency",
+    "page": "Intent Declaration API",
+    "section": "Idempotency",
+    "url": "intent-api.html#idempotency",
+    "body": "Use Idempotency-Key header to safely retry intent submissions. Duplicate submissions with the same key within 24 hours return the original decision without re-evaluation. Prevents double-governance on network retries.",
+    "tags": ["Idempotency-Key", "retry", "duplicate", "24 hour", "dedup"]
+  },
+  {
+    "id": "intent-api#bulk-submission",
+    "page": "Intent Declaration API",
+    "section": "Bulk Submission",
+    "url": "intent-api.html#bulk-submission",
+    "body": "POST /v1/intents/batch accepts an array of up to 100 intent objects. Returns individual verdicts for each. Evaluated in parallel for performance. Each intent gets its own decision_id.",
+    "tags": ["batch", "bulk", "POST /v1/intents/batch", "parallel", "array"]
+  },
+  {
+    "id": "intent-api#a2a-gateway",
+    "page": "Intent Declaration API",
+    "section": "A2A Gateway",
+    "url": "intent-api.html#a2a-gateway",
+    "body": "POST /v1/a2a/rpc for Agent-to-Agent JSON-RPC protocol. One agent delegates tasks to another through the governance gateway. All inter-agent actions governed before execution.",
+    "tags": ["A2A", "agent-to-agent", "JSON-RPC", "delegation", "gateway"]
+  },
+  {
+    "id": "policies",
+    "page": "Policy Library",
+    "section": null,
+    "url": "policies.html",
+    "body": "33 pre-built governance policies across 4 tiers plus AP2 payment layer. Covers HIPAA, GDPR, PCI-DSS, SOX, EU AI Act, TCPA, FCRA. Custom NL-authored policies available.",
+    "tags": ["HIPAA", "GDPR", "PCI-DSS", "SOX", "EU AI Act", "TCPA", "policies", "tier", "compliance"]
+  },
+  {
+    "id": "policies#coverage-overview",
+    "page": "Policy Library",
+    "section": "Coverage Overview",
+    "url": "policies.html#coverage-overview",
+    "body": "33 policies organized across Tier 1 (hard blocks — fast-fail), Tier 2 (high-risk escalations), Tier 3 (risk-scored), Tier 4 (audit-only). AP2 layer covers agentic payment governance. Tier 1 violations skip all further evaluation.",
+    "tags": ["tier 1", "tier 2", "tier 3", "tier 4", "AP2", "fast-fail", "hard block"]
+  },
+  {
+    "id": "policies#how-policies-work",
+    "page": "Policy Library",
+    "section": "How Policies Work",
+    "url": "policies.html#how-policies-work",
+    "body": "Verdict ladder: approve → modify → escalate → block. Risk scored across 6 dimensions: legal, reputational, operational, financial, privacy, safety. Policies evaluated in parallel; highest-severity verdict wins.",
+    "tags": ["verdict ladder", "risk score", "6 dimensions", "legal", "reputational", "financial", "privacy", "safety"]
+  },
+  {
+    "id": "policies#policy-registry",
+    "page": "Policy Library",
+    "section": "Policy Registry",
+    "url": "policies.html#policy-registry",
+    "body": "Natural language policy authoring — describe a policy in plain English, GaaS compiles it into an evaluatable rule. Policy IDs follow pol_t1_xxx, pol_t2_xxx convention. Custom policies versioned and auditable.",
+    "tags": ["custom policy", "NL authoring", "policy ID", "pol_t1", "pol_t2", "natural language"]
+  },
+  {
+    "id": "policies#eu-ai-act-compliance",
+    "page": "Policy Library",
+    "section": "EU AI Act Compliance",
+    "url": "policies.html#eu-ai-act-compliance",
+    "body": "Policies mapped to EU AI Act Articles 9–15. High-risk AI classification, transparency obligations, human oversight requirements. August 2026 compliance deadline enforced by GaaS governance layer.",
+    "tags": ["EU AI Act", "Articles 9-15", "high-risk AI", "transparency", "August 2026", "human oversight"]
+  },
+  {
+    "id": "connectors",
+    "page": "Connectors",
+    "section": null,
+    "url": "connectors.html",
+    "body": "12 production integrations for context enrichment during governance evaluation. Twilio, Salesforce, Stripe, Okta, GitHub, Slack, Datadog, PagerDuty, SIEM, and more. All connectors resilient with circuit-breaker pattern.",
+    "tags": ["integrations", "Okta", "Slack", "Stripe", "Twilio", "Salesforce", "GitHub", "Datadog", "PagerDuty", "SIEM"]
+  },
+  {
+    "id": "connectors#communications",
+    "page": "Connectors",
+    "section": "Communications",
+    "url": "connectors.html#communications",
+    "body": "Twilio connector — call and SMS metadata, TCPA consent status, opt-out records. Used to verify communication compliance before agent messages are sent. Returns consent signals in real-time.",
+    "tags": ["Twilio", "SMS", "TCPA", "consent", "opt-out", "communication"]
+  },
+  {
+    "id": "connectors#crm",
+    "page": "Connectors",
+    "section": "CRM",
+    "url": "connectors.html#crm",
+    "body": "Salesforce connector — account and contact records, permission sets, relationship data. Enriches governance decisions with CRM context for customer-facing agent actions.",
+    "tags": ["Salesforce", "CRM", "contact", "account", "permission"]
+  },
+  {
+    "id": "connectors#payment",
+    "page": "Connectors",
+    "section": "Payment",
+    "url": "connectors.html#payment",
+    "body": "Stripe connector — transaction history, fraud signals, spend tracking, PCI-DSS compliance signals. AP2 Mandate store integration for agentic payment governance. Prevents unauthorized financial agent actions.",
+    "tags": ["Stripe", "payment", "PCI-DSS", "fraud", "AP2 Mandate", "spend", "financial"]
+  },
+  {
+    "id": "connectors#identity",
+    "page": "Connectors",
+    "section": "Identity",
+    "url": "connectors.html#identity",
+    "body": "Okta connector — identity verification, MFA status, session risk, group membership, permission scopes. Used to validate agent identity and authorization before privileged actions.",
+    "tags": ["Okta", "identity", "MFA", "SSO", "authentication", "authorization", "permissions"]
+  },
+  {
+    "id": "connectors#security",
+    "page": "Connectors",
+    "section": "Security",
+    "url": "connectors.html#security",
+    "body": "SIEM connector — security event feeds, anomaly signals, threat indicators. Feeds real-time security context into governance decisions. Blocks agents during active security incidents.",
+    "tags": ["SIEM", "security", "anomaly", "threat", "incident"]
+  },
+  {
+    "id": "connectors#developer",
+    "page": "Connectors",
+    "section": "Developer",
+    "url": "connectors.html#developer",
+    "body": "GitHub connector — repository access, PR state, code review status. Jira connector — issue tracking, project state. Used to govern agent actions in development workflows.",
+    "tags": ["GitHub", "Jira", "repository", "PR", "code review", "developer"]
+  },
+  {
+    "id": "connectors#organizational",
+    "page": "Connectors",
+    "section": "Organizational",
+    "url": "connectors.html#organizational",
+    "body": "Slack connector — organizational communication signals, channel membership, message history context. Used to assess communication risk and validate communication targets.",
+    "tags": ["Slack", "organizational", "communication", "channel"]
+  },
+  {
+    "id": "connectors#operations",
+    "page": "Connectors",
+    "section": "Operations",
+    "url": "connectors.html#operations",
+    "body": "Datadog connector — infrastructure metrics, service health. PagerDuty connector — on-call status, active incidents. Prevents agent actions during system degradation or active incidents.",
+    "tags": ["Datadog", "PagerDuty", "on-call", "incidents", "infrastructure", "metrics"]
+  },
+  {
+    "id": "connectors#agent-to-agent",
+    "page": "Connectors",
+    "section": "Agent-to-Agent",
+    "url": "connectors.html#agent-to-agent",
+    "body": "Agent trust connector — trust scores, delegation history, capability declarations. AP2 mandate store — active payment mandates, spend limits, validity windows. Governs inter-agent interactions.",
+    "tags": ["agent trust", "AP2", "mandate", "trust score", "delegation", "inter-agent"]
+  },
+  {
+    "id": "connectors#resilience-model",
+    "page": "Connectors",
+    "section": "Resilience Model",
+    "url": "connectors.html#resilience-model",
+    "body": "ResilientConnector wraps all integrations with circuit breaker and timeout logic. Returns ConnectorResult with .status: TIMED_OUT, FAILED, or DEGRADED. Never raises exceptions. GAAS_CONNECTOR_MODE env var controls behavior.",
+    "tags": ["ResilientConnector", "circuit breaker", "TIMED_OUT", "FAILED", "DEGRADED", "timeout", "GAAS_CONNECTOR_MODE"]
+  },
+  {
+    "id": "a2a",
+    "page": "A2A & Agent Networks",
+    "section": null,
+    "url": "a2a.html",
+    "body": "A2A Protocol v0.3 support, Agent Trust Registry, multi-agent governance, and AP2 agentic payment governance with mandate management. Governs every inter-agent delegation and payment before execution.",
+    "tags": ["A2A", "agent-to-agent", "multi-agent", "AP2", "mandate", "trust", "delegation"]
+  },
+  {
+    "id": "a2a#agent-card",
+    "page": "A2A & Agent Networks",
+    "section": "Agent Card",
+    "url": "a2a.html#agent-card",
+    "body": "Agent Card JSON document describes an agent's capabilities, trust score, skills, and supported A2A protocol version. Published at /.well-known/agent.json. Required for A2A registration.",
+    "tags": ["Agent Card", "capabilities", "trust score", "skills", "well-known", "JSON"]
+  },
+  {
+    "id": "a2a#a2a-gateway",
+    "page": "A2A & Agent Networks",
+    "section": "A2A Gateway",
+    "url": "a2a.html#a2a-gateway",
+    "body": "POST /v1/a2a/rpc — JSON-RPC 2.0 endpoint for agent-to-agent task delegation. Caller agent governs the delegated task through the GaaS pipeline before the callee executes. Method: tasks/send.",
+    "tags": ["A2A Gateway", "/v1/a2a/rpc", "JSON-RPC", "tasks/send", "delegation", "POST"]
+  },
+  {
+    "id": "a2a#agent-trust-registry",
+    "page": "A2A & Agent Networks",
+    "section": "Agent Trust Registry",
+    "url": "a2a.html#agent-trust-registry",
+    "body": "Agent Trust Registry stores trust scores, capability declarations, and suspension state. GET /v1/a2a/agents to list. POST /v1/a2a/agents to register. Trust score 0–100 affects governance thresholds.",
+    "tags": ["trust registry", "trust score", "registration", "suspension", "capabilities", "agent registry"]
+  },
+  {
+    "id": "a2a#governance-proxy",
+    "page": "A2A & Agent Networks",
+    "section": "Governance Proxy",
+    "url": "a2a.html#governance-proxy",
+    "body": "Upstream agent governs the downstream agent's intent. The orchestrating agent submits the intent on behalf of the worker agent. Full audit trail maintained for the entire delegation chain.",
+    "tags": ["governance proxy", "orchestrator", "worker", "delegation chain", "audit trail"]
+  },
+  {
+    "id": "a2a#cross-org-policy-federation",
+    "page": "A2A & Agent Networks",
+    "section": "Cross-Org Policy Federation",
+    "url": "a2a.html#cross-org-policy-federation",
+    "body": "Agents from different organizations can federate policies. Caller org policies applied first, callee org policies second. Federation requires mutual trust establishment.",
+    "tags": ["cross-org", "federation", "multi-org", "policy federation", "trust"]
+  },
+  {
+    "id": "a2a#ap2-payment-governance",
+    "page": "A2A & Agent Networks",
+    "section": "AP2 Payment Governance",
+    "url": "a2a.html#ap2-payment-governance",
+    "body": "AP2 protocol governs agentic payments. All agent-initiated transactions must reference a valid AP2 mandate. High-Net-Payment (HNP) threshold triggers additional deliberation. Prevents runaway agent spending.",
+    "tags": ["AP2", "agentic payment", "mandate", "HNP", "high-net-payment", "spending limit", "financial governance"]
+  },
+  {
+    "id": "a2a#ap2-mandate-management",
+    "page": "A2A & Agent Networks",
+    "section": "AP2 Mandate Management",
+    "url": "a2a.html#ap2-mandate-management",
+    "body": "POST /v1/a2a/mandates to create a mandate. Mandates define allowed payees, spend limits, validity window, and currency. GET /v1/a2a/mandates/{id} to check status. Spend tracked in real-time.",
+    "tags": ["mandate", "POST /v1/a2a/mandates", "spend limit", "validity", "payee", "currency", "AP2"]
+  },
+  {
+    "id": "shadow-mode",
+    "page": "Shadow Mode",
+    "section": null,
+    "url": "shadow-mode.html",
+    "body": "Full five-stage pipeline evaluation on real traffic with zero enforcement. Test governance on live agent actions before activating live mode. All shadow decisions logged, retrievable, and reviewable in the dashboard.",
+    "tags": ["shadow mode", "dry-run", "testing", "membrane", "zero enforcement", "evaluate"]
+  },
+  {
+    "id": "shadow-mode#why-shadow-mode",
+    "page": "Shadow Mode",
+    "section": "Why Shadow Mode",
+    "url": "shadow-mode.html#why-shadow-mode",
+    "body": "Shadow mode lets you validate governance rules on real production traffic without blocking any agent actions. Identify false positives, tune thresholds, and build confidence before live enforcement.",
+    "tags": ["validation", "false positive", "tune", "confidence", "production traffic"]
+  },
+  {
+    "id": "shadow-mode#how-to-enable",
+    "page": "Shadow Mode",
+    "section": "How to Enable",
+    "url": "shadow-mode.html#how-to-enable",
+    "body": "Membranes start in shadow mode by default after onboarding. No explicit action required. To verify shadow state: GET /v1/membranes/{id}. Response includes mode: shadow.",
+    "tags": ["enable shadow", "membrane state", "GET /v1/membranes", "mode: shadow", "default"]
+  },
+  {
+    "id": "shadow-mode#membrane-lifecycle",
+    "page": "Shadow Mode",
+    "section": "Membrane Lifecycle",
+    "url": "shadow-mode.html#membrane-lifecycle",
+    "body": "Membrane states: draft → shadow → live → suspended. Transition from shadow to live with POST /v1/membranes/{id}/activate. Revert from live to shadow with POST /v1/membranes/{id}/suspend.",
+    "tags": ["membrane", "draft", "shadow", "live", "suspended", "activate", "suspend", "lifecycle"]
+  },
+  {
+    "id": "shadow-mode#what-happens-differently",
+    "page": "Shadow Mode",
+    "section": "What Happens Differently",
+    "url": "shadow-mode.html#what-happens-differently",
+    "body": "In shadow mode, verdicts are returned in the response body but not enforced — the agent proceeds regardless. Blocked decisions are logged as would_have_blocked. The full audit record is created and hash-chained.",
+    "tags": ["would_have_blocked", "not enforced", "shadow verdict", "audit record", "log"]
+  },
+  {
+    "id": "shadow-mode#monitoring-shadow-decisions",
+    "page": "Shadow Mode",
+    "section": "Monitoring Shadow Decisions",
+    "url": "shadow-mode.html#monitoring-shadow-decisions",
+    "body": "Use the conversational dashboard to review shadow decisions. Filter by would-have-blocked, would-have-escalated, would-have-modified. Mark false positives to improve membrane accuracy.",
+    "tags": ["dashboard", "review", "monitor", "false positive", "would-have-blocked", "filter"]
+  },
+  {
+    "id": "shadow-mode#transitioning-to-live",
+    "page": "Shadow Mode",
+    "section": "Transitioning to Live",
+    "url": "shadow-mode.html#transitioning-to-live",
+    "body": "Activate live mode with POST /v1/membranes/{id}/activate with mode: live. From live mode, revert to shadow with mode: shadow. All audit records preserved across both modes. No data loss on transition.",
+    "tags": ["activate", "live mode", "POST /v1/membranes", "revert", "transition"]
+  },
+  {
+    "id": "dashboard",
+    "page": "Conversational Dashboard",
+    "section": null,
+    "url": "dashboard.html",
+    "body": "Governance operations through natural language. Review escalations, explore decisions, run backtests — all in a Claude-powered chat interface at the.gaas.is. Auto-generated visual artifacts for data queries.",
+    "tags": ["dashboard", "chat", "Claude", "natural language", "backtests", "the.gaas.is"]
+  },
+  {
+    "id": "dashboard#authentication-access",
+    "page": "Conversational Dashboard",
+    "section": "Authentication & Access",
+    "url": "dashboard.html#authentication-access",
+    "body": "Access at the.gaas.is. SSO login or email/password. Session-based auth scoped to your org. Each org member sees only their org's governance data.",
+    "tags": ["the.gaas.is", "SSO", "login", "session", "org isolation", "access"]
+  },
+  {
+    "id": "dashboard#architecture",
+    "page": "Conversational Dashboard",
+    "section": "Architecture",
+    "url": "dashboard.html#architecture",
+    "body": "BFF (Backend for Frontend) pattern with Express server. Claude Opus model powers the chat. Streaming responses. Artifact renderer for charts, pipeline flows, decision timelines. Tool calls to GaaS API for live data.",
+    "tags": ["BFF", "Express", "Claude", "streaming", "artifacts", "architecture"]
+  },
+  {
+    "id": "dashboard#what-you-can-do",
+    "page": "Conversational Dashboard",
+    "section": "What You Can Do",
+    "url": "dashboard.html#what-you-can-do",
+    "body": "Query decisions by date, agent, verdict. Review and resolve escalations. Explore policy violations. Run backtests on historical traffic. Export audit trails. View membrane configuration. Ask questions in plain English.",
+    "tags": ["query", "decisions", "escalations", "backtests", "export", "audit trail", "natural language"]
+  },
+  {
+    "id": "dashboard#visual-artifacts",
+    "page": "Conversational Dashboard",
+    "section": "Visual Artifacts",
+    "url": "dashboard.html#visual-artifacts",
+    "body": "Dashboard auto-generates charts (bar, line, radar, scatter), pipeline flow diagrams, decision timelines, and policy heat maps in response to data queries. Rendered inline in the chat.",
+    "tags": ["charts", "pipeline flow", "artifacts", "visualization", "Recharts", "diagrams"]
+  },
+  {
+    "id": "dashboard#example-conversation-flows",
+    "page": "Conversational Dashboard",
+    "section": "Example Conversation Flows",
+    "url": "dashboard.html#example-conversation-flows",
+    "body": "Example queries: 'show me blocked intents this week', 'which agents trigger most escalations', 'what's my policy violation rate by tier', 'show the audit trail for decision abc123', 'run a backtest on last month's traffic'.",
+    "tags": ["examples", "queries", "blocked intents", "escalations", "backtest", "audit trail", "conversation"]
+  },
+  {
+    "id": "sdks",
+    "page": "SDKs",
+    "section": null,
+    "url": "sdks.html",
+    "body": "Official client libraries for Python, TypeScript, and Java with full type safety, intent builders, retry logic, and async support. Available on PyPI, npm, and Maven.",
+    "tags": ["python", "typescript", "java", "SDK", "client library", "PyPI", "npm", "Maven"]
+  },
+  {
+    "id": "sdks#python",
+    "page": "SDKs",
+    "section": "Python",
+    "url": "sdks.html#python",
+    "body": "pip install gaas-sdk. GaaSClient async context manager. build_intent() helper. submit_intent() returns typed decision. Python 3.9+ supported. Async/await native.",
+    "tags": ["pip", "gaas-sdk", "GaaSClient", "build_intent", "submit_intent", "asyncio", "Python"]
+  },
+  {
+    "id": "sdks#typescript",
+    "page": "SDKs",
+    "section": "TypeScript",
+    "url": "sdks.html#typescript",
+    "body": "npm install @gaas/sdk. GaaSClient class with buildIntent() and submitIntent(). Full TypeScript types for all request and response objects. Node.js 18+ and browser compatible.",
+    "tags": ["npm", "@gaas/sdk", "GaaSClient", "buildIntent", "submitIntent", "TypeScript", "types", "Node.js"]
+  },
+  {
+    "id": "sdks#java",
+    "page": "SDKs",
+    "section": "Java",
+    "url": "sdks.html#java",
+    "body": "Maven dependency: com.gaas/gaas-sdk. GaasClient builder pattern. CompletableFuture for async. Java 11+ required. Builder pattern for intent construction.",
+    "tags": ["Maven", "gaas-sdk", "GaasClient", "Java", "CompletableFuture", "builder"]
+  },
+  {
+    "id": "sdks#common-patterns",
+    "page": "SDKs",
+    "section": "Common Patterns",
+    "url": "sdks.html#common-patterns",
+    "body": "Retry with exponential backoff on 429 and 503. Detect shadow mode from response.shadow_mode flag. Route verdicts: approve → execute, block → log and skip, escalate → queue for human review, modify → use modified_payload.",
+    "tags": ["retry", "exponential backoff", "shadow mode detection", "verdict routing", "modified_payload", "human review"]
+  },
+  {
+    "id": "onboarding",
+    "page": "Onboarding",
+    "section": null,
+    "url": "onboarding.html",
+    "body": "From intent to governed agents in hours. Context intake, Unified Context Model (UCM) builder, governance membrane generation, shadow-to-live lifecycle. One quickstart endpoint provisions everything.",
+    "tags": ["membrane", "UCM", "onboard", "lifecycle", "quickstart", "unified context model"]
+  },
+  {
+    "id": "onboarding#the-onboarding-flow",
+    "page": "Onboarding",
+    "section": "The Onboarding Flow",
+    "url": "onboarding.html#the-onboarding-flow",
+    "body": "POST /v1/onboarding/quickstart triggers: domain analysis, regulatory framework inference, UCM construction, membrane generation, API key provisioning. Returns API key and membrane ID in one response.",
+    "tags": ["quickstart", "domain analysis", "regulatory inference", "UCM", "membrane generation", "API key"]
+  },
+  {
+    "id": "onboarding#context-intake",
+    "page": "Onboarding",
+    "section": "Context Intake",
+    "url": "onboarding.html#context-intake",
+    "body": "Provide organization name, domain URL, description, and agent declarations including framework, action types, and domains. GaaS infers applicable regulatory requirements (HIPAA, GDPR, PCI-DSS, etc.) from context.",
+    "tags": ["context intake", "organization", "agent declarations", "regulatory requirements", "HIPAA", "GDPR", "PCI-DSS"]
+  },
+  {
+    "id": "onboarding#the-governance-membrane",
+    "page": "Onboarding",
+    "section": "The Governance Membrane",
+    "url": "onboarding.html#the-governance-membrane",
+    "body": "A governance membrane is the complete policy set, risk thresholds, delegation limits, and connector configuration that defines how GaaS governs your agents. Generated automatically and customizable.",
+    "tags": ["membrane", "policy set", "risk thresholds", "delegation limits", "configuration"]
+  },
+  {
+    "id": "onboarding#shadow-mode",
+    "page": "Onboarding",
+    "section": "Shadow Mode",
+    "url": "onboarding.html#shadow-mode",
+    "body": "All new membranes start in shadow mode — 30-day zero-enforcement preview. Full governance pipeline runs on every intent but verdicts are not enforced. Use to validate rules before going live.",
+    "tags": ["shadow mode", "30-day preview", "zero enforcement", "validate", "new membrane"]
+  },
+  {
+    "id": "onboarding#membrane-lifecycle",
+    "page": "Onboarding",
+    "section": "Membrane Lifecycle",
+    "url": "onboarding.html#membrane-lifecycle",
+    "body": "States: draft (configured, inactive), shadow (evaluating, not enforcing), live (full enforcement), suspended (paused). Transition endpoints for each state change. Full audit trail of all state transitions.",
+    "tags": ["draft", "shadow", "live", "suspended", "membrane state", "lifecycle", "transition"]
+  },
+  {
+    "id": "authentication",
+    "page": "Authentication",
+    "section": null,
+    "url": "authentication.html",
+    "body": "API key-based authentication. Keys prefixed with gsk_. Multi-tenancy with org isolation. OAuth flow, MFA enforcement, key rotation and revocation, 90-day expiry by default.",
+    "tags": ["API key", "gsk_", "auth", "multi-tenant", "OAuth", "MFA", "rotation", "revoke"]
+  },
+  {
+    "id": "authentication#obtaining-an-api-key",
+    "page": "Authentication",
+    "section": "Obtaining an API Key",
+    "url": "authentication.html#obtaining-an-api-key",
+    "body": "POST /v1/onboarding/quickstart returns apiKey in the response. Or POST /v1/api-keys to create additional keys. Keys are shown only once — store them securely immediately.",
+    "tags": ["obtain API key", "create key", "POST /v1/api-keys", "quickstart", "store securely"]
+  },
+  {
+    "id": "authentication#using-your-api-key",
+    "page": "Authentication",
+    "section": "Using Your API Key",
+    "url": "authentication.html#using-your-api-key",
+    "body": "Include API key in every request: X-API-Key: gsk_your_key. Missing or invalid key returns 401 Unauthorized with error code invalid_api_key. The header name is X-API-Key (not Authorization: Bearer).",
+    "tags": ["X-API-Key", "header", "401", "gsk_", "request authentication"]
+  },
+  {
+    "id": "authentication#api-key-format",
+    "page": "Authentication",
+    "section": "API Key Format",
+    "url": "authentication.html#api-key-format",
+    "body": "GaaS API keys are prefixed with gsk_ followed by a 32-character random string. Example: gsk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6. Scopes embedded in key metadata, not the key string itself.",
+    "tags": ["gsk_", "API key format", "prefix", "32 character", "scopes"]
+  },
+  {
+    "id": "authentication#multi-tenancy",
+    "page": "Authentication",
+    "section": "Multi-Tenancy",
+    "url": "authentication.html#multi-tenancy",
+    "body": "Each API key is scoped to one organization (org_id). All data — intents, decisions, audit records, membranes — is strictly isolated by org_id. No cross-org data leakage possible.",
+    "tags": ["multi-tenancy", "org isolation", "org_id", "data isolation", "scoped"]
+  },
+  {
+    "id": "authentication#key-rotation-revocation",
+    "page": "Authentication",
+    "section": "Key Rotation & Revocation",
+    "url": "authentication.html#key-rotation-revocation",
+    "body": "POST /v1/api-keys/{id}/rotate creates a new key and immediately invalidates the old one. DELETE /v1/api-keys/{id} permanently revokes a key. Revocation is instant with no grace period.",
+    "tags": ["rotate", "revoke", "POST /v1/api-keys", "DELETE /v1/api-keys", "rotation", "invalidate"]
+  },
+  {
+    "id": "authentication#key-expiration-lifetime",
+    "page": "Authentication",
+    "section": "Key Expiration & Lifetime",
+    "url": "authentication.html#key-expiration-lifetime",
+    "body": "Default expiry is 90 days. Configurable at creation time via expires_in_days. Expired keys return 401 with code api_key_expired. Rotate before expiry to avoid service interruption.",
+    "tags": ["expiration", "90 days", "expires_in_days", "api_key_expired", "lifetime"]
+  },
+  {
+    "id": "authentication#best-practices",
+    "page": "Authentication",
+    "section": "Best Practices",
+    "url": "authentication.html#best-practices",
+    "body": "Store API keys in environment variables, not source code. Create per-service keys (one per agent or service). Rotate on any suspected compromise. Use short expiry for CI/CD contexts.",
+    "tags": ["security", "env vars", "per-service keys", "best practices", "compromise", "CI/CD"]
+  },
+  {
+    "id": "authentication#troubleshooting",
+    "page": "Authentication",
+    "section": "Troubleshooting",
+    "url": "authentication.html#troubleshooting",
+    "body": "401 Unauthorized causes: missing X-API-Key header, expired key (api_key_expired), revoked key, wrong key for environment (staging vs production). Check key prefix starts with gsk_.",
+    "tags": ["401", "Unauthorized", "expired", "revoked", "wrong environment", "debug", "troubleshoot"]
+  },
+  {
+    "id": "rate-limits",
+    "page": "Rate Limits",
+    "section": null,
+    "url": "rate-limits.html",
+    "body": "Per-endpoint sliding-window rate limiting. Default 100 req/min for intent submission. 429 response with Retry-After header and X-RateLimit headers. Exponential backoff recommended.",
+    "tags": ["rate limit", "429", "throttle", "backoff", "Retry-After", "sliding window"]
+  },
+  {
+    "id": "rate-limits#per-endpoint-rate-limits",
+    "page": "Rate Limits",
+    "section": "Per-Endpoint Rate Limits",
+    "url": "rate-limits.html#per-endpoint-rate-limits",
+    "body": "POST /v1/intents: 100/min. GET /v1/intents: 200/min. POST /v1/intents/batch: 10/min (counts as up to 100 per call). GET /v1/decisions: 200/min. POST /v1/onboarding/quickstart: 5/min.",
+    "tags": ["limits", "100/min", "200/min", "POST /v1/intents", "GET /v1/intents", "batch"]
+  },
+  {
+    "id": "rate-limits#429-response-format",
+    "page": "Rate Limits",
+    "section": "429 Response Format",
+    "url": "rate-limits.html#429-response-format",
+    "body": "429 Too Many Requests response includes Retry-After (seconds to wait), X-RateLimit-Limit (max requests), X-RateLimit-Remaining (0), X-RateLimit-Reset (epoch timestamp when window resets).",
+    "tags": ["429", "Retry-After", "X-RateLimit-Limit", "X-RateLimit-Remaining", "X-RateLimit-Reset", "headers"]
+  },
+  {
+    "id": "rate-limits#handling-rate-limits",
+    "page": "Rate Limits",
+    "section": "Handling Rate Limits",
+    "url": "rate-limits.html#handling-rate-limits",
+    "body": "Use exponential backoff with jitter. Read Retry-After header for minimum wait time. Implement client-side token bucket. For burst workloads, use batch endpoint to reduce request count.",
+    "tags": ["exponential backoff", "jitter", "Retry-After", "token bucket", "burst", "retry"]
+  },
+  {
+    "id": "webhooks",
+    "page": "Webhooks",
+    "section": null,
+    "url": "webhooks.html",
+    "body": "HMAC-SHA256 signed event delivery for governance decisions, escalations, and quota events. Register endpoints, verify signatures, and handle retries with exponential backoff.",
+    "tags": ["webhook", "events", "HMAC", "SHA256", "delivery", "escalations", "notifications"]
+  },
+  {
+    "id": "webhooks#available-events",
+    "page": "Webhooks",
+    "section": "Available Events",
+    "url": "webhooks.html#available-events",
+    "body": "Event types: intent.decision (every governance decision), escalation.created (new escalation queued), escalation.resolved (escalation resolved), quota.warning (80% quota used), quota.exceeded, membrane.activated, membrane.suspended.",
+    "tags": ["intent.decision", "escalation.created", "escalation.resolved", "quota.warning", "quota.exceeded", "membrane.activated", "event types"]
+  },
+  {
+    "id": "webhooks#registering-a-webhook",
+    "page": "Webhooks",
+    "section": "Registering a Webhook",
+    "url": "webhooks.html#registering-a-webhook",
+    "body": "POST /v1/webhooks with endpoint URL, event types array, and optional secret. Returns webhook_id and signing_secret. Store signing_secret — used to verify all incoming payloads.",
+    "tags": ["POST /v1/webhooks", "register", "endpoint URL", "signing_secret", "webhook_id"]
+  },
+  {
+    "id": "webhooks#event-payload-structure",
+    "page": "Webhooks",
+    "section": "Event Payload Structure",
+    "url": "webhooks.html#event-payload-structure",
+    "body": "Every event includes event_type, event_id, timestamp (ISO 8601), org_id, and data object specific to the event type. The data object for intent.decision includes the full GovernanceDecision schema.",
+    "tags": ["event_type", "event_id", "timestamp", "org_id", "data", "GovernanceDecision", "payload structure"]
+  },
+  {
+    "id": "webhooks#signature-verification-hmac-sha256",
+    "page": "Webhooks",
+    "section": "Signature Verification (HMAC-SHA256)",
+    "url": "webhooks.html#signature-verification-hmac-sha256",
+    "body": "Verify the X-GaaS-Signature header on every incoming webhook. HMAC-SHA256 over the raw request body using your signing_secret. Reject requests where signature does not match — replay attack protection.",
+    "tags": ["HMAC", "SHA256", "X-GaaS-Signature", "verify", "signature", "security", "replay attack"]
+  },
+  {
+    "id": "webhooks#retry-policy",
+    "page": "Webhooks",
+    "section": "Retry Policy",
+    "url": "webhooks.html#retry-policy",
+    "body": "Failed deliveries retried up to 3 times with exponential backoff: 1 min, 10 min, 1 hour. Events abandoned after 24 hours. Your endpoint must return 2xx within 10 seconds or delivery is marked failed.",
+    "tags": ["retry", "3 times", "exponential backoff", "24 hours", "10 seconds", "delivery failure"]
+  },
+  {
+    "id": "webhooks#testing-webhooks",
+    "page": "Webhooks",
+    "section": "Testing Webhooks",
+    "url": "webhooks.html#testing-webhooks",
+    "body": "POST /v1/webhooks/{id}/test sends a test event to your endpoint. Use ngrok or similar for local development. Test payload is identically structured to production events.",
+    "tags": ["test webhook", "POST /v1/webhooks/test", "ngrok", "local development", "test event"]
+  },
+  {
+    "id": "observability",
+    "page": "Observability & Alerting",
+    "section": null,
+    "url": "observability.html",
+    "body": "Structured logging with structlog, Prometheus metrics, OpenTelemetry distributed tracing, and threshold-based anomaly detection alerts. Three observability layers for full system visibility.",
+    "tags": ["logging", "metrics", "tracing", "Prometheus", "OpenTelemetry", "OTel", "structlog", "alerts", "anomaly"]
+  },
+  {
+    "id": "observability#three-layers",
+    "page": "Observability & Alerting",
+    "section": "Three Layers",
+    "url": "observability.html#three-layers",
+    "body": "Layer 1: structured JSON logs via structlog with trace_id, org_id, decision_id context. Layer 2: Prometheus metrics scrape at /metrics. Layer 3: OpenTelemetry spans exported to OTEL_EXPORTER_OTLP_ENDPOINT.",
+    "tags": ["structlog", "JSON logs", "Prometheus", "/metrics", "OpenTelemetry", "OTLP", "spans", "trace_id"]
+  },
+  {
+    "id": "observability#anomaly-alerting",
+    "page": "Observability & Alerting",
+    "section": "Anomaly Alerting",
+    "url": "observability.html#anomaly-alerting",
+    "body": "Threshold-based alerts fire when: block rate exceeds threshold, escalation volume spikes, p99 latency exceeds SLA, quota approaching limit. Behavioral anomaly detection for unusual agent patterns.",
+    "tags": ["anomaly", "alert", "block rate", "escalation spike", "latency threshold", "behavioral detection"]
+  },
+  {
+    "id": "observability#notification-channels",
+    "page": "Observability & Alerting",
+    "section": "Notification Channels",
+    "url": "observability.html#notification-channels",
+    "body": "Alert delivery to Slack (GAAS_ALERT_SLACK_WEBHOOK), PagerDuty (GAAS_PAGERDUTY_ROUTING_KEY), and email. Configure via environment variables. Multiple channels can receive the same alert.",
+    "tags": ["Slack", "PagerDuty", "email", "GAAS_ALERT_SLACK_WEBHOOK", "GAAS_PAGERDUTY_ROUTING_KEY", "alert channels"]
+  },
+  {
+    "id": "observability#prometheus-metrics-reference",
+    "page": "Observability & Alerting",
+    "section": "Prometheus Metrics Reference",
+    "url": "observability.html#prometheus-metrics-reference",
+    "body": "Key metrics: gaas_intent_total (counter), gaas_decision_latency_seconds (histogram, p50/p95/p99), gaas_policy_violations_total (by policy_id), gaas_escalations_active (gauge), gaas_connector_errors_total.",
+    "tags": ["gaas_intent_total", "gaas_decision_latency_seconds", "gaas_policy_violations_total", "gaas_escalations_active", "Prometheus metrics", "histogram", "gauge", "counter"]
+  },
+  {
+    "id": "advanced-features",
+    "page": "Advanced Features",
+    "section": null,
+    "url": "advanced-features.html",
+    "body": "Bulk intent submission, sparse field filtering, idempotency keys, ETag HTTP caching, API versioning, and performance optimizations including read replicas and connection pooling.",
+    "tags": ["bulk", "idempotency", "ETag", "caching", "performance", "read replicas", "API versioning"]
+  },
+  {
+    "id": "advanced-features#bulk-intent-submission",
+    "page": "Advanced Features",
+    "section": "Bulk Intent Submission",
+    "url": "advanced-features.html#bulk-intent-submission",
+    "body": "POST /v1/intents/batch accepts up to 100 intents. Evaluated in parallel. Response includes individual decisions keyed by intent id. Reduces HTTP overhead for high-throughput agents.",
+    "tags": ["batch", "bulk", "100 intents", "parallel", "POST /v1/intents/batch", "high-throughput"]
+  },
+  {
+    "id": "advanced-features#field-filtering-sparse-responses",
+    "page": "Advanced Features",
+    "section": "Field Filtering (Sparse Responses)",
+    "url": "advanced-features.html#field-filtering-sparse-responses",
+    "body": "Append ?fields=id,verdict,reasoning to any GET request to receive only the specified fields. Reduces payload size by up to 80%. Useful for high-frequency polling of decision status.",
+    "tags": ["?fields=", "sparse response", "field filtering", "payload size", "polling", "GET"]
+  },
+  {
+    "id": "advanced-features#idempotency",
+    "page": "Advanced Features",
+    "section": "Idempotency",
+    "url": "advanced-features.html#idempotency",
+    "body": "Add Idempotency-Key: <uuid> header to any mutating request. Duplicate requests within 24 hours return the cached response without re-processing. Safe for retries after network failures.",
+    "tags": ["Idempotency-Key", "uuid", "24 hours", "dedup", "retry safe", "cached response"]
+  },
+  {
+    "id": "advanced-features#etag-caching-http-conditional-requests",
+    "page": "Advanced Features",
+    "section": "ETag Caching (HTTP Conditional Requests)",
+    "url": "advanced-features.html#etag-caching-http-conditional-requests",
+    "body": "All GET endpoints return ETag header. Send If-None-Match: <etag> on subsequent requests. Returns 304 Not Modified if unchanged, saving bandwidth. ETags are per-resource and per-org.",
+    "tags": ["ETag", "If-None-Match", "304 Not Modified", "HTTP caching", "conditional request", "bandwidth"]
+  },
+  {
+    "id": "advanced-features#api-versioning",
+    "page": "Advanced Features",
+    "section": "API Versioning",
+    "url": "advanced-features.html#api-versioning",
+    "body": "Current version: /v1/. Breaking changes get a new major version. Old versions maintained for 12 months after deprecation. API-Version response header indicates current serving version.",
+    "tags": ["API versioning", "/v1/", "breaking changes", "deprecation", "API-Version header"]
+  },
+  {
+    "id": "load-testing",
+    "page": "Load Testing",
+    "section": null,
+    "url": "load-testing.html",
+    "body": "k6 smoke, load, and stress test profiles. CI-gated between staging and production deployments. Pass/fail thresholds for p95 latency and error rate. Custom GaaS metrics included.",
+    "tags": ["k6", "performance", "stress test", "smoke test", "load test", "CI", "staging", "production"]
+  },
+  {
+    "id": "load-testing#three-test-profiles",
+    "page": "Load Testing",
+    "section": "Three Test Profiles",
+    "url": "load-testing.html#three-test-profiles",
+    "body": "Smoke: 1 VU for 30 seconds — basic sanity check. Load: 50 VUs for 10 minutes — sustained production load. Stress: ramp to 200 VUs over 15 minutes — find breaking point.",
+    "tags": ["smoke", "load", "stress", "VU", "virtual users", "30 seconds", "10 minutes", "200 VUs"]
+  },
+  {
+    "id": "load-testing#passfail-thresholds",
+    "page": "Load Testing",
+    "section": "Pass/Fail Thresholds",
+    "url": "load-testing.html#passfail-thresholds",
+    "body": "p95 response time < 200ms, p99 < 500ms, error rate < 1%, governance pipeline latency < 150ms. Tests fail CI if thresholds exceeded. Thresholds configurable per environment.",
+    "tags": ["p95", "p99", "200ms", "500ms", "error rate", "thresholds", "CI gate", "latency"]
+  },
+  {
+    "id": "load-testing#ci-integration",
+    "page": "Load Testing",
+    "section": "CI Integration",
+    "url": "load-testing.html#ci-integration",
+    "body": "GitHub Actions runs load tests after staging deploy and before production deploy. Failing thresholds block production promotion. Results uploaded as artifacts. Grafana dashboard for historical trends.",
+    "tags": ["GitHub Actions", "CI/CD", "staging", "production gate", "artifacts", "Grafana"]
+  },
+  {
+    "id": "compliance",
+    "page": "Compliance & Liability Shield",
+    "section": null,
+    "url": "compliance.html",
+    "body": "EU AI Act Articles 9–15 enforcement, Governance Proof Tokens (cryptographic audit), SR 11-7 model inventory, August 2026 compliance deadline. GaaS as a liability shield for AI deployments.",
+    "tags": ["EU AI Act", "SR 11-7", "GPT", "liability shield", "model inventory", "audit", "compliance", "August 2026"]
+  },
+  {
+    "id": "compliance#eu-ai-act-compliance",
+    "page": "Compliance & Liability Shield",
+    "section": "EU AI Act Compliance",
+    "url": "compliance.html#eu-ai-act-compliance",
+    "body": "GaaS enforces Articles 9–15: risk management (Art. 9), data governance (Art. 10), technical documentation (Art. 11), transparency (Art. 13), human oversight (Art. 14), accuracy (Art. 15). High-risk AI classification handled automatically.",
+    "tags": ["Article 9", "Article 10", "Article 11", "Article 13", "Article 14", "Article 15", "EU AI Act", "risk management", "human oversight", "transparency"]
+  },
+  {
+    "id": "compliance#governance-proof-tokens",
+    "page": "Compliance & Liability Shield",
+    "section": "Governance Proof Tokens",
+    "url": "compliance.html#governance-proof-tokens",
+    "body": "Governance Proof Tokens (GPT) — cryptographically signed audit bundles proving governance occurred. Download via GET /v1/audit/verification-bundle/{id}. SHA-256 hash chain, ECDSA signatures, tamper-evident ZIP.",
+    "tags": ["GPT", "Governance Proof Token", "audit bundle", "verification bundle", "ECDSA", "SHA-256", "tamper-evident", "ZIP"]
+  },
+  {
+    "id": "compliance#sr-11-7-model-inventory",
+    "page": "Compliance & Liability Shield",
+    "section": "SR 11-7 Model Inventory",
+    "url": "compliance.html#sr-11-7-model-inventory",
+    "body": "GET /v1/model-inventory returns SR 11-7 compliant model inventory in JSON, CSV, or HTML format. Includes model ID, version, purpose, risk tier, validation date, and ownership. Required for banking/financial regulators.",
+    "tags": ["SR 11-7", "model inventory", "GET /v1/model-inventory", "JSON", "CSV", "HTML", "banking", "financial regulator"]
+  },
+  {
+    "id": "gdpr-compliance",
+    "page": "GDPR Compliance",
+    "section": null,
+    "url": "gdpr-compliance.html",
+    "body": "Article 17 right to erasure, Article 20 data portability, Article 22 right to explanation, consent management, sub-processor automation. Full GDPR compliance built into GaaS governance layer.",
+    "tags": ["GDPR", "erasure", "portability", "consent", "sub-processor", "right to explanation", "data subject rights"]
+  },
+  {
+    "id": "gdpr-compliance#article-17-right-to-erasure",
+    "page": "GDPR Compliance",
+    "section": "Article 17: Right to Erasure",
+    "url": "gdpr-compliance.html#article-17-right-to-erasure",
+    "body": "DELETE /v1/gdpr/erasure/{subject_id} triggers cascading deletion of all data for a data subject across intents, decisions, audit records, and agent interactions. Confirmation receipt with timestamp returned.",
+    "tags": ["Article 17", "right to erasure", "right to be forgotten", "DELETE /v1/gdpr/erasure", "data deletion", "cascading"]
+  },
+  {
+    "id": "gdpr-compliance#article-20-right-to-data-portability",
+    "page": "GDPR Compliance",
+    "section": "Article 20: Right to Data Portability",
+    "url": "gdpr-compliance.html#article-20-right-to-data-portability",
+    "body": "GET /v1/gdpr/export/{subject_id} returns all data for a subject as a structured JSON package. Includes intents, decisions, audit records, and consent history. Machine-readable format for portability.",
+    "tags": ["Article 20", "data portability", "GET /v1/gdpr/export", "JSON package", "data export"]
+  },
+  {
+    "id": "gdpr-compliance#article-22-right-to-explanation",
+    "page": "GDPR Compliance",
+    "section": "Article 22: Right to Explanation",
+    "url": "gdpr-compliance.html#article-22-right-to-explanation",
+    "body": "Every governance decision includes a human-readable reasoning field explaining why the verdict was reached. Accessible via GET /v1/decisions/{id}/explanation. Satisfies GDPR Article 22 automated decision explanation requirement.",
+    "tags": ["Article 22", "right to explanation", "automated decision", "reasoning", "GET /v1/decisions/explanation"]
+  },
+  {
+    "id": "gdpr-compliance#consent-management",
+    "page": "GDPR Compliance",
+    "section": "Consent Management",
+    "url": "gdpr-compliance.html#consent-management",
+    "body": "Consent records stored per data subject. POST /v1/gdpr/consent to record. DELETE /v1/gdpr/consent to revoke. Consent status propagated to governance decisions in real-time. Twilio connector verifies TCPA consent.",
+    "tags": ["consent", "POST /v1/gdpr/consent", "DELETE /v1/gdpr/consent", "revoke consent", "TCPA", "data subject"]
+  },
+  {
+    "id": "gdpr-compliance#article-28-sub-processor-notification-automation",
+    "page": "GDPR Compliance",
+    "section": "Article 28: Sub-processor Notification Automation",
+    "url": "gdpr-compliance.html#article-28-sub-processor-notification-automation",
+    "body": "GaaS automatically generates Article 28 sub-processor notification letters when new integrations (connectors) are added to your membrane. Downloads via /v1/gdpr/sub-processors. DPA templates included.",
+    "tags": ["Article 28", "sub-processor", "DPA", "notification", "data processing agreement", "connector"]
+  },
+  {
+    "id": "billing-and-quotas",
+    "page": "Billing & Quotas",
+    "section": null,
+    "url": "billing-and-quotas.html",
+    "body": "Four-tier usage-based pricing with automatic quota enforcement. Free (1k/mo), Starter (10k/mo), Pro (100k/mo), Enterprise (custom). Multi-currency Stripe Tax, quota headers in every response.",
+    "tags": ["pricing", "plans", "free tier", "Starter", "Pro", "Enterprise", "quota", "Stripe", "invoice"]
+  },
+  {
+    "id": "billing-and-quotas#pricing-tiers",
+    "page": "Billing & Quotas",
+    "section": "Pricing Tiers",
+    "url": "billing-and-quotas.html#pricing-tiers",
+    "body": "Free: 1,000 actions/month, no credit card. Starter: 10,000 actions/month. Pro: 100,000 actions/month. Enterprise: custom limits, dedicated SLA, on-prem option. All plans include shadow mode.",
+    "tags": ["Free tier", "Starter", "Pro", "Enterprise", "1000", "10000", "100000", "actions per month", "pricing"]
+  },
+  {
+    "id": "billing-and-quotas#usage-enforcement",
+    "page": "Billing & Quotas",
+    "section": "Usage Enforcement",
+    "url": "billing-and-quotas.html#usage-enforcement",
+    "body": "Quota exceeded returns 402 Payment Required with quota_exceeded error code. X-Quota-Limit, X-Quota-Used, X-Quota-Remaining headers on every response. webhook event quota.warning fires at 80% usage.",
+    "tags": ["402", "quota exceeded", "X-Quota-Limit", "X-Quota-Used", "X-Quota-Remaining", "enforcement", "80%"]
+  },
+  {
+    "id": "billing-and-quotas#upgrading-your-plan",
+    "page": "Billing & Quotas",
+    "section": "Upgrading Your Plan",
+    "url": "billing-and-quotas.html#upgrading-your-plan",
+    "body": "Upgrade via Billing dashboard at the.gaas.is/settings/billing. Stripe Checkout for self-service. Upgrade takes effect immediately. Downgrade at end of billing period. No proration on downgrades.",
+    "tags": ["upgrade", "Stripe", "billing dashboard", "checkout", "downgrade", "proration"]
+  },
+  {
+    "id": "billing-and-quotas#free-tier",
+    "page": "Billing & Quotas",
+    "section": "Free Tier",
+    "url": "billing-and-quotas.html#free-tier",
+    "body": "1,000 governance actions per month. No credit card required. Includes shadow mode, all connectors, full policy library, and audit trail. Upgrade self-serve when ready to scale.",
+    "tags": ["free", "1000 actions", "no credit card", "shadow mode", "trial", "start free"]
+  },
+  {
+    "id": "sla",
+    "page": "Service Level Agreement",
+    "section": null,
+    "url": "sla.html",
+    "body": "Availability commitments by plan tier. Downtime credit calculation, exclusions, incident definitions. Free 99.5%, Pro 99.9%, Enterprise 99.99% monthly uptime SLA.",
+    "tags": ["SLA", "uptime", "availability", "credit", "incident", "99.9%", "99.99%"]
+  },
+  {
+    "id": "sla#availability-by-tier",
+    "page": "Service Level Agreement",
+    "section": "Availability by Tier",
+    "url": "sla.html#availability-by-tier",
+    "body": "Free: 99.5% monthly uptime (~3.6 hrs downtime/month). Starter: 99.9% (~43 min/month). Pro: 99.9% (~43 min/month). Enterprise: 99.99% (~4 min/month). Measured as calendar month rolling window.",
+    "tags": ["99.5%", "99.9%", "99.99%", "uptime", "availability", "downtime", "Free", "Pro", "Enterprise"]
+  },
+  {
+    "id": "sla#sla-credit-process",
+    "page": "Service Level Agreement",
+    "section": "SLA Credit Process",
+    "url": "sla.html#sla-credit-process",
+    "body": "Submit credit claims within 30 days of incident via support. Credits applied to next invoice. Not redeemable for cash. Requires incident report reference number.",
+    "tags": ["credit", "claim", "30 days", "invoice credit", "incident report", "SLA breach"]
+  },
+  {
+    "id": "sla#credit-calculation",
+    "page": "Service Level Agreement",
+    "section": "Credit Calculation",
+    "url": "sla.html#credit-calculation",
+    "body": "99.5%–99.9% availability: 10% monthly credit. 99.0%–99.5%: 25% credit. Below 99.0%: 50% credit. Enterprise SLA breach triggers dedicated incident review.",
+    "tags": ["10% credit", "25% credit", "50% credit", "SLA breach", "credit calculation"]
+  }
+]

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>Search — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    #meshCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 10;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+      transition: color 0.15s;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── SEARCH FIELD ── */
+    .search-wrap { margin-bottom: 1.75rem; }
+
+    .search-field {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-field:focus-within {
+      border-color: #00d4aa;
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.12);
+    }
+
+    .search-icon { color: #484f58; flex-shrink: 0; }
+
+    #q {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      color: #e6edf3;
+      font-family: inherit;
+    }
+
+    #q::placeholder { color: #484f58; }
+
+    .search-hint {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.75rem;
+      color: #484f58;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+      flex-shrink: 0;
+    }
+
+    /* ── META ── */
+    .results-meta {
+      font-size: 0.8125rem;
+      color: #484f58;
+      margin-bottom: 1rem;
+      min-height: 1.25rem;
+    }
+
+    /* ── RESULT CARDS ── */
+    .result-card {
+      display: block;
+      padding: 1rem 1.25rem;
+      background: #0d1117;
+      border: 1px solid #1e2533;
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 0.625rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .result-card:hover,
+    .result-card:focus {
+      border-color: #00d4aa;
+      background: #161b22;
+      outline: none;
+    }
+
+    .result-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.8125rem;
+      flex-wrap: wrap;
+    }
+
+    .result-page { color: #00d4aa; font-weight: 600; }
+    .result-sep { color: #484f58; }
+    .result-section { color: #8b949e; }
+
+    .result-body {
+      font-size: 0.875rem;
+      color: #6e7681;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .result-body mark {
+      background: transparent;
+      color: #e6edf3;
+      font-weight: 600;
+    }
+
+    /* ── STATES ── */
+    .loading-state {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #484f58;
+      font-size: 0.875rem;
+      padding: 2rem 0;
+    }
+
+    .loading-ring {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #1e2533;
+      border-top-color: #00d4aa;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .initial-hint,
+    .error-hint {
+      font-size: 0.9375rem;
+      color: #484f58;
+      padding: 2rem 0;
+    }
+
+    .initial-hint kbd,
+    .shortcut-hint kbd {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.75rem;
+      color: #8b949e;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+    }
+
+    .error-hint a,
+    .empty-state a,
+    .initial-hint a { color: #58a6ff; text-decoration: none; }
+    .error-hint a:hover,
+    .empty-state a:hover,
+    .initial-hint a:hover { text-decoration: underline; }
+
+    .empty-state { padding: 2rem 0; }
+
+    .empty-title {
+      font-size: 1rem;
+      color: #e6edf3;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-hint {
+      font-size: 0.875rem;
+      color: #484f58;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      main { padding: 2rem 1.25rem 4rem; }
+      h1 { font-size: 1.375rem; }
+      .search-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+
+<header>
+  <a class="logo" href="index.html">G<span>aa</span>S</a>
+  <nav>
+    <a href="index.html">Docs</a>
+    <a href="https://gaas.is">Home</a>
+    <a href="https://github.com/H2OmAI">GitHub</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Search Docs</h1>
+
+  <div class="search-wrap">
+    <div class="search-field">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M10.5 10.5L14 14M6.5 11a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input
+        id="q"
+        type="search"
+        placeholder="Search documentation…"
+        autocomplete="off"
+        autofocus
+        aria-label="Search documentation"
+      >
+      <kbd class="search-hint">ESC</kbd>
+    </div>
+  </div>
+
+  <div id="results-meta" class="results-meta" aria-live="polite"></div>
+  <div id="loading-state" class="loading-state" style="display:none;">
+    <div class="loading-ring"></div>
+    <span>Loading search index…</span>
+  </div>
+  <div id="results" role="list" aria-label="Search results"></div>
+</main>
+
+<footer>
+  <a href="https://gaas.is">&copy; H2Om</a>
+</footer>
+
+<script>
+(function () {
+  var INDEX_URL = 'search-index.json';
+  var FUSE_CDN  = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
+
+  var inputEl   = document.getElementById('q');
+  var resultsEl = document.getElementById('results');
+  var metaEl    = document.getElementById('results-meta');
+  var loadEl    = document.getElementById('loading-state');
+
+  var fuse          = null;
+  var debounceTimer = null;
+
+  // ── URL param helpers ──
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name) || '';
+  }
+
+  function setParam(value) {
+    var url = value
+      ? window.location.pathname + '?q=' + encodeURIComponent(value)
+      : window.location.pathname;
+    window.history.replaceState(null, '', url);
+  }
+
+  // ── Bootstrap ──
+  function boot() {
+    loadEl.style.display = 'flex';
+    fetch(INDEX_URL)
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var s = document.createElement('script');
+        s.src = FUSE_CDN;
+        s.onload = function () {
+          fuse = new Fuse(data, {
+            keys: [
+              { name: 'page',    weight: 0.35 },
+              { name: 'section', weight: 0.30 },
+              { name: 'body',    weight: 0.25 },
+              { name: 'tags',    weight: 0.10 }
+            ],
+            threshold: 0.35,
+            distance: 200,
+            minMatchCharLength: 2,
+            includeMatches: true,
+            ignoreLocation: true
+          });
+          loadEl.style.display = 'none';
+          var q = getParam('q').trim();
+          if (q) {
+            inputEl.value = q;
+            runSearch(q);
+          } else {
+            showInitial();
+          }
+        };
+        s.onerror = function () {
+          loadEl.style.display = 'none';
+          showError();
+        };
+        document.head.appendChild(s);
+      })
+      .catch(function () {
+        loadEl.style.display = 'none';
+        showError();
+      });
+  }
+
+  // ── Search ──
+  function runSearch(query) {
+    query = query.trim();
+    setParam(query);
+    if (!query) { showInitial(); return; }
+    if (!fuse)  { return; }
+    var results = fuse.search(query, { limit: 20 });
+    renderResults(results, query);
+  }
+
+  // ── Debounced input ──
+  inputEl.addEventListener('input', function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () { runSearch(inputEl.value); }, 120);
+  });
+
+  // ESC clears
+  inputEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { inputEl.value = ''; runSearch(''); }
+  });
+
+  // Cmd/Ctrl+K on this page re-focuses the input instead of navigating away
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      inputEl.focus();
+      inputEl.select();
+    }
+  }, true);
+
+  // ── Render ──
+  function renderResults(results, query) {
+    resultsEl.innerHTML = '';
+    if (!results.length) {
+      metaEl.textContent = '';
+      resultsEl.innerHTML =
+        '<div class="empty-state">' +
+          '<p class="empty-title">No results for \u201c<strong>' + esc(query) + '</strong>\u201d</p>' +
+          '<p class="empty-hint">Try shorter keywords, or browse the <a href="index.html">docs index</a>.</p>' +
+        '</div>';
+      return;
+    }
+
+    var n = results.length;
+    metaEl.textContent = n + ' result' + (n !== 1 ? 's' : '') + ' for \u201c' + query + '\u201d';
+
+    results.forEach(function (result) {
+      var item  = result.item;
+      var card  = document.createElement('a');
+      card.className = 'result-card';
+      card.href = item.url;
+      card.setAttribute('role', 'listitem');
+
+      var breadcrumb = '<div class="result-breadcrumb"><span class="result-page">' + esc(item.page) + '</span>';
+      if (item.section) {
+        breadcrumb += '<span class="result-sep">\u203a</span><span class="result-section">' + esc(item.section) + '</span>';
+      }
+      breadcrumb += '</div>';
+
+      var bodyHtml = buildSnippet(result, item.body, 160);
+      card.innerHTML = breadcrumb + '<p class="result-body">' + bodyHtml + '</p>';
+      resultsEl.appendChild(card);
+    });
+  }
+
+  function buildSnippet(result, text, maxLen) {
+    var bodyMatch = null;
+    if (result.matches) {
+      for (var i = 0; i < result.matches.length; i++) {
+        if (result.matches[i].key === 'body') { bodyMatch = result.matches[i]; break; }
+      }
+    }
+
+    if (!bodyMatch || !bodyMatch.indices || !bodyMatch.indices.length) {
+      return esc(text.slice(0, maxLen)) + (text.length > maxLen ? '\u2026' : '');
+    }
+
+    var first    = bodyMatch.indices[0][0];
+    var winStart = Math.max(0, first - 40);
+    var winEnd   = Math.min(text.length, winStart + maxLen);
+    var snippet  = text.slice(winStart, winEnd);
+
+    var adjusted = bodyMatch.indices
+      .map(function (p) { return [p[0] - winStart, p[1] - winStart]; })
+      .filter(function (p) { return p[0] >= 0 && p[1] < snippet.length; });
+
+    var out = '', cursor = 0;
+    adjusted.forEach(function (p) {
+      if (p[0] > cursor) out += esc(snippet.slice(cursor, p[0]));
+      out += '<mark>' + esc(snippet.slice(p[0], p[1] + 1)) + '</mark>';
+      cursor = p[1] + 1;
+    });
+    if (cursor < snippet.length) out += esc(snippet.slice(cursor));
+    return (winStart > 0 ? '\u2026' : '') + out + (winEnd < text.length ? '\u2026' : '');
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function showInitial() {
+    metaEl.textContent = '';
+    resultsEl.innerHTML =
+      '<p class="initial-hint">Start typing to search the GaaS docs.' +
+      ' Press <kbd>Cmd+K</kbd> from any page to return here.</p>';
+  }
+
+  function showError() {
+    metaEl.textContent = '';
+    resultsEl.innerHTML =
+      '<p class="error-hint">Search index unavailable. Browse the ' +
+      '<a href="index.html">docs index</a> instead.</p>';
+  }
+
+  boot();
+})();
+</script>
+
+<script src="search.js"></script>
+<script src="constellation.js"></script>
+</body>
+</html>

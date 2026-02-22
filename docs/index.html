@@ -406,6 +406,52 @@
       filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.3));
     }
 
+    /* ── HERO SEARCH ── */
+    .hero-search { max-width: 520px; margin: 0 auto 2.5rem; }
+
+    .hero-search-field {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      background: rgba(13, 17, 23, 0.85);
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .hero-search-field:focus-within {
+      border-color: #00d4aa;
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.10);
+    }
+
+    .hero-search-icon { color: #484f58; flex-shrink: 0; }
+
+    .hero-search-field input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.9375rem;
+      color: #e6edf3;
+      font-family: inherit;
+    }
+
+    .hero-search-field input::placeholder { color: #484f58; }
+
+    .hero-search-field button {
+      background: none;
+      border: none;
+      color: #484f58;
+      cursor: pointer;
+      font-size: 1.125rem;
+      padding: 0;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .hero-search-field button:hover { color: #00d4aa; }
+
     @media (max-width: 700px) {
       .pipeline-flow { flex-direction: column; }
       .pipe-stage + .pipe-stage::before { top: 0; bottom: auto; left: 10%; right: 10%; width: auto; height: 1px; }
@@ -414,6 +460,8 @@
       .pipeline-section { padding: 0 1.25rem; }
       .card-grid, .card-grid.two-col { grid-template-columns: 1fr; }
       footer { flex-direction: column; text-align: center; }
+      .hero-search { margin-bottom: 1.75rem; }
+      .hero-search-field { padding: 0.625rem 0.875rem; }
     }
   </style>
 </head>
@@ -423,6 +471,7 @@
 <header>
   <a class="logo" href="index.html"><img src="logo.png" alt="GaaS" style="height:120px; filter: drop-shadow(0 0 15px rgba(0,212,170,0.15));"></a>
   <nav>
+    <a href="search.html">Search</a>
     <a href="https://gaas.is">Home</a>
     <a href="https://github.com/H2OmAI">GitHub</a>
     <a href="https://the.gaas.is/login" class="nav-cta">Sign In &rarr;</a>
@@ -440,6 +489,16 @@
     Every agent action — payment, communication, data access — passes through a
     five-stage governance pipeline before execution. Compliance built in, not bolted on.
   </p>
+  <form class="hero-search" action="search.html" method="get" role="search">
+    <div class="hero-search-field">
+      <svg class="hero-search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M10.5 10.5L14 14M6.5 11a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input name="q" type="search" placeholder="Search docs… (⌘K)" autocomplete="off" aria-label="Search GaaS documentation">
+      <button type="submit" aria-label="Search">&rarr;</button>
+    </div>
+  </form>
   <div class="hero-actions">
     <a href="getting-started.html" class="btn-primary">Get Started &rarr;</a>
     <a href="api-reference.html" class="btn-secondary">API Reference</a>
@@ -738,6 +797,7 @@ console.<span class="fn">log</span>(decision.verdict); <span class="cm">// APPRO
   </span>
 </footer>
 
+<script src="search.js"></script>
 <script>
 function showTab(id) {
   document.querySelectorAll('.qs-tab').forEach(t => t.classList.remove('active'));

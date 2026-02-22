@@ -259,6 +259,7 @@
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
+      <a href="search.html">Search</a>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -271,7 +272,7 @@
       Structured logging, Prometheus metrics, distributed tracing, and threshold-based anomaly alerting &mdash; built into the governance pipeline.
     </p>
 
-    <h2>Three Layers</h2>
+    <h2 id="three-layers">Three Layers</h2>
     <p>
       GaaS observability is designed around three layers that work independently. You can run with just structured logs, add Prometheus scraping, and optionally enable OpenTelemetry tracing &mdash; each layer requires zero code changes.
     </p>
@@ -302,7 +303,7 @@
 
     <hr class="divider">
 
-    <h2>Anomaly Alerting</h2>
+    <h2 id="anomaly-alerting">Anomaly Alerting</h2>
     <p>
       Beyond passive metrics, GaaS actively monitors operational health and fires alerts when thresholds are exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check (every 60 seconds), dispatching events through the notification engine.
     </p>
@@ -361,7 +362,7 @@
 
     <hr class="divider">
 
-    <h2>Notification Channels</h2>
+    <h2 id="notification-channels">Notification Channels</h2>
     <p>
       Alert events are dispatched through configurable channels. Each notification rule specifies a channel and recipients.
     </p>
@@ -395,7 +396,7 @@
 
     <hr class="divider">
 
-    <h2>Notification Rules</h2>
+    <h2 id="notification-rules">Notification Rules</h2>
     <p>
       Rules are managed via the dashboard API. Each rule matches an event type (exact or wildcard) to a channel and recipient list.
     </p>
@@ -449,7 +450,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Prometheus Metrics Reference</h2>
+    <h2 id="prometheus-metrics-reference">Prometheus Metrics Reference</h2>
     <table>
       <tr>
         <th>Metric</th>
@@ -515,7 +516,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Environment Variables</h2>
+    <h2 id="environment-variables">Environment Variables</h2>
     <table>
       <tr>
         <th>Variable</th>
@@ -583,6 +584,7 @@ Content-Type: application/json
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>
 </html>

@@ -211,6 +211,7 @@
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
+      <a href="search.html">Search</a>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -238,7 +239,7 @@
 
     <hr class="divider">
 
-    <h2>Article 17: Right to Erasure</h2>
+    <h2 id="article-17-right-to-erasure">Article 17: Right to Erasure</h2>
     <p>
       Data subjects have the right to request deletion of their personal data. GaaS provides a two-step process: <strong>preview</strong> what will be deleted, then <strong>confirm</strong> to execute the erasure.
     </p>
@@ -295,7 +296,7 @@ X-API-Key: your_api_key
 
     <hr class="divider">
 
-    <h2>Article 20: Right to Data Portability</h2>
+    <h2 id="article-20-right-to-data-portability">Article 20: Right to Data Portability</h2>
     <p>
       Data subjects can request a machine-readable export of all their data. GaaS returns a comprehensive JSON export of all organization data.
     </p>
@@ -331,7 +332,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Article 22: Right to Explanation</h2>
+    <h2 id="article-22-right-to-explanation">Article 22: Right to Explanation</h2>
     <p>
       When GaaS makes an automated decision (block, modify, or escalate an agent action), data subjects have the right to understand why. GaaS provides human-readable explanations derived from the full governance pipeline.
     </p>
@@ -372,7 +373,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Consent Management</h2>
+    <h2 id="consent-management">Consent Management</h2>
     <p>
       GaaS tracks user consent for five processing purposes:
     </p>
@@ -431,7 +432,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Article 28: Sub-processor Notification Automation</h2>
+    <h2 id="article-28-sub-processor-notification-automation">Article 28: Sub-processor Notification Automation</h2>
     <p>
       Under GDPR Article 28, processors (GaaS) must notify controllers (you) at least 30 days in advance before engaging a new sub-processor or changing an existing one. GaaS automates this entire workflow.
     </p>
@@ -507,7 +508,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Best Practices</h2>
+    <h2 id="best-practices">Best Practices</h2>
     <ul>
       <li><strong>Preview before erasing:</strong> Always use the <code>/erasure-preview</code> endpoint before executing a deletion.</li>
       <li><strong>Archive exports:</strong> Store data export JSON files securely for compliance records (7-year retention recommended).</li>
@@ -543,6 +544,7 @@ X-API-Key: your_api_key</code></pre>
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>
 </html>

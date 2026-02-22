@@ -199,6 +199,7 @@
   <header>
     <a class="logo" href="index.html">G<span>aa</span>S</a>
     <nav>
+      <a href="search.html">Search</a>
       <a href="index.html">Docs</a>
       <a href="https://gaas.is">Home</a>
       <a href="https://github.com/H2OmAI">GitHub</a>
@@ -211,7 +212,7 @@
       Usage-based pricing with automatic quota enforcement and multi-currency support.
     </p>
 
-    <h2>Pricing Tiers</h2>
+    <h2 id="pricing-tiers">Pricing Tiers</h2>
     <p>
       GaaS offers five pricing tiers based on monthly governance action volume and the number of agents under management:
     </p>
@@ -271,7 +272,7 @@
 
     <hr class="divider">
 
-    <h2>Multi-Currency Support</h2>
+    <h2 id="multi-currency-support">Multi-Currency Support</h2>
     <p>
       GaaS supports billing in three currencies: <strong>USD</strong>, <strong>EUR</strong>, and <strong>GBP</strong>. Pricing is automatically converted at current exchange rates. Select your preferred currency during checkout or in the billing settings.
     </p>
@@ -325,7 +326,7 @@
 
     <hr class="divider">
 
-    <h2>Usage Enforcement</h2>
+    <h2 id="usage-enforcement">Usage Enforcement</h2>
     <p>
       When you exceed your plan's monthly action quota, GaaS returns an HTTP <code>402 Payment Required</code> error on intent submission:
     </p>
@@ -358,7 +359,7 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Quota Headers</h2>
+    <h2 id="quota-headers">Quota Headers</h2>
     <p>
       Every intent submission response includes quota usage headers:
     </p>
@@ -381,7 +382,7 @@ X-GaaS-Quota-Reset: 2026-03-01T00:00:00Z</code></pre>
 
     <hr class="divider">
 
-    <h2>Upgrading Your Plan</h2>
+    <h2 id="upgrading-your-plan">Upgrading Your Plan</h2>
     <p>
       Upgrade your plan anytime via the dashboard billing page or API:
     </p>
@@ -416,7 +417,7 @@ X-API-Key: your_api_key
 
     <hr class="divider">
 
-    <h2>Billing Dashboard</h2>
+    <h2 id="billing-dashboard">Billing Dashboard</h2>
     <p>
       Access the Stripe Customer Portal to manage your subscription:
     </p>
@@ -463,7 +464,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Usage Analytics</h2>
+    <h2 id="usage-analytics">Usage Analytics</h2>
     <p>
       Track daily usage for the current billing period:
     </p>
@@ -487,7 +488,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Enterprise Plans</h2>
+    <h2 id="enterprise-plans">Enterprise Plans</h2>
     <p>
       Enterprise plans include:
     </p>
@@ -508,7 +509,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>Free Tier</h2>
+    <h2 id="free-tier">Free Tier</h2>
     <p>
       The Free tier is free forever and includes:
     </p>
@@ -527,7 +528,7 @@ X-API-Key: your_api_key</code></pre>
 
     <hr class="divider">
 
-    <h2>FAQ</h2>
+    <h2 id="faq">FAQ</h2>
 
     <h3>What happens if I hit my quota mid-month?</h3>
     <p>
@@ -568,6 +569,7 @@ X-API-Key: your_api_key</code></pre>
   <footer>
     <a href="https://gaas.is">&copy; H2Om</a>
   </footer>
+<script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>
 </html>
