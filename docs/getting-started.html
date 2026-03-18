@@ -216,19 +216,9 @@
 Content-Type: application/json
 
 {
-  "organization": {
-    "name": "Acme Health",
-    "domain_url": "https://acmehealth.com",
-    "description": "Healthcare call center with AI agents for billing and scheduling"
-  },
-  "agents": [
-    {
-      "name": "Billing Bot",
-      "framework": "langchain",
-      "action_types": ["communicate", "access"],
-      "domains": ["healthcare"]
-    }
-  ]
+  "org_name": "Acme Health",
+  "email": "eng@acmehealth.com",
+  "description": "Healthcare call center with AI agents for billing and scheduling"
 }</code></pre>
 
     <p>
@@ -343,6 +333,38 @@ Content-Type: application/json
     <p>
       Live mode can be reverted to shadow at any time with a single call. All audit records are preserved across both modes.
     </p>
+
+    <hr class="divider">
+
+    <!-- STEP 4 -->
+    <div class="step-label">STEP 4</div>
+    <h2 id="configure-custom-policies">Configure Custom Policies (Optional)</h2>
+    <p>
+      Your membrane ships with default policies covering delegation limits, financial exposure, PCI/HIPAA rules, and more. To add org-specific rules &mdash; brand safety, fact-checking, domain restrictions &mdash; use the policy authoring API. Describe your requirement in plain English:
+    </p>
+    <pre><code>POST /v1/policy-authoring/generate
+Authorization: Bearer &lt;your-api-key&gt;
+Content-Type: application/json
+
+{
+  "description": "Block publishing of unverified factual claims or statistics about our products."
+}</code></pre>
+    <p>
+      GaaS drafts a policy, explains its logic, and runs smoke tests. Review the draft, then activate it:
+    </p>
+    <pre><code>POST /v1/policy-authoring/activate
+Authorization: Bearer &lt;your-api-key&gt;
+Content-Type: application/json
+
+{
+  "draft_id": "draft_abc123"
+}</code></pre>
+    <p>
+      To see all currently active policies for your membrane: <code>GET /v1/policy-authoring/policies</code>
+    </p>
+    <div class="note">
+      <strong>Visual authoring.</strong> The <a class="link" href="https://the.gaas.is/settings/policies">GaaS dashboard</a> provides a UI for authoring, reviewing, and managing policies without API calls.
+    </div>
 
     <hr class="divider">
 
