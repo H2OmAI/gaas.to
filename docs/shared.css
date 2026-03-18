@@ -1,0 +1,99 @@
+/* ── GaaS Docs — Shared header/footer chrome ────────────────────────── */
+/* Linked by all interior pages. index.html carries its own inline styles. */
+
+header {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid #1e2533;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 14, 23, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+header .logo { text-decoration: none; }
+
+.logo-img {
+  height: 120px;
+  filter: drop-shadow(0 0 15px rgba(0, 212, 170, 0.15));
+  display: block;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+header nav a {
+  color: #8b949e;
+  text-decoration: none;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: color 0.15s, background 0.15s;
+}
+
+header nav a:hover {
+  color: #e6edf3;
+  background: #1e2533;
+}
+
+header nav .nav-cta {
+  background: #00d4aa;
+  color: #050810 !important;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+}
+
+header nav .nav-cta:hover { background: #00e6b8; }
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+
+footer {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-top: 1px solid #1e2533;
+  font-size: 0.8rem;
+  color: #484f58;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+footer a {
+  color: #484f58;
+  text-decoration: none;
+}
+
+footer a:hover { color: #8b949e; }
+
+.cert-seal {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.85;
+  transition: opacity 0.15s, filter 0.15s;
+  text-decoration: none;
+}
+
+.cert-seal:hover {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.3));
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  header { padding: 1rem 1.25rem; }
+  footer { flex-direction: column; text-align: center; }
+  .logo-img { height: 80px; }
+}

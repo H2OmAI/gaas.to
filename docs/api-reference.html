@@ -32,24 +32,29 @@
       z-index: 100;
     }
 
-    .top-bar .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
+    .top-bar .logo { text-decoration: none; }
 
-    .top-bar .logo span { color: #58a6ff; }
+    .top-bar nav { display: flex; align-items: center; gap: 0.25rem; }
 
     .top-bar nav a {
       color: #8b949e;
       text-decoration: none;
-      margin-left: 1.5rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
       font-size: 0.875rem;
+      transition: color 0.15s, background 0.15s;
     }
 
-    .top-bar nav a:hover { color: #e6edf3; }
+    .top-bar nav a:hover { color: #e6edf3; background: #1e2533; }
+
+    .top-bar nav .nav-cta {
+      background: #00d4aa;
+      color: #050810 !important;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .top-bar nav .nav-cta:hover { background: #00e6b8; }
 
     /* Redoc overrides to match dark theme */
     redoc {
@@ -59,13 +64,15 @@
 </head>
 <body>
   <div class="top-bar">
-    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <a class="logo" href="index.html">
+      <img src="logo.png" alt="GaaS" style="height:40px; filter:drop-shadow(0 0 8px rgba(0,212,170,0.15)); display:block;">
+    </a>
     <nav>
       <a href="search.html">Search</a>
-      <a href="index.html">Docs</a>
       <a href="getting-started.html">Getting Started</a>
-      <a href="sdks.html">SDKs</a>
-      <a href="https://gaas.is">Home</a>
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/H2OmAI" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://the.gaas.is/login" class="nav-cta" target="_blank" rel="noopener">Sign In &rarr;</a>
     </nav>
   </div>
 

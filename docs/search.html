@@ -10,6 +10,7 @@
   <meta property="og:image" content="https://gaas.to/favicon.png">
   <meta property="og:site_name" content="GaaS — Governance as a Service">
   <title>Search — GaaS Documentation</title>
+  <link rel="stylesheet" href="shared.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,35 +30,7 @@
       pointer-events: none;
     }
 
-    header {
-      border-bottom: 1px solid #1e2533;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      z-index: 10;
-    }
-
-    header .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e6edf3;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    header .logo span { color: #58a6ff; }
-
-    header nav a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.875rem;
-      transition: color 0.15s;
-    }
-
-    header nav a:hover { color: #e6edf3; }
+    /* header/footer chrome from shared.css */
 
     main {
       max-width: 720px;
@@ -158,7 +131,7 @@
 
     .result-page { color: #00d4aa; font-weight: 600; }
     .result-sep { color: #484f58; }
-    .result-section { color: #8b949e; }
+    .result-section { color: #c9d1d9; font-weight: 600; font-size: 0.875rem; }
 
     .result-body {
       font-size: 0.875rem;
@@ -233,21 +206,37 @@
       color: #484f58;
     }
 
-    /* ── FOOTER ── */
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-      position: relative;
-      z-index: 1;
+    /* ── GROUPED RESULTS ── */
+    .result-group { margin-bottom: 1.5rem; }
+
+    .result-group-header {
+      padding: 0.3rem 0 0.4rem;
+      margin-bottom: 0.4rem;
+      border-bottom: 1px solid #1e2533;
     }
 
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
+    .result-group-page {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #00d4aa;
+    }
+
+    .result-group .result-card {
+      margin-bottom: 0.375rem;
+      padding-left: 1.25rem;
+      border-left: 2px solid transparent;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .result-group .result-card:hover,
+    .result-group .result-card:focus {
+      border-left-color: #00d4aa;
+      outline: none;
+    }
+
+    /* footer chrome from shared.css */
 
     @media (max-width: 600px) {
       main { padding: 2rem 1.25rem 4rem; }
@@ -260,11 +249,14 @@
 <canvas id="meshCanvas"></canvas>
 
 <header>
-  <a class="logo" href="index.html">G<span>aa</span>S</a>
+  <a class="logo" href="index.html">
+    <img src="logo.png" alt="GaaS" class="logo-img">
+  </a>
   <nav>
-    <a href="index.html">Docs</a>
-    <a href="https://gaas.is">Home</a>
-    <a href="https://github.com/H2OmAI">GitHub</a>
+    <a href="getting-started.html">Getting Started</a>
+    <a href="api-reference.html">API Reference</a>
+    <a href="https://github.com/H2OmAI" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://the.gaas.is/login" class="nav-cta" target="_blank" rel="noopener">Sign In &rarr;</a>
   </nav>
 </header>
 
@@ -298,7 +290,15 @@
 </main>
 
 <footer>
-  <a href="https://gaas.is">&copy; H2Om</a>
+  <span>&copy; 2026 <a href="https://gaas.is">H2Om</a> &mdash; BSL&nbsp;1.1 &rarr; Apache&nbsp;2.0 on 2030-02-12</span>
+  <a href="https://gaas.is" class="cert-seal" title="GaaS">
+    <img src="gaas-shield.png" alt="GaaS Shield" style="height:36px;display:block;">
+  </a>
+  <span>
+    <a href="https://gaas.is">gaas.is</a> &nbsp;&middot;&nbsp;
+    <a href="https://the.gaas.is">Dashboard</a> &nbsp;&middot;&nbsp;
+    <a href="https://github.com/H2OmAI">GitHub</a>
+  </span>
 </footer>
 
 <script>
@@ -378,8 +378,8 @@
     setParam(query);
     if (!query) { showInitial(); return; }
     if (!fuse)  { return; }
-    var results = fuse.search(query, { limit: 20 });
-    renderResults(results, query);
+    var rawResults = fuse.search(query, { limit: 60 }); // pull extra; cap after grouping
+    renderResults(rawResults, query);
   }
 
   // ── Debounced input ──
@@ -403,10 +403,10 @@
     }
   }, true);
 
-  // ── Render ──
-  function renderResults(results, query) {
+  // ── Render (grouped by page) ──
+  function renderResults(rawResults, query) {
     resultsEl.innerHTML = '';
-    if (!results.length) {
+    if (!rawResults.length) {
       metaEl.textContent = '';
       resultsEl.innerHTML =
         '<div class="empty-state">' +
@@ -416,25 +416,67 @@
       return;
     }
 
-    var n = results.length;
-    metaEl.textContent = n + ' result' + (n !== 1 ? 's' : '') + ' for \u201c' + query + '\u201d';
-
-    results.forEach(function (result) {
-      var item  = result.item;
-      var card  = document.createElement('a');
-      card.className = 'result-card';
-      card.href = item.url;
-      card.setAttribute('role', 'listitem');
-
-      var breadcrumb = '<div class="result-breadcrumb"><span class="result-page">' + esc(item.page) + '</span>';
-      if (item.section) {
-        breadcrumb += '<span class="result-sep">\u203a</span><span class="result-section">' + esc(item.section) + '</span>';
+    // 1. Group by base URL (strip #anchor), preserving relevance order
+    var pageGroups = {}, pageOrder = [];
+    rawResults.forEach(function (result) {
+      var item    = result.item;
+      var baseUrl = item.url.split('#')[0];
+      if (!pageGroups[baseUrl]) {
+        pageGroups[baseUrl] = { pageName: item.page, sections: [], pageLevelFallback: null };
+        pageOrder.push(baseUrl);
       }
-      breadcrumb += '</div>';
+      if (!item.section) {
+        pageGroups[baseUrl].pageLevelFallback = result; // surface only if no sections hit
+        return;
+      }
+      if (pageGroups[baseUrl].sections.length < 2) {  // cap: 2 sections per page
+        pageGroups[baseUrl].sections.push(result);
+      }
+    });
 
-      var bodyHtml = buildSnippet(result, item.body, 160);
-      card.innerHTML = breadcrumb + '<p class="result-body">' + bodyHtml + '</p>';
-      resultsEl.appendChild(card);
+    // 2. If a page has zero section hits, fall back to the page-level entry
+    pageOrder.forEach(function (url) {
+      var g = pageGroups[url];
+      if (!g.sections.length && g.pageLevelFallback) {
+        g.sections.push(g.pageLevelFallback);
+      }
+    });
+
+    // 3. Cap to 8 pages
+    var shown     = pageOrder.slice(0, 8);
+    var totalHits = shown.reduce(function (s, url) { return s + pageGroups[url].sections.length; }, 0);
+    metaEl.textContent = shown.length + ' page' + (shown.length !== 1 ? 's' : '') +
+      ' \u00b7 ' + totalHits + ' result' + (totalHits !== 1 ? 's' : '') +
+      ' for \u201c' + query + '\u201d';
+
+    // 4. Render each page group
+    shown.forEach(function (baseUrl) {
+      var group = pageGroups[baseUrl];
+      if (!group.sections.length) return;
+
+      var groupEl = document.createElement('div');
+      groupEl.className = 'result-group';
+
+      var hdr = document.createElement('div');
+      hdr.className = 'result-group-header';
+      hdr.innerHTML = '<span class="result-group-page">' + esc(group.pageName) + '</span>';
+      groupEl.appendChild(hdr);
+
+      group.sections.forEach(function (result) {
+        var item = result.item;
+        var card = document.createElement('a');
+        card.className = 'result-card';
+        card.href = item.url;
+        card.setAttribute('role', 'listitem');
+
+        var sectionHtml = item.section
+          ? '<div class="result-breadcrumb"><span class="result-section">' + esc(item.section) + '</span></div>'
+          : '';
+        card.innerHTML = sectionHtml + '<p class="result-body">' + buildSnippet(result, item.body, 160) + '</p>';
+        groupEl.appendChild(card);
+      });
+
+      resultsEl.appendChild(groupEl);
     });
   }
 
