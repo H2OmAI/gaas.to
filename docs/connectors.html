@@ -261,7 +261,7 @@
       that gracefully degrades when a data source is unavailable.
     </p>
     <p>
-      GaaS ships with <strong>12 production connectors</strong> spanning communications, identity, security, developer tooling, payments, and multi-agent networks.
+      GaaS ships with <strong>27 production connectors</strong> spanning communications, identity, security, developer tooling, payments, IoT, agriculture, fleet management, and multi-agent networks.
       Connectors run in parallel — enrichment adds minimal latency while maximising context fidelity.
     </p>
 
@@ -282,14 +282,14 @@
     <div class="connector-card">
       <div class="connector-header">
         <h3>Twilio</h3>
-        <span class="cat-label cat-communications">COMMUNICATIONS</span>
+        <span class="cat-label cat-communications">ENTITY_STATE</span>
         <span class="confidence">confidence 0.88</span>
       </div>
-      <p class="desc">Fetches call and SMS metadata, consent records, and opt-out status from your Twilio account.</p>
+      <p class="desc">Fetches call metadata from your Twilio account for communication governance.</p>
       <ul>
-        <li>Call and SMS logs for the target phone number</li>
-        <li>Opt-out / STOP keyword status</li>
-        <li>Messaging service compliance flags</li>
+        <li>Call status, duration, direction, and recording state</li>
+        <li>Caller and recipient phone numbers</li>
+        <li>Call pricing and billing data</li>
         <li>Used by: TCPA Consent Verification policy (pol_t2_002)</li>
       </ul>
     </div>
@@ -336,15 +336,15 @@
         <li>Customer payment method and risk metadata</li>
         <li>Stripe Radar fraud signals and rules</li>
         <li>Subscription and charge history</li>
-        <li>Used by: PCI-DSS (pol_t2_003), PSD2 SCA (ap2_psd2), AML velocity (ap2_aml)</li>
+        <li>Used by: PCI-DSS (pol_t2_pci_001), PSD2 SCA (pol_ap2_006), AML velocity (pol_ap2_007)</li>
       </ul>
     </div>
 
     <div class="connector-card">
       <div class="connector-header">
         <h3>AP2 Mandate</h3>
-        <span class="cat-label cat-a2a">A2A</span>
-        <span class="confidence">confidence 0.97</span>
+        <span class="cat-label cat-a2a">REGULATORY</span>
+        <span class="confidence">confidence 0.90</span>
       </div>
       <p class="desc">Validates payment mandates and tracks cumulative agent spending for AP2 agentic payment governance.</p>
       <ul>
@@ -384,7 +384,7 @@
     <div class="connector-card">
       <div class="connector-header">
         <h3>Workday</h3>
-        <span class="cat-label cat-identity">IDENTITY / HR</span>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
         <span class="confidence">confidence 0.89</span>
       </div>
       <p class="desc">Retrieves workforce records, active employment status, certifications, and training history from Workday HCM.</p>
@@ -519,17 +519,282 @@
     <div class="connector-card">
       <div class="connector-header">
         <h3>A2A Registry</h3>
-        <span class="cat-label cat-a2a">A2A</span>
-        <span class="confidence">confidence 0.95</span>
+        <span class="cat-label cat-a2a">IDENTITY</span>
+        <span class="confidence">confidence 0.85</span>
       </div>
-      <p class="desc">Queries the Agent Trust Registry to score the acting agent's reputation, delegation chain depth, and accumulated violations.</p>
+      <p class="desc">Queries the Agent Trust Registry to look up agent identity, trust score, and interaction history.</p>
       <ul>
-        <li>Agent trust score (0.0–1.0) from historical interactions</li>
-        <li>Delegation chain depth and verified path</li>
-        <li>Policy violation history and suspension status</li>
-        <li>Registered capabilities and permitted action types</li>
+        <li>Agent trust score (0.0–1.0) and identity verification status</li>
+        <li>Agent registration status (registered, suspended, etc.)</li>
+        <li>Interaction count from historical A2A exchanges</li>
+        <li>Agent name, URL, and registration timestamp</li>
         <li>Used by: Multi-Agent Coordination (pol_t4_004), A2A governance proxy</li>
       </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ENVIRONMENTAL / IoT -->
+    <h2 id="environmental-iot">Environmental &amp; IoT</h2>
+    <div class="section-intro">
+      Smart home, energy, and environmental monitoring connectors for IoT-driven governance scenarios.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>SmartThings</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Fetches device inventories and location data from Samsung SmartThings via OAuth2.</p>
+      <ul>
+        <li>Device list with capabilities (switch, temperature, motion, contact, lock)</li>
+        <li>Location and room data</li>
+        <li>Device status polling (caps at 10 devices per fetch)</li>
+        <li>Data keys: <code>smartthings_devices</code>, <code>smartthings_locations</code></li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Honeywell Home</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Thermostat and location data from Honeywell Home via OAuth2 + API key query parameter.</p>
+      <ul>
+        <li>Thermostat telemetry: indoor/outdoor temp, humidity, mode, setpoints</li>
+        <li>Offline device detection — adds <code>DEVICE_OFFLINE</code> to <code>data_quality_flags</code></li>
+        <li><strong>Auth:</strong> Requires both OAuth2 Bearer token <em>and</em> <code>apikey</code> query param</li>
+        <li><strong>Rate limit:</strong> 100 requests/hour per user — cache aggressively</li>
+        <li>Data keys: <code>honeywell_thermostats</code>, <code>honeywell_locations</code></li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Philips Hue</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Lighting, rooms, and scenes from the Philips Hue cloud API (CLIP v2) via OAuth2.</p>
+      <ul>
+        <li>Light status (on/off, brightness, color temperature), rooms, and scenes</li>
+        <li><strong>Cloud API requires <code>/route/clip/v2/resource/</code> prefix</strong> — omitting <code>/route</code> returns 404</li>
+        <li>Uses CLIP v2 exclusively (v1 API is deprecated)</li>
+        <li>Data keys use <code>hue_</code> prefix (not <code>philips_hue_</code>)</li>
+        <li>Data keys: <code>hue_lights</code>, <code>hue_rooms</code>, <code>hue_scenes</code></li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>SolarEdge</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Solar energy monitoring and battery storage data via API key authentication.</p>
+      <ul>
+        <li>Current power (W), daily/monthly/lifetime energy (Wh), battery telemetry</li>
+        <li><strong>Auth:</strong> API key as <code>api_key</code> query parameter (not OAuth2, not header)</li>
+        <li><strong>Rate limit:</strong> 300 requests/day per <em>account</em> (not per site)</li>
+        <li>Timestamps in site-local time (not UTC). Pre-configured <code>site_ids</code></li>
+        <li>Data keys: <code>solaredge_current_power_w</code>, <code>solaredge_today_energy_wh</code>, <code>solaredge_batteries</code></li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Alexa</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Amazon Alexa smart home device data via OAuth2.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Google Nest</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Google Nest thermostat, camera, and doorbell device data via OAuth2.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Ring</h3>
+        <span class="cat-label cat-identity">ENVIRONMENTAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Ring security cameras and doorbells device data via OAuth2.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ENTITY STATE / FLEET -->
+    <h2 id="fleet-agriculture">Fleet &amp; Agriculture</h2>
+    <div class="section-intro">
+      Heavy equipment telematics, vehicle fleet management, and agricultural data connectors.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>AEMP 2.0</h3>
+        <span class="cat-label cat-operations">ENTITY_STATE</span>
+        <span class="confidence">confidence 0.75</span>
+      </div>
+      <p class="desc">ISO 15143-3 multi-OEM heavy equipment telematics. Works with Caterpillar VisionLink, Komatsu KOMTRAX, Volvo ActiveCare, JCB LiveLink, and 15+ other OEMs.</p>
+      <ul>
+        <li>Equipment inventory: make, model, serial, status, operating hours, fuel usage</li>
+        <li>Active fault codes with severity</li>
+        <li>GPS location with timestamp</li>
+        <li><strong>Returns XML</strong> (ISO 15143-3 standard), not JSON</li>
+        <li><strong>Data quality:</strong> Always flags <code>hour_meter_api_ui_discrepancy_documented</code> — API hour meter values can differ from OEM portal UI by up to 4.6x</li>
+        <li>Auth: OAuth2 (client credentials). Config takes OEM-specific <code>api_base_url</code> + <code>token_url</code></li>
+        <li>Data keys: <code>aemp_equipment</code>, <code>aemp_active_fault_codes</code></li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Leaf Agriculture</h3>
+        <span class="cat-label cat-operations">ENTITY_STATE</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Unified agricultural data from multiple OEMs (John Deere, AGCO, CNH, Climate) via Leaf Agriculture&rsquo;s abstraction layer.</p>
+      <ul>
+        <li>Equipment inventory, field boundaries (with acreage), and field operations</li>
+        <li><strong>Data keys use <code>ag_</code> prefix</strong> (not <code>leaf_</code>) — OEM-neutral naming for future direct OEM migration</li>
+        <li>Auth: Bearer token (API key). Caps: 50 equipment, 20 operations per fetch</li>
+        <li>Data keys: <code>ag_equipment</code>, <code>ag_field_boundaries</code>, <code>ag_operations</code></li>
+      </ul>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Tesla Fleet</h3>
+        <span class="cat-label cat-operations">ENTITY_STATE</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Tesla vehicle fleet telemetry and status data via OAuth2.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ADDITIONAL ORGANIZATIONAL -->
+    <h2 id="additional-organizational">Additional Organizational</h2>
+    <div class="section-intro">
+      Project management, team collaboration, and education platform connectors.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Google Workspace</h3>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Google Workspace user, group, and organizational unit data via OAuth2.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Microsoft Teams</h3>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Teams, channels, and membership data from Microsoft Graph API via OAuth2.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Jira</h3>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Atlassian Jira project, issue, and sprint data via OAuth2 or API key.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Asana</h3>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Asana project, task, and team data via OAuth2.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Canvas LMS</h3>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Canvas Learning Management System course, enrollment, and assignment data via OAuth2.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Clever</h3>
+        <span class="cat-label cat-identity">ORGANIZATIONAL</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Clever education platform student, teacher, and school data via OAuth2.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ADDITIONAL OPERATIONS / SECURITY -->
+    <h2 id="additional-operations">Additional Operations &amp; Security</h2>
+    <div class="section-intro">
+      Incident management, shipping, compliance posture, and logistics connectors.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>PagerDuty</h3>
+        <span class="cat-label cat-operations">OPERATIONS</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">PagerDuty incident, on-call schedule, and service data via API key.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>ShipStation</h3>
+        <span class="cat-label cat-operations">OPERATIONS</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">ShipStation shipping, order fulfillment, and carrier data via API key.</p>
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>Vanta</h3>
+        <span class="cat-label cat-security">SECURITY</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">Vanta compliance posture, security controls, and vulnerability data via OAuth2.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- GENERIC -->
+    <h2 id="custom-http">Custom HTTP</h2>
+    <div class="section-intro">
+      Generic connector for integrating any HTTP API as a context source.
+    </div>
+
+    <div class="connector-card">
+      <div class="connector-header">
+        <h3>HttpConnector</h3>
+        <span class="cat-label cat-operations">CONFIGURABLE</span>
+        <span class="confidence">configurable</span>
+      </div>
+      <p class="desc">
+        Generic HTTP connector for integrating custom data sources. Configure the endpoint, auth method, and
+        response mapping to pull context from any REST API into the governance pipeline.
+      </p>
     </div>
 
     <hr class="divider">

@@ -237,7 +237,8 @@
     <p class="subtitle">Production-grade governance policies covering major regulatory frameworks and AI safety controls.</p>
 
     <p>
-      GaaS ships with <strong>33 pre-built policies</strong> organized into 4 tiers plus an AP2 payment governance layer.
+      GaaS ships with <strong>60 pre-built policies</strong> organized into 11 categories — including 4 enforcement tiers,
+      AP2 payment governance, EU AI Act, and federal compliance frameworks (NIST, FedRAMP, CMMC).
       Each policy evaluates agent actions against compliance requirements, risk thresholds, and organizational rules —
       returning a binding verdict (approve, modify, escalate, or block) with full reasoning.
     </p>
@@ -253,7 +254,7 @@
     <h2 id="coverage-overview">Coverage Overview</h2>
 
     <div class="tier-section">
-      <h3>Tier 1: Critical Compliance <span class="tier-badge">10 POLICIES</span></h3>
+      <h3>Tier 1: Critical Compliance <span class="tier-badge">12 POLICIES</span></h3>
       <p>
         Fast-fail policies that block violations of fundamental requirements. These run first in the evaluation pipeline and
         immediately block actions that violate critical rules — no deliberation required.
@@ -264,15 +265,16 @@
         <li>Encryption requirement enforcement</li>
         <li>Sensitive data handling controls</li>
         <li>Resource isolation validation</li>
+        <li>Session trust decay enforcement (pol_t1_015 — blocks when trust budget ≤ 0.10)</li>
+        <li>Behavioral anomaly detection (pol_t1_016)</li>
       </ul>
     </div>
 
     <div class="tier-section">
-      <h3>Tier 2: Regulatory Frameworks <span class="tier-badge">13 POLICIES</span></h3>
+      <h3>Tier 2: Regulatory Frameworks <span class="tier-badge">8 POLICIES</span></h3>
       <p>
-        Industry-specific compliance policies covering healthcare, finance, privacy, communications, education,
-        and EU AI Act obligations. Each policy implements the specific requirements of its regulatory framework.
-        Includes 5 dedicated EU AI Act enforcement policies (pol_euaia_001–005) covering Articles 9–15.
+        Industry-specific compliance policies covering healthcare, finance, privacy, communications, and education.
+        Each policy implements the specific requirements of its regulatory framework.
       </p>
       <div class="framework-grid">
         <div class="framework-card">
@@ -327,7 +329,8 @@
       <h3>Tier 4: Experimental <span class="tier-badge">5 POLICIES</span></h3>
       <p>
         Cutting-edge governance for advanced AI systems. These policies address emerging challenges in AI safety,
-        transparency, and coordination.
+        transparency, and coordination. Tier 4 policies are defined but not yet registered in the production pipeline
+        — they are available for testing and preview via custom policy activation.
       </p>
       <ul class="features-list">
         <li>Hallucination detection for LLM outputs</li>
@@ -376,6 +379,63 @@
         </div>
       </div>
       <p style="margin-top:0.75rem;margin-bottom:0;">See the <a href="a2a.html" class="link">A2A &amp; Agent Networks</a> page for mandate management and the AP2 governance model.</p>
+    </div>
+
+    <div class="tier-section">
+      <h3>EU AI Act <span class="tier-badge">5 POLICIES</span></h3>
+      <p>
+        Enforcement policies covering Articles 9–15 of the EU AI Act for high-risk AI systems.
+        Policy IDs: pol_euaia_001 through pol_euaia_005. Enforcement date: August 2, 2026. Maximum fine: €30M.
+      </p>
+      <ul class="features-list">
+        <li>Risk management system requirements (Art. 9)</li>
+        <li>Data governance and training data quality (Art. 10)</li>
+        <li>Technical documentation obligations (Art. 11)</li>
+        <li>Record-keeping and traceability (Art. 12)</li>
+        <li>Transparency and human oversight (Art. 13–15)</li>
+      </ul>
+    </div>
+
+    <div class="tier-section">
+      <h3>NIST CSF 2.0 <span class="tier-badge">5 POLICIES</span></h3>
+      <p>
+        Cybersecurity framework policies aligned to the NIST Cybersecurity Framework 2.0.
+        Policy IDs: pol_nist_001 through pol_nist_005.
+      </p>
+    </div>
+
+    <div class="tier-section">
+      <h3>NIST SP 800-53 Rev. 5 <span class="tier-badge">5 POLICIES</span></h3>
+      <p>
+        Moderate baseline security and privacy controls from NIST SP 800-53 Rev. 5.
+        Covers 4 control families: Access Control (AC), Audit (AU), System &amp; Information Integrity (SI), and Incident Response (IR).
+        Policy IDs: pol_nist800_001 through pol_nist800_005.
+      </p>
+    </div>
+
+    <div class="tier-section">
+      <h3>FedRAMP Moderate Baseline <span class="tier-badge">5 POLICIES</span></h3>
+      <p>
+        Federal Risk and Authorization Management Program controls for cloud services selling to US federal agencies.
+        5 of 325 FedRAMP Moderate controls are in scope. Includes 3PAO-ready evidence packages with NIST SP 800-53A assessment procedures.
+        Policy IDs: pol_fedramp_001 through pol_fedramp_005.
+      </p>
+    </div>
+
+    <div class="tier-section">
+      <h3>CMMC 2.0 Level 1–2 <span class="tier-badge">4 POLICIES</span></h3>
+      <p>
+        Cybersecurity Maturity Model Certification for Defense Industrial Base contractors.
+        Covers Level 1 (basic safeguarding) and Level 2 (advanced, aligned to NIST SP 800-171 Rev. 2).
+        Policy IDs: pol_cmmc_001 through pol_cmmc_004.
+      </p>
+    </div>
+
+    <div class="tier-section">
+      <h3>Security <span class="tier-badge">1 POLICY</span></h3>
+      <p>
+        Additional security enforcement policy (pol_security_001) for prompt injection detection and security boundary enforcement.
+      </p>
     </div>
 
     <h2 id="how-policies-work">How Policies Work</h2>
@@ -452,6 +512,22 @@
       <div class="framework-card">
         <h4>gaas-privacy-v1</h4>
         <p>GDPR, CCPA, FERPA privacy and data subject rights</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-nist-csf-v1</h4>
+        <p>NIST Cybersecurity Framework 2.0 (pol_nist_001–005)</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-nist-800-53-v1</h4>
+        <p>NIST SP 800-53 Rev. 5 Moderate Baseline controls (pol_nist800_001–005)</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-fedramp-moderate-v1</h4>
+        <p>FedRAMP Moderate Baseline with 3PAO evidence packages (pol_fedramp_001–005)</p>
+      </div>
+      <div class="framework-card">
+        <h4>gaas-cmmc-v1</h4>
+        <p>CMMC 2.0 Level 1–2 for Defense Industrial Base (pol_cmmc_001–004)</p>
       </div>
     </div>
 

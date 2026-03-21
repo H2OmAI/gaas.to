@@ -428,7 +428,7 @@ Content-Type: application/json
 
     <h3>5. Cache Read-Only Data</h3>
     <p>
-      Responses for read-only endpoints (e.g., <code>GET /v1/decisions/{id}</code>) include <code>ETag</code> headers. Cache these responses locally and use <code>If-None-Match</code> headers to get 304 Not Modified responses, which don't count toward rate limits.
+      Responses for read-only endpoints (e.g., <code>GET /v1/intents/{intent_id}/decision</code>) include <code>ETag</code> headers. Cache these responses locally and use <code>If-None-Match</code> headers to get 304 Not Modified responses, which don't count toward rate limits.
     </p>
 
     <hr class="divider">

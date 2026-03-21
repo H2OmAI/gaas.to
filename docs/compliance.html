@@ -380,7 +380,7 @@
 <main>
   <h1>Compliance</h1>
   <p class="subtitle">
-    EU AI Act enforcement, Governance Proof Tokens, SR 11-7 model inventory, and the Policy Registry — all in v0.3.0.
+    EU AI Act enforcement, Federal Compliance (NIST, FedRAMP, CMMC), Governance Proof Tokens, SR 11-7 model inventory, and the Policy Registry.
   </p>
 
   <hr class="divider">
@@ -496,6 +496,106 @@
   <hr class="divider">
 
   <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION 1B: FEDERAL COMPLIANCE                          -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2 id="federal-compliance">Federal Compliance</h2>
+    <p>
+      GaaS maps governance controls to four major US federal frameworks, enabling AI systems to satisfy procurement and security requirements for government agencies and defense contractors.
+    </p>
+
+    <h3>NIST AI Risk Management Framework 1.0</h3>
+    <p>
+      Maps to all 4 NIST AI RMF functions (GOVERN, MAP, MEASURE, MANAGE) across 23 subcategories.
+      GaaS provides automated evidence generation for each subcategory based on live pipeline data.
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/nist-ai-rmf</span>
+        <span class="endpoint-desc">— Current NIST AI RMF status</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/nist-ai-rmf/report</span>
+        <span class="endpoint-desc">— Full report with subcategory-level detail</span>
+      </li>
+    </ul>
+
+    <h3>NIST SP 800-53 Rev. 5 Moderate Baseline</h3>
+    <p>
+      5 enforcement policies (pol_nist800_001–005) covering 4 control families:
+      Access Control (AC), Audit &amp; Accountability (AU), System &amp; Information Integrity (SI), and Incident Response (IR).
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/nist-800-53</span>
+        <span class="endpoint-desc">— Current NIST 800-53 status</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/nist-800-53/report</span>
+        <span class="endpoint-desc">— Full report with control-family detail</span>
+      </li>
+    </ul>
+
+    <h3>FedRAMP Moderate Baseline</h3>
+    <p>
+      5 enforcement policies (pol_fedramp_001–005) for cloud services selling to US federal agencies.
+      Includes 3PAO-ready evidence packages with NIST SP 800-53A assessment procedures.
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/fedramp</span>
+        <span class="endpoint-desc">— Current FedRAMP status</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/fedramp/report</span>
+        <span class="endpoint-desc">— Full FedRAMP report</span>
+      </li>
+    </ul>
+
+    <h3>CMMC 2.0 Level 1–2</h3>
+    <p>
+      4 enforcement policies (pol_cmmc_001–004) covering Level 1 (basic safeguarding of Federal Contract Information) and Level 2 (advanced protection aligned to NIST SP 800-171 Rev. 2) for Defense Industrial Base contractors.
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/cmmc</span>
+        <span class="endpoint-desc">— Current CMMC status</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/cmmc/report</span>
+        <span class="endpoint-desc">— Full CMMC report</span>
+      </li>
+    </ul>
+
+    <h3>Federal Procurement Summary</h3>
+    <p>
+      A single endpoint that aggregates compliance status across all four frameworks, plus 3PAO evidence packages per control.
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/federal</span>
+        <span class="endpoint-desc">— Combined federal procurement readiness summary</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/compliance/federal/evidence/{control_id}</span>
+        <span class="endpoint-desc">— 3PAO evidence package for a specific control (ControlEvidencePackage with NIST SP 800-53A assessment procedures)</span>
+      </li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
   <!-- SECTION 2: GOVERNANCE PROOF TOKENS                     -->
   <!-- ─────────────────────────────────────────────────────── -->
   <section>
@@ -590,7 +690,7 @@
 }</code></pre>
 
     <div class="note">
-      <strong>Signature Algorithm:</strong> ECDSA P-256 (modern, compact, FIPS 186-4 compliant). The signature covers the canonical JSON of all fields except <code>gaas_signature</code> itself. Public keys are available at <code>GET /v1/verify/keys</code>.
+      <strong>Signature Algorithm:</strong> ECDSA P-256 (modern, compact, FIPS 186-4 compliant). The signature covers <code>SHA-256("{token_id}:{decision_id}:{audit_hash}")</code>. Verify any token via <code>GET /v1/verify/proof/{token_id}</code>.
     </div>
   </section>
 
@@ -697,22 +797,42 @@
         <tr>
           <td><code>gaas-healthcare-v1</code></td>
           <td>HIPAA, patient consent, minimum-necessary, emergency access</td>
-          <td>8</td>
+          <td>4</td>
         </tr>
         <tr>
           <td><code>gaas-financial-v1</code></td>
           <td>PCI DSS, PSD2 SCA, AML velocity, SR 11-7 controls</td>
-          <td>7</td>
+          <td>8</td>
         </tr>
         <tr>
           <td><code>gaas-privacy-v1</code></td>
-          <td>GDPR, CCPA, TCPA, FERPA — privacy-by-design governance</td>
-          <td>6</td>
+          <td>GDPR, CCPA, FERPA — privacy-by-design governance</td>
+          <td>3</td>
         </tr>
         <tr>
           <td><code>gaas-eu-ai-act-v1</code></td>
           <td>EU AI Act Articles 9/10/13/14/15 for high-risk systems</td>
           <td>5</td>
+        </tr>
+        <tr>
+          <td><code>gaas-nist-csf-v1</code></td>
+          <td>NIST Cybersecurity Framework 2.0</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td><code>gaas-nist-800-53-v1</code></td>
+          <td>NIST SP 800-53 Rev. 5 Moderate Baseline (AC, AU, SI, IR)</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td><code>gaas-fedramp-moderate-v1</code></td>
+          <td>FedRAMP Moderate Baseline with 3PAO evidence packages</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td><code>gaas-cmmc-v1</code></td>
+          <td>CMMC 2.0 Level 1–2 for Defense Industrial Base</td>
+          <td>4</td>
         </tr>
       </tbody>
     </table>

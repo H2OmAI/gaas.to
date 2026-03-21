@@ -329,7 +329,7 @@
 
     <h2 id="why-shadow-mode">Why Shadow Mode</h2>
     <p>
-      No governance system should go from zero to enforcement without a trial period. Shadow mode lets you observe the full pipeline &mdash; validation, enrichment, policy evaluation, deliberation, and decision assembly &mdash; on real traffic, while your agents continue to operate freely.
+      No governance system should go from zero to enforcement without a trial period. Shadow mode lets you observe the pipeline &mdash; validation, enrichment, policy evaluation, and decision assembly &mdash; on real traffic, while your agents continue to operate freely. Deliberation (stage 4) is bypassed in shadow mode for performance; all other stages execute identically to live mode.
     </p>
     <p>
       You get real governance decisions tagged as shadow. You see what would have been blocked, what would have been modified, what would have triggered escalation. You can review, submit feedback, and refine your membrane &mdash; all before a single action is actually blocked.
@@ -349,7 +349,7 @@
       <p class="desc">Submit an intent for shadow evaluation &mdash; full pipeline, no enforcement</p>
     </div>
     <p>
-      The intent is processed through the full 5-stage pipeline. The response is identical to a live decision &mdash; same verdict, same risk assessment, same reasoning &mdash; but the <code>pipeline_mode</code> field is set to <code>shadow</code> and no enforcement occurs.
+      The intent is processed through stages 1–3 and 5 (validation, enrichment, policy evaluation, and decision assembly). Deliberation (stage 4) is skipped in shadow mode for performance. The response is structurally identical to a live decision &mdash; same verdict format, same risk assessment &mdash; but the <code>pipeline_mode</code> field is set to <code>shadow</code> and no enforcement occurs.
     </p>
 
     <h3>Option 2: Membrane Lifecycle</h3>

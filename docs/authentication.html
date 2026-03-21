@@ -236,28 +236,30 @@
 Content-Type: application/json
 
 {
-  "organization": {
-    "name": "Your Company",
-    "domain_url": "https://yourcompany.com",
-    "description": "Brief description of your use case"
-  },
-  "agents": [
-    {
-      "name": "agent-name",
-      "framework": "langchain",
-      "action_types": ["COMMUNICATE", "ACCESS"],
-      "domains": ["industry"]
-    }
-  ]
+  "org_name": "Your Company",
+  "email": "admin@yourcompany.com",
+  "description": "Brief description of your use case"
 }</code></pre>
+
+    <p>
+      All three fields are required strings. The endpoint provisions an organization, generates a governance membrane in shadow mode, and returns an API key in a single call.
+    </p>
 
     <p>
       The response includes your API key in the <code>api_key</code> field:
     </p>
     <pre><code>{
   "membrane_id": "mem_abc123...",
+  "membrane_status": "shadow",
+  "org_id": "org_abc123",
   "api_key": "gsk_live_org_a1b2c3d4e5f6...",
-  "status": "shadow"
+  "key_id": "key_abc123",
+  "quickstart_snippet": "from gaas_sdk import GaaSClient ...",
+  "next_steps": [
+    "Submit your first intent with POST /v1/intents",
+    "Review shadow decisions in the dashboard",
+    "Activate live mode when ready"
+  ]
 }</code></pre>
 
     <div class="warning">

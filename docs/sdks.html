@@ -212,7 +212,7 @@
   <main>
     <h1>SDKs</h1>
     <p class="subtitle">
-      Official client libraries for Python, TypeScript, and Java. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+      Official client libraries for Python, TypeScript, Java, and LangChain/LangGraph. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
     <h2 id="at-a-glance">At a Glance</h2>
@@ -240,6 +240,12 @@
         <td><code>com.gaas:gaas-sdk</code></td>
         <td>Maven / Gradle</td>
         <td>Java 17+</td>
+      </tr>
+      <tr>
+        <td>LangChain / LangGraph</td>
+        <td><code>gaas-langchain</code></td>
+        <td><code>pip install gaas-langchain</code></td>
+        <td>Python 3.11+</td>
       </tr>
     </table>
 
@@ -467,6 +473,76 @@ intent = <span class="func">build_intent</span>(
 } <span class="keyword">catch</span> (<span class="type">GaaSConnectionException</span> e) {
     System.out.<span class="func">println</span>(<span class="string">"Could not reach GaaS server"</span>);
 }</code></pre>
+
+    <hr class="divider">
+
+    <!-- ── LangChain / LangGraph ────────────────────────────────── -->
+
+    <h2 id="langchain">LangChain / LangGraph</h2>
+
+    <h3>Install</h3>
+    <pre><code>pip install gaas-langchain</code></pre>
+    <p>Optional extras: <code>pip install gaas-langchain[langchain]</code>, <code>gaas-langchain[langgraph]</code>, or <code>gaas-langchain[all]</code>.</p>
+
+    <h3>Configuration</h3>
+    <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> GaaSGovernanceConfig
+
+config = <span class="func">GaaSGovernanceConfig</span>(
+    api_url=<span class="string">"https://api.gaas.is"</span>,
+    api_key=<span class="string">"gsk_your_key"</span>,
+    agent_id=<span class="string">"my-langchain-agent"</span>,
+    block_on_escalate=<span class="keyword">True</span>,     <span class="comment"># raise on ESCALATE verdicts too</span>
+    timeout_seconds=<span class="number">5.0</span>,
+    sensitivity=<span class="string">"INTERNAL"</span>,
+)</code></pre>
+
+    <h3>Govern a Single Tool</h3>
+    <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> govern_tool
+
+safe_tool = <span class="func">govern_tool</span>(my_tool, config=config)
+<span class="comment"># safe_tool.run() and safe_tool.arun() now submit governance
+# intents before execution. Blocked actions raise GovernanceBlockedError.</span></code></pre>
+
+    <h3>Govern Multiple Tools</h3>
+    <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> govern_tools
+
+safe_tools = <span class="func">govern_tools</span>([tool_a, tool_b, tool_c], config=config)</code></pre>
+
+    <h3>LangGraph Node Decorator</h3>
+    <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> govern_node
+
+<span class="decorator">@govern_node</span>(config=config, node_name=<span class="string">"send_email_node"</span>, financial_exposure_usd=<span class="number">0.0</span>)
+<span class="keyword">async def</span> <span class="func">send_email</span>(state):
+    <span class="comment"># Only executes if governance approves</span>
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"sent"</span>}</code></pre>
+    <p>
+      Supports both sync and async node functions. Uses <code>functools.wraps</code> to preserve function metadata.
+      Additional parameters: <code>sensitivity</code>, <code>regulatory_domains</code>.
+    </p>
+
+    <h3>Callback Handler (Observability)</h3>
+    <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> GaaSCallbackHandler
+
+handler = <span class="func">GaaSCallbackHandler</span>(config, enforce=<span class="keyword">False</span>)
+<span class="comment"># Pass as a LangChain callback — logs all governance decisions</span>
+<span class="comment"># Set enforce=True to raise GovernanceBlockedError on BLOCK/ESCALATE</span>
+
+<span class="comment"># After agent run:</span>
+<span class="func">print</span>(handler.<span class="func">summary</span>())
+<span class="comment"># {"total_tool_calls": 5, "approved": 4, "blocked": 1, "block_rate": 0.2, ...}</span>
+handler.<span class="func">reset</span>()  <span class="comment"># clear log between runs</span></code></pre>
+
+    <h3>Error Handling</h3>
+    <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> GovernanceBlockedError
+
+<span class="keyword">try</span>:
+    result = safe_tool.<span class="func">run</span>(<span class="string">"send payment"</span>)
+<span class="keyword">except</span> <span class="type">GovernanceBlockedError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(e.verdict)              <span class="comment"># "BLOCK" or "ESCALATE"</span>
+    <span class="func">print</span>(e.decision_id)           <span class="comment"># GaaS decision ID</span>
+    <span class="func">print</span>(e.risk_score)             <span class="comment"># 0.0–1.0</span>
+    <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
+    <span class="func">print</span>(e.governance_proof_token)  <span class="comment"># ECDSA-signed proof token ID</span></code></pre>
 
     <hr class="divider">
 

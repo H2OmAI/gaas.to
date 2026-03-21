@@ -571,12 +571,141 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
       <strong>Performance targets:</strong> p95 latency &lt;500 ms, payload size &minus;70% with GZip, cache hit rate &gt;90% after warm-up, primary DB load &minus;70% with read replicas active.
     </div>
 
+    <hr class="divider">
+
+    <h2 id="nl-policy-authoring">Natural Language Policy Authoring</h2>
+    <p>
+      Author governance policies in plain English. GaaS uses an LLM to generate a sandboxed Python policy function from your description, validates it against 5 canonical intents, and stages it as a draft for review.
+    </p>
+    <h3>Endpoints</h3>
+    <ul>
+      <li><code>POST /v1/policy-authoring/generate</code> — Generate a policy from natural language</li>
+      <li><code>POST /v1/policy-authoring/activate</code> — Compile and register an active policy</li>
+      <li><code>GET /v1/policy-authoring/drafts</code> — List drafts (7-day TTL)</li>
+      <li><code>DELETE /v1/policy-authoring/drafts/{draft_id}</code> — Delete a draft</li>
+      <li><code>GET /v1/policy-authoring/policies</code> — List activated policies for the org</li>
+    </ul>
+    <h3>Sandbox</h3>
+    <p>
+      Generated policies run in a restricted execution environment. AST validation allows 42 node types, 15 safe built-in functions (<code>len</code>, <code>bool</code>, <code>int</code>, <code>float</code>, <code>str</code>, <code>min</code>, <code>max</code>, etc.), and 19 safe methods. Blocked: <code>import</code>, <code>eval</code>, <code>exec</code>, <code>open</code>, <code>__import__</code>, and all dunder attributes. The <code>__builtins__</code> dict is empty at runtime.
+    </p>
+    <h3>Smoke Testing</h3>
+    <p>
+      Every generated policy is automatically tested against 5 canonical intents covering low-risk approve, high-risk transaction, PHI access, PII communication, and control actions. All 5 must execute without exceptions before the draft is accepted.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="governance-proof-tokens">Governance Proof Tokens</h2>
+    <p>
+      Every decision carries a <code>governance_proof_token</code> — an ECDSA P-256 signed artefact that binds the verdict, policies evaluated, risk score, and audit hash into a tamper-evident object. The signed payload is <code>SHA-256("{token_id}:{decision_id}:{audit_hash}")</code>.
+    </p>
+    <ul>
+      <li>Verification: <code>GET /v1/verify/proof/{token_id}</code> — public endpoint, no API key required</li>
+      <li>Returns: <code>TokenVerificationResult</code> with <code>valid</code>, <code>signature_valid</code>, and <code>chain_integrity</code> fields</li>
+      <li>See <a class="link" href="compliance.html#governance-proof-tokens">Compliance &gt; Governance Proof Tokens</a> for full field reference</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="dlt-anchoring">DLT Temporal Anchoring</h2>
+    <p>
+      Audit records can be anchored to a distributed ledger for independent temporal verification.
+      Anchoring is fire-and-forget — it never blocks the governance pipeline.
+    </p>
+    <ul>
+      <li>Enable: <code>GAAS_DLT_ANCHOR_ENABLED=true</code></li>
+      <li>Backend: <code>GAAS_DLT_ANCHOR_BACKEND=sqlite</code> (default) or <code>ethereum</code></li>
+      <li>Batching: 100 records or 3,600 seconds (1 hour), whichever comes first</li>
+      <li>Confirmation hash: <code>SHA-256("{anchor_id}:{chain_head_hash}:{chain_position}:{timestamp.isoformat()}")</code></li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="co-signing">Multi-Party Co-Signing</h2>
+    <p>
+      Configure how audit records are cryptographically signed. Three modes are available, configured per-organization in the governance membrane's <code>signing_config</code>:
+    </p>
+    <table>
+      <thead><tr><th>Mode</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>gaas_only</code></td><td>Default. GaaS signs with ECDSA P-256 or RSA 2048.</td></tr>
+        <tr><td><code>segregated</code></td><td>Customer's KMS endpoint signs the record. SSRF-protected: blocks non-HTTPS, private IPs, loopback, link-local, metadata endpoints. 5s timeout.</td></tr>
+        <tr><td><code>cosigned</code></td><td>Both GaaS and customer sign (dual signatures). Combines both strategies.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Signing failures never block decisions — the record receives an <code>unsigned_reason</code> instead. The <code>signing_metadata</code> field is excluded from audit hash computation (signatures derive from the hash).
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="policy-epoch">Policy Epoch Tracking</h2>
+    <p>
+      Every audit record is stamped with <code>policy_epoch</code> (integer) and <code>epoch_stale</code> (boolean), identifying exactly which version of your policy configuration was active when the decision was made.
+    </p>
+    <ul>
+      <li>Stored in Redis at <code>gaas:policy_epoch:current</code> with HMAC-SHA256 integrity (<code>GAAS_POLICY_EPOCH_HMAC_KEY</code>)</li>
+      <li>Local cache TTL: 5 seconds. If HMAC verification fails, the system uses the last known-good value (fail-closed)</li>
+      <li>Fields live on <code>AuditPipelineMetadata</code> (not <code>GovernanceDecision</code>)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="behavioral-signals">Behavioral Velocity Signals</h2>
+    <p>
+      GaaS automatically computes per-agent behavioral signals from recent observation history (10-minute sliding window). These signals run as a virtual connector — no external HTTP calls, no additional latency.
+    </p>
+    <ul>
+      <li>Signals: submit rate, block rate, deliberation rate, risk trend, baseline deviation</li>
+      <li>Cold-start safe: fewer than 5 observations &rarr; <code>cold_start=true</code>, confidence 0.0. After 5+ observations, confidence rises to 0.85</li>
+      <li>Shadow mode decisions are excluded from behavioral calculations</li>
+      <li>Available in enriched context as source category <code>BEHAVIORAL</code></li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="feature-flags">Feature Flags</h2>
+    <p>
+      Runtime feature toggles that can be enabled per-organization or globally, with optional percentage-based rollouts using deterministic hashing. Bootstrap defaults from environment variables (<code>GAAS_FEATURE_{NAME}</code>).
+    </p>
+    <h3>Endpoints</h3>
+    <ul>
+      <li><code>GET /v1/feature-flags</code> — List all flags (viewer+)</li>
+      <li><code>GET /v1/feature-flags/{name}</code> — Get flag details (viewer+)</li>
+      <li><code>GET /v1/feature-flags/{name}/check</code> — Check if enabled (viewer+)</li>
+      <li><code>POST /v1/feature-flags</code> — Create flag (admin only)</li>
+      <li><code>PATCH /v1/feature-flags/{name}</code> — Update flag (admin only)</li>
+      <li><code>DELETE /v1/feature-flags/{name}</code> — Delete flag (admin only)</li>
+    </ul>
+    <p>
+      Flag names are 1–128 characters. Rollout percentage (0–100) determines what fraction of requests see the flag enabled. InMemory and Postgres-backed stores are available.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="appeal-system">Decision Appeal System</h2>
+    <p>
+      When a decision is blocked, org admins receive an email with appeal action buttons. Appeal tokens are HMAC-SHA256 signed and expire after <strong>72 hours</strong>.
+    </p>
+    <h3>Endpoints</h3>
+    <ul>
+      <li><code>GET /v1/intents/{intent_id}/appeal?action=approve&amp;token={token}</code> — HTML confirmation page</li>
+      <li><code>POST /v1/intents/{intent_id}/appeal</code> — Record appeal decision (form: action, token, decision_id, reason)</li>
+    </ul>
+    <p>
+      Token format: <code>hex_signature:unix_timestamp</code>. The HMAC payload is <code>decision_id:timestamp_str</code>, signed with the <code>SESSION_SECRET</code> environment variable. Old tokens without a <code>:</code> separator are rejected. All user-controlled values in HTML pages are escaped via <code>html_escape()</code> to prevent XSS.
+    </p>
+
+    <hr class="divider">
+
     <h2>Related Pages</h2>
     <ul>
       <li><a class="link" href="getting-started.html">Getting Started</a> — Onboard and integrate with the API</li>
       <li><a class="link" href="authentication.html">Authentication</a> — API keys and security</li>
       <li><a class="link" href="rate-limits.html">Rate Limits</a> — Per-endpoint throttling</li>
-      <li><a class="link" href="sdks.html">SDKs</a> — Python, TypeScript, and Java clients</li>
+      <li><a class="link" href="sdks.html">SDKs</a> — Python, TypeScript, Java, and LangChain clients</li>
+      <li><a class="link" href="compliance.html">Compliance</a> — EU AI Act, Federal Compliance, Proof Tokens, SR 11-7</li>
       <li><a class="link" href="observability.html">Observability</a> — Prometheus metrics including cache and query monitoring</li>
       <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
     </ul>

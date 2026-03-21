@@ -718,7 +718,7 @@ X-API-Key: your_api_key
     <div class="warning">
       <strong>Revocation propagation:</strong> When a mandate is revoked, the change propagates to all GaaS governance nodes within 60 seconds.
       For immediate enforcement in distributed deployments, use the force-revoke flag:
-      <code>DELETE /v1/ap2/mandates/{id}?force=true</code>.
+      <code>POST /v1/ap2/mandates/{mandate_id}/revoke</code>.
     </div>
 
     <hr class="divider">
