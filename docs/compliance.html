@@ -884,6 +884,57 @@
 
   <hr class="divider">
 
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION: AUDIT RECONSTRUCTION                           -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2 id="audit-reconstruction">Audit Reconstruction &amp; Verification</h2>
+    <p>
+      GaaS provides auditor-facing endpoints for independently verifying governance decisions
+      without live system access. Download self-contained verification bundles (ZIP archives) or
+      retrieve structured decision reconstructions with inline hash verification.
+    </p>
+
+    <h3>Verification Bundles</h3>
+    <p>
+      Verification bundles are ZIP archives containing audit records, governance proof tokens,
+      a self-contained Python verification script (<code>verify.py</code>), and a manifest.
+      Auditors can verify hash chain integrity and cryptographic signatures offline.
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/audit/{audit_id}/verification-bundle</span>
+        <span class="endpoint-desc">— Download verification bundle for a single audit record (ZIP)</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/audit/verification-bundle</span>
+        <span class="endpoint-desc">— Download verification bundle for a date range. Query params: <code>start_date</code>, <code>end_date</code>, <code>limit</code> (1–1000), <code>offset</code></span>
+      </li>
+    </ul>
+
+    <h3>Decision Reconstruction</h3>
+    <p>
+      Returns a structured JSON report for a governance decision, including all 5 pipeline stages,
+      inline SHA-256 hash re-verification, and chain position validation. Suitable for regulators
+      who need to understand exactly how a decision was made.
+    </p>
+    <ul class="endpoint-list">
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/audit/{audit_id}/reconstruction</span>
+        <span class="endpoint-desc">— Reconstruct a governance decision with inline hash verification</span>
+      </li>
+    </ul>
+
+    <div class="note">
+      <strong>Auth:</strong> All reconstruction endpoints require <code>operator</code> role or above.
+    </div>
+  </section>
+
+  <hr class="divider">
+
   <section>
     <h2>Related Pages</h2>
     <ul>

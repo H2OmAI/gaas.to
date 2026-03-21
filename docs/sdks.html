@@ -338,27 +338,28 @@ intent = <span class="func">build_intent</span>(
 
     <h3>Error Handling</h3>
     <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> (
+    GaaSError,
     GaaSValidationError,
-    GaaSAuthenticationError,
-    GaaSQuotaExceededError,
-    GaaSRateLimitError,
+    GaaSSemanticError,
+    GaaSNotFoundError,
+    GaaSConflictError,
+    GaaSServerError,
     GaaSConnectionError,
 )
 
 <span class="keyword">try</span>:
     response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)
-<span class="keyword">except</span> <span class="type">GaaSAuthenticationError</span>:
-    <span class="func">print</span>(<span class="string">"Invalid API key"</span>)
-<span class="keyword">except</span> <span class="type">GaaSQuotaExceededError</span> <span class="keyword">as</span> e:
-    <span class="func">print</span>(<span class="string">f"Quota exceeded. Upgrade plan or wait until: </span>{e.details.reset_time}<span class="string">"</span>)
-<span class="keyword">except</span> <span class="type">GaaSRateLimitError</span> <span class="keyword">as</span> e:
-    <span class="comment"># Exponential backoff recommended</span>
-    retry_after = e.details.get(<span class="string">"retry_after_seconds"</span>, 60)
-    <span class="keyword">await</span> asyncio.<span class="func">sleep</span>(retry_after)
 <span class="keyword">except</span> <span class="type">GaaSValidationError</span> <span class="keyword">as</span> e:
-    <span class="func">print</span>(<span class="string">f"Validation failed: </span>{e.message}<span class="string">"</span>)
+    <span class="func">print</span>(<span class="string">f"Validation failed (400): </span>{e.message}<span class="string">"</span>)
+<span class="keyword">except</span> <span class="type">GaaSSemanticError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(<span class="string">f"Semantic error (422): </span>{e.message}<span class="string">"</span>)
+<span class="keyword">except</span> <span class="type">GaaSConflictError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(<span class="string">f"Conflict (409): </span>{e.message}<span class="string">"</span>)
 <span class="keyword">except</span> <span class="type">GaaSConnectionError</span>:
-    <span class="func">print</span>(<span class="string">"Could not reach GaaS server"</span>)</code></pre>
+    <span class="func">print</span>(<span class="string">"Could not reach GaaS server"</span>)
+<span class="keyword">except</span> <span class="type">GaaSError</span> <span class="keyword">as</span> e:
+    <span class="comment"># Catches all other GaaS errors (401, 402, 429, 500, etc.)</span>
+    <span class="func">print</span>(<span class="string">f"GaaS error </span>{e.code}<span class="string">: </span>{e.message}<span class="string">"</span>)</code></pre>
 
     <h3>Best Practices</h3>
     <ul>

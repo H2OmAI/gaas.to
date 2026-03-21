@@ -699,6 +699,25 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
 
     <hr class="divider">
 
+    <h2 id="geo-guard">Geographic Access Control</h2>
+    <p>
+      Optional middleware that logs or blocks requests based on the originating country. Uses MaxMind GeoLite2 for IP-to-country resolution.
+      Disabled by default — enable via environment variables.
+    </p>
+    <ul>
+      <li><code>GAAS_GEO_GUARD_ENABLED</code> — set to <code>true</code> to activate (default: <code>false</code>)</li>
+      <li><code>GAAS_GEO_GUARD_MODE</code> — <code>log</code> (default) or <code>block</code></li>
+      <li><code>GAAS_GEO_BLOCK_COUNTRIES</code> — comma-separated ISO country codes to block (e.g., <code>CN,RU</code>)</li>
+      <li><code>GAAS_GEOIP_DB_PATH</code> — path to GeoLite2-Country.mmdb (default: <code>/var/lib/GeoIP/GeoLite2-Country.mmdb</code>)</li>
+    </ul>
+    <p>
+      In <code>log</code> mode, the country ISO code is logged with each request and stored in request state for downstream access.
+      In <code>block</code> mode, requests from listed countries receive HTTP 403 with a <code>geo_blocked</code> error code.
+      If the GeoIP database or <code>geoip2</code> library is unavailable, the middleware passes requests through silently (graceful degradation).
+    </p>
+
+    <hr class="divider">
+
     <h2>Related Pages</h2>
     <ul>
       <li><a class="link" href="getting-started.html">Getting Started</a> — Onboard and integrate with the API</li>

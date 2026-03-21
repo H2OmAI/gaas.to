@@ -345,8 +345,8 @@
 
     <div class="endpoint">
       <span class="method method-post">POST</span>
-      <span class="path">/v1/a2a</span>
-      <p class="desc">A2A JSON-RPC 2.0 gateway — handles all A2A protocol methods.</p>
+      <span class="path">/a2a/jsonrpc</span>
+      <p class="desc">A2A JSON-RPC 2.0 gateway — handles all A2A protocol methods. Mounted outside the <code>/v1</code> prefix.</p>
     </div>
 
     <h3>Supported JSON-RPC Methods</h3>
@@ -355,18 +355,16 @@
         <tr><th>Method</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>tasks/send</code></td><td>Submit a task for governance evaluation and execution</td></tr>
-        <tr><td><code>tasks/get</code></td><td>Retrieve the current status and result of a task</td></tr>
-        <tr><td><code>tasks/cancel</code></td><td>Request cancellation of a pending or in-progress task</td></tr>
-        <tr><td><code>tasks/sendSubscribe</code></td><td>Submit a task and subscribe to streaming status updates</td></tr>
-        <tr><td><code>tasks/resubscribe</code></td><td>Reconnect to an existing task stream</td></tr>
-        <tr><td><code>tasks/pushNotification/set</code></td><td>Register an HMAC-signed webhook for task status changes</td></tr>
-        <tr><td><code>tasks/pushNotification/get</code></td><td>Retrieve current push notification configuration</td></tr>
+        <tr><td><code>a2a.SendMessage</code></td><td>Submit a task for governance evaluation and execution</td></tr>
+        <tr><td><code>a2a.GetTask</code></td><td>Retrieve the current status and result of a task</td></tr>
+        <tr><td><code>a2a.ListTasks</code></td><td>List all tasks for the authenticated agent</td></tr>
+        <tr><td><code>a2a.CancelTask</code></td><td>Request cancellation of a pending or in-progress task</td></tr>
+        <tr><td><code>a2a.GetExtendedAgentCard</code></td><td>Retrieve the extended agent card with governance capabilities</td></tr>
       </tbody>
     </table>
 
     <h3>Example: A2A Task Submission</h3>
-    <pre><code>POST /v1/a2a
+    <pre><code>POST /a2a/jsonrpc
 Content-Type: application/json
 Authorization: Bearer &lt;agent_token&gt;
 
@@ -434,23 +432,38 @@ Authorization: Bearer &lt;agent_token&gt;
 
     <div class="endpoint">
       <span class="method method-post">POST</span>
-      <span class="path">/v1/agents</span>
+      <span class="path">/v1/agent-registry/agents</span>
       <p class="desc">Register a new agent in the trust registry</p>
     </div>
     <div class="endpoint">
       <span class="method method-get">GET</span>
-      <span class="path">/v1/agents/{agent_id}</span>
+      <span class="path">/v1/agent-registry/agents/{agent_id}</span>
       <p class="desc">Retrieve an agent's profile, trust score, and interaction history</p>
     </div>
     <div class="endpoint">
       <span class="method method-get">GET</span>
-      <span class="path">/v1/agents/{agent_id}/interactions</span>
+      <span class="path">/v1/agent-registry/agents/{agent_id}/interactions</span>
       <p class="desc">List all governance decisions for a specific agent</p>
     </div>
     <div class="endpoint">
-      <span class="method method-put">PUT</span>
-      <span class="path">/v1/agents/{agent_id}/capabilities</span>
-      <p class="desc">Update the registered capabilities and permitted action types for an agent</p>
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/agent-registry/agents/{agent_id}/refresh</span>
+      <p class="desc">Re-fetch the agent card from its URL and recompute trust score</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/agent-registry/agents/{agent_id}/suspend</span>
+      <p class="desc">Suspend an agent with a reason (blocks further governance participation)</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/agent-registry/agents/{agent_id}/unsuspend</span>
+      <p class="desc">Restore a suspended agent to active status</p>
+    </div>
+    <div class="endpoint">
+      <span class="method method-get">GET</span>
+      <span class="path">/v1/agent-registry/trust-scores</span>
+      <p class="desc">Overview of all registered agents with current trust scores</p>
     </div>
 
     <h3>Trust Score</h3>
@@ -684,9 +697,9 @@ X-API-Key: your_api_key
       <p class="desc">List all mandates for the organization, with optional status filter</p>
     </div>
     <div class="endpoint">
-      <span class="method method-del">DELETE</span>
-      <span class="path">/v1/ap2/mandates/{mandate_id}</span>
-      <p class="desc">Revoke a mandate immediately — any in-flight transactions using this mandate are blocked</p>
+      <span class="method method-post">POST</span>
+      <span class="path">/v1/ap2/mandates/{mandate_id}/revoke</span>
+      <p class="desc">Revoke a mandate — any in-flight transactions using this mandate are blocked</p>
     </div>
     <div class="endpoint">
       <span class="method method-get">GET</span>
