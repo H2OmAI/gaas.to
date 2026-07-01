@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The Record Is Free Forever — GaaS Documentation">
+  <meta property="og:url" content="https://gaas.to/record-free-forever.html">
+  <meta property="og:image" content="https://gaas.to/favicon.png">
+  <meta property="og:site_name" content="GaaS — Governance as a Service">
+  <meta name="description" content="GaaS's standing pledge: the tamper-evident audit record — its creation, export, and cryptographic verification — is free forever, on every plan, and its immutability guarantees will never be weakened.">
+  <title>The Record Is Free Forever — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .pledge {
+      background: #10161f;
+      border: 1px solid #1f6feb;
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .pledge strong { color: #58a6ff; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="search.html">Search</a>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>The Record Is Free Forever</h1>
+    <p class="subtitle">
+      GaaS's standing pledge about the audit record — what it covers, exactly, and how we hold ourselves to it.
+    </p>
+
+    <div class="pledge">
+      <strong>The pledge:</strong> the tamper-evident audit record — its creation,
+      its export, and its cryptographic verification — is <strong>free on every
+      plan, forever</strong>. We will never put the record behind a paywall, and
+      we will never weaken its immutability guarantees. Trust in the record is
+      the product; it is not for sale.
+    </div>
+
+    <h2 id="what-this-covers">What this covers, precisely</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Guarantee</th>
+          <th>What it means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Record creation</strong></td>
+          <td>Every governance decision — approve, block, modify, or escalate, in live or shadow mode — produces a hash-chained audit record, on every tier including Free.</td>
+        </tr>
+        <tr>
+          <td><strong>Export</strong></td>
+          <td>Bulk and streaming audit export (<code>GET /v1/audit/export</code>, <code>GET /v1/audit/export/stream</code>) never requires a paid plan.</td>
+        </tr>
+        <tr>
+          <td><strong>Cryptographic verification</strong></td>
+          <td>Hash-chain integrity checks (<code>GET /v1/audit/chain/verify</code>), signed decision proof tokens (<code>GET /v1/verify/proof/{token_id}</code>), and offline verification bundles never require a paid plan.</td>
+        </tr>
+        <tr>
+          <td><strong>Appeal &amp; contest</strong></td>
+          <td>Appealing a blocked decision and contesting a record never require a paid plan.</td>
+        </tr>
+        <tr>
+          <td><strong>Immutability</strong></td>
+          <td>Records are SHA-256 hash-chained and cryptographically signed. No future change will weaken these guarantees — strengthening (e.g. optional ledger anchoring) only.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="what-this-does-not-cover">What this does not cover</h2>
+    <p>
+      Being precise is part of keeping a promise, so here is the boundary:
+    </p>
+    <ul>
+      <li><strong>Retention length varies by plan</strong> — per the published schedule on <a class="link" href="billing-and-quotas.html">Billing &amp; Quotas</a> (7 days on Free up to 7 years on Enterprise). Within your retention window, access, export, and verification are always free. Export before expiry if you need the record longer than your window.</li>
+      <li><strong>Verification bundles outlive retention</strong> — an exported verification bundle remains independently verifiable offline, forever, without a GaaS account.</li>
+      <li><strong>Enforcement is a separate, paid capability</strong> — preventive control (the inline gate) is what paid plans buy. The record of what happened is not.</li>
+      <li><strong>Decision volume is subject to plan quotas</strong> — quotas limit how many governance decisions you can submit, not your access to the records of decisions already made.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="how-we-hold-ourselves-to-it">How we hold ourselves to it</h2>
+    <p>
+      This pledge is enforced in code, not just posted on a page. Our continuous
+      integration suite walks the API's full route table on every change and
+      fails the build if any audit, verification, appeal, or contest endpoint
+      carries a paid-plan gate. A change that violates this pledge cannot merge.
+    </p>
+
+    <div class="note">
+      <strong>Verify it yourself:</strong> the record is designed to be checked
+      by people who don't trust us. Export a verification bundle and run the
+      included verifier offline — no API key, no GaaS account, no network.
+      See <a class="link" href="api-reference.html">API Reference</a> for
+      <code>/v1/audit</code> and <code>/v1/verify</code> endpoints.
+    </div>
+
+    <h2 id="why">Why we pledge this</h2>
+    <p>
+      An audit record that can be paywalled is leverage; a record that can be
+      quietly weakened is worthless. Governance only works if the evidence
+      layer is beyond commercial reach — including ours. The free record is how
+      an agent, its operator, a buyer, an auditor, or a regulator can all look
+      at the same history and agree on what happened.
+    </p>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="billing-and-quotas.html">Billing &amp; Quotas</a> — Plans, quotas, and the retention schedule</li>
+      <li><a class="link" href="compliance.html">Compliance</a> — Framework mappings and evidence endpoints</li>
+      <li><a class="link" href="api-reference.html">API Reference</a> — Complete endpoint documentation</li>
+      <li><a class="link" href="shadow-mode.html">Shadow Mode</a> — Free governance observation, no card required</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+<script src="search.js"></script>
+<script src="constellation.js"></script>
+</body>
+</html>

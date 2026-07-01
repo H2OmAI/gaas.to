@@ -1861,5 +1861,34 @@
       "xss",
       "html"
     ]
+  },
+  {
+    "id": "record-free-forever",
+    "page": "The Record Is Free Forever",
+    "section": null,
+    "url": "record-free-forever.html",
+    "body": "GaaS's standing pledge: the tamper-evident audit record — its creation, export, and cryptographic verification — is free on every plan, forever. Never paywalled, immutability never weakened. Enforced by a CI invariant that fails any change gating audit, verify, appeal, or contest endpoints.",
+    "tags": [
+      "pledge",
+      "audit",
+      "free",
+      "record",
+      "immutability",
+      "trust"
+    ]
+  },
+  {
+    "id": "record-free-forever-scope",
+    "page": "The Record Is Free Forever",
+    "section": "What this covers, precisely",
+    "url": "record-free-forever.html#what-this-covers",
+    "body": "Record creation on every tier, bulk and streaming export, hash-chain verification, signed proof tokens, offline verification bundles, appeals and contest — all free. Retention length varies by plan; verification bundles remain verifiable offline forever.",
+    "tags": [
+      "audit export",
+      "verification",
+      "proof token",
+      "retention",
+      "appeals"
+    ]
   }
 ]
