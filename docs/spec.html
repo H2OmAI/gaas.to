@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The auth.md Spec — Governance as Files — GaaS Documentation">
+  <meta property="og:url" content="https://gaas.to/spec.html">
+  <meta property="og:image" content="https://gaas.to/favicon.png">
+  <meta property="og:site_name" content="GaaS — Governance as a Service">
+  <meta name="description" content="auth.md is an open convention for AI agent governance as readable, signed, enforceable files: a .gaas/ directory with auth.md, policy.md, audit.md, escalation.md, and attestation.sig. GaaS is the reference runtime.">
+  <title>The auth.md Spec — Governance as Files — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code, td code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .draft {
+      display: inline-block;
+      background: rgba(210, 153, 34, 0.12);
+      border: 1px solid rgba(210, 153, 34, 0.4);
+      color: #d29922;
+      border-radius: 100px;
+      padding: 0.2rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .string { color: #a5d6ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #1e2533;
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: center;
+    }
+
+    footer a { color: #484f58; text-decoration: none; }
+    footer a:hover { color: #8b949e; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="search.html">Search</a>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="draft">Spec 0.1 — Public Draft</div>
+    <h1>The auth.md Spec</h1>
+    <p class="subtitle">
+      An open convention for AI agent governance as files: readable by people, validated and enforced by machines, signed like a release.
+    </p>
+
+    <p>
+      The agent ecosystem standardized on plain-text convention files — <code>agents.md</code> for instructions, <code>llms.txt</code> for guidance, <code>SKILL.md</code> for skills, MCP for tools. There was no agreed file for <strong>governance</strong>: who an agent may act as, what it may do, what must be recorded, and when it must stop and ask a human. The auth.md convention fills that gap.
+    </p>
+
+    <div class="note">
+      <strong>Canonical spec:</strong> the specification, JSON Schemas, and conformance fixtures live at
+      <a class="link" href="https://github.com/H2OmAI/authmd">github.com/H2OmAI/authmd</a> —
+      CC BY 4.0 text, Apache-2.0 schemas. Issues and PRs are open to everyone.
+    </div>
+
+    <h2 id="the-files">The files</h2>
+    <p>A <code>.gaas/</code> directory at the governed project's root:</p>
+
+    <table>
+      <thead>
+        <tr><th>File</th><th>Declares</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>auth.md</code></td><td>Who or what may act: agent identities, trust tiers, delegation limits, and the actions that always require a human's yes</td></tr>
+        <tr><td><code>policy.md</code></td><td>The rules: scope, severity, verdict, and declarative conditions</td></tr>
+        <tr><td><code>audit.md</code></td><td>Record expectations: retention, signing mode, export cadence — validated against reality, drift surfaced</td></tr>
+        <tr><td><code>escalation.md</code></td><td>Escalation routes: approvers, timeouts, and what happens when nobody answers (never auto-approve)</td></tr>
+        <tr><td><code>attestation.sig</code></td><td>A detached ES256 signature over the bundle — portable, offline-verifiable proof of the rules in force</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Each <code>.md</code> file is YAML frontmatter (the machine contract, schema-validated) plus a Markdown body (the human rationale — hashed into the signature, never machine-interpreted). Governance you can diff in a pull request.
+    </p>
+
+    <h2 id="declarative">Conditions are declarative, never code</h2>
+    <p>
+      A governance file that can execute code is a supply-chain attack surface. Conditions in this convention are a structured matcher tree — portable across runtimes, reviewable by non-programmers, and safe to accept from any repo:
+    </p>
+
+    <pre><code>policies:
+  - id: no-bulk-customer-export
+    description: <span class="string">Block bulk exports of customer records</span>
+    severity: mandatory
+    verdict: block
+    when:
+      all:
+        - { field: action.target.identifier, op: contains, value: customer }
+        - { field: action.payload.estimated_impact.audience_size, op: gte, value: 1000 }</code></pre>
+
+    <h2 id="validate">Validate in CI, today</h2>
+    <p>
+      The reference validator is <a class="link" href="https://github.com/H2OmAI/gaas">open-source</a> Python — local-only, no API key, no network:
+    </p>
+
+    <pre><code>pip install gaas-spec
+
+gaas validate          <span class="comment"># validate ./.gaas — exits non-zero with findings</span>
+gaas sign --key org-key.pem --key-id acme-2026
+gaas verify --pub acme-2026=org-pub.pem</code></pre>
+
+    <p>
+      An implementation conforms to spec 0.1 when it accepts every bundle in the spec repo's <code>fixtures/valid/</code> and rejects every bundle in <code>fixtures/invalid/</code> for the documented reason. Fixtures are ground truth: where prose and fixtures disagree, fixtures win.
+    </p>
+
+    <h2 id="reference-runtime">GaaS is the reference runtime</h2>
+    <p>
+      GaaS validates these files, compiles them into enforced runtime policy scoped to your organization, countersigns applied bundles, and records the applied bundle's hash in the tamper-evident audit chain — binding <em>what the rules said</em> to <em>what decisions were made</em>. The audit record beneath it is <a class="link" href="record-free-forever.html">free forever</a>.
+    </p>
+
+    <div class="note">
+      <strong>Status:</strong> spec 0.1 is a public draft. Runtime enforcement of governance files
+      (validate/apply endpoints) is landing in the current release cycle; the spec, schemas,
+      fixtures, and the <code>gaas-spec</code> validator are available now.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="https://github.com/H2OmAI/authmd">The spec repository</a> — canonical text, schemas, fixtures, governance</li>
+      <li><a class="link" href="record-free-forever.html">The Record Is Free Forever</a> — the pledge beneath the convention</li>
+      <li><a class="link" href="policies.html">Policies</a> — the runtime's policy engine</li>
+      <li><a class="link" href="getting-started.html">Getting Started</a> — free Shadow Mode, no card required</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="https://gaas.is">&copy; H2Om</a>
+  </footer>
+<script src="search.js"></script>
+<script src="constellation.js"></script>
+</body>
+</html>

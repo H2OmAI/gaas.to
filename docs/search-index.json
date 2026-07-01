@@ -1890,5 +1890,35 @@
       "retention",
       "appeals"
     ]
+  },
+  {
+    "id": "spec",
+    "page": "The auth.md Spec",
+    "section": null,
+    "url": "spec.html",
+    "body": "auth.md is an open convention for AI agent governance as files: a .gaas/ directory with auth.md, policy.md, audit.md, escalation.md, and attestation.sig. YAML frontmatter as machine contract, Markdown body as human rationale. Conditions are declarative matchers, never code. Canonical spec at github.com/H2OmAI/authmd. GaaS is the reference runtime; validate locally with pip install gaas-spec.",
+    "tags": [
+      "spec",
+      "auth.md",
+      "policy.md",
+      "governance files",
+      "convention",
+      "gaas-spec",
+      "attestation"
+    ]
+  },
+  {
+    "id": "spec-validate",
+    "page": "The auth.md Spec",
+    "section": "Validate in CI, today",
+    "url": "spec.html#validate",
+    "body": "pip install gaas-spec. gaas validate exits non-zero with findings — local-only, no API key, no network. gaas sign and gaas verify handle ES256 detached attestation signatures over the bundle manifest.",
+    "tags": [
+      "cli",
+      "validate",
+      "ci",
+      "sign",
+      "verify"
+    ]
   }
 ]
