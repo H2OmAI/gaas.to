@@ -1966,5 +1966,20 @@
       "audit",
       "controls"
     ]
+  },
+  {
+    "id": "compliance#iso42001-control-mapping",
+    "page": "Compliance",
+    "section": "ISO/IEC 42001 Control Mapping",
+    "url": "compliance.html#iso42001-control-mapping",
+    "body": "15 ISO/IEC 42001 Annex A controls mapped to GaaS capabilities: AI policy via governance membranes, impact assessment via six-dimensional risk scoring, lifecycle via membrane progression, third-party risk via the A2A trust registry. Control mapping to support customer audits \u2014 not a certification.",
+    "tags": [
+      "iso42001",
+      "ai management system",
+      "compliance",
+      "evidence",
+      "annex a",
+      "eu ai act"
+    ]
   }
 ]

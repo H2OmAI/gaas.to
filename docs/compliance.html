@@ -620,6 +620,31 @@
   <hr class="divider">
 
   <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION: ISO/IEC 42001 CONTROL MAPPING                  -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2 id="iso42001-control-mapping">ISO/IEC 42001 Control Mapping</h2>
+    <p>
+      GaaS maps <strong>15 ISO/IEC 42001 Annex A controls</strong> (AI policy, internal
+      organization, resources, impact assessment, life cycle, data, transparency, responsible
+      use, and third parties) to platform capabilities with API evidence endpoints and
+      <code>[EXAMINE/TEST]</code> assessment procedures. This is a <strong>control mapping to
+      support your AI management system audit</strong> &mdash; it is not an ISO/IEC 42001
+      certification of GaaS, and statuses are honest: incomplete capabilities (e.g. independent
+      model validation, automated sub-processor notification) report <code>partial</code>.
+    </p>
+    <p>
+      Fetch any control's evidence package via
+      <code>GET /v1/compliance/federal/evidence/{control_id}</code> (e.g. <code>A.2.2</code>
+      AI policy via governance membranes, <code>A.5.2</code> impact assessment via
+      six-dimensional risk scoring, <code>A.6.1.2</code> life cycle via the membrane
+      DRAFT&rarr;SHADOW&rarr;LIVE progression).
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
   <!-- SECTION 2: GOVERNANCE PROOF TOKENS                     -->
   <!-- ─────────────────────────────────────────────────────── -->
   <section>
