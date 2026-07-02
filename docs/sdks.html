@@ -212,7 +212,7 @@
   <main>
     <h1>SDKs</h1>
     <p class="subtitle">
-      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, and the OpenAI Agents SDK. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, and the OpenAI Agents SDK &mdash; plus an MCP server for Claude Code and Claude Desktop. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
     <h2 id="at-a-glance">At a Glance</h2>
@@ -252,6 +252,12 @@
         <td><code>gaas-openai-agents</code></td>
         <td><code>pip install gaas-openai-agents</code></td>
         <td>Python 3.11+</td>
+      </tr>
+      <tr>
+        <td>MCP (Claude Code / Desktop)</td>
+        <td><code>@gaas/mcp</code></td>
+        <td><code>npx -y @gaas/mcp</code></td>
+        <td>Node.js 18+</td>
       </tr>
     </table>
 
@@ -614,6 +620,72 @@ result = <span class="keyword">await</span> Runner.<span class="func">run</span>
       <code>GovernanceBlockedError</code> with verdict <code>ESCALATE_DENY</code> or
       <code>ESCALATE_TIMEOUT</code>.
     </p>
+
+    <hr class="divider">
+
+    <!-- ── MCP Server ───────────────────────────────────────────── -->
+
+    <h2 id="mcp">MCP Server (Claude Code / Claude Desktop)</h2>
+    <p>
+      <code>@gaas/mcp</code> is a Model Context Protocol server that gives Claude Code,
+      Claude Desktop, and any MCP client direct access to the GaaS governance pipeline.
+    </p>
+
+    <h3>Setup — Claude Code</h3>
+    <pre><code>claude mcp add gaas --env GAAS_API_KEY=gsk_your_key -- npx -y @gaas/mcp</code></pre>
+
+    <h3>Setup — Claude Desktop / .mcp.json</h3>
+    <pre><code>{
+  <span class="string">"mcpServers"</span>: {
+    <span class="string">"gaas"</span>: {
+      <span class="string">"type"</span>: <span class="string">"stdio"</span>,
+      <span class="string">"command"</span>: <span class="string">"npx"</span>,
+      <span class="string">"args"</span>: [<span class="string">"-y"</span>, <span class="string">"@gaas/mcp"</span>],
+      <span class="string">"env"</span>: {
+        <span class="string">"GAAS_API_URL"</span>: <span class="string">"https://api.gaas.is"</span>,
+        <span class="string">"GAAS_API_KEY"</span>: <span class="string">"gsk_your_key"</span>
+      }
+    }
+  }
+}</code></pre>
+    <p>
+      Environment: <code>GAAS_API_KEY</code> (required), <code>GAAS_API_URL</code>
+      (default <code>https://api.gaas.is</code>), <code>GAAS_TIMEOUT_MS</code> (default 30000).
+    </p>
+
+    <h3>Tools</h3>
+    <table>
+      <tr>
+        <th>Tool</th>
+        <th>What it does</th>
+      </tr>
+      <tr>
+        <td><code>gaas_submit_intent</code></td>
+        <td>Submit a governance intent and receive the decision (APPROVE / ESCALATE / BLOCK) with risk assessment and signed proof token. <code>mode=shadow</code> evaluates without enforcement.</td>
+      </tr>
+      <tr>
+        <td><code>gaas_check_decision</code></td>
+        <td>Fetch the decision for an intent ID &mdash; poll after an ESCALATE verdict.</td>
+      </tr>
+      <tr>
+        <td><code>gaas_query_audit</code></td>
+        <td>Fetch the full signed audit record: pipeline stages, policy evaluations, hash-chain position.</td>
+      </tr>
+      <tr>
+        <td><code>gaas_validate_governance_files</code></td>
+        <td>Dry-run validation of <code>.gaas/</code> governance files against the authmd spec. Never mutates anything.</td>
+      </tr>
+    </table>
+    <p>
+      Resources: <code>governance://current</code> (applied bundle + drift),
+      <code>governance://policy-packs</code>, <code>governance://spec</code>.
+      No write-side policy tools &mdash; applying governance bundles from an LLM
+      session is the wrong trust direction.
+    </p>
+
+    <h3>HTTP Mode</h3>
+    <pre><code>GAAS_API_KEY=gsk_... npx -y @gaas/mcp --http --port 3917
+<span class="comment"># MCP endpoint: POST http://localhost:3917/mcp</span></code></pre>
 
     <hr class="divider">
 
