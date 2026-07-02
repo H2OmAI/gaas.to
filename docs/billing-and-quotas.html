@@ -364,6 +364,59 @@ Content-Type: application/json
 
     <hr class="divider">
 
+    <h2 id="priced-on-decisions">Priced on Decisions</h2>
+    <p>
+      GaaS pricing follows what governance actually costs: <strong>decisions, not seats</strong>.
+      Every live decision is classified into exactly one of three classes, in this precedence order:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>When it applies</th>
+          <th>Overage price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Escalation</strong></td>
+          <td>The decision escalated to a human reviewer</td>
+          <td>$0.25 / decision</td>
+        </tr>
+        <tr>
+          <td><strong>Deliberation</strong></td>
+          <td>The multi-agent deliberation stage ran to completion</td>
+          <td>$0.05 / decision</td>
+        </tr>
+        <tr>
+          <td><strong>Routine</strong></td>
+          <td>Everything else — the fast policy-evaluation path</td>
+          <td>$0.002 / decision</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      Overage prices apply only to decisions <em>beyond</em> your plan's included monthly actions.
+      Fairness rules, stated plainly:
+    </p>
+    <ul>
+      <li><strong>Shadow and test decisions are never metered.</strong> Calibrate freely.</li>
+      <li><strong>A failed deliberation bills as routine.</strong> You don't pay for our failures.</li>
+      <li><strong>Each decision counts exactly once</strong>, in its highest applicable class.</li>
+      <li><strong>The audit record is not metered and never will be</strong> — see <a class="link" href="record-free-forever.html">The Record Is Free Forever</a>.</li>
+    </ul>
+
+    <div class="note">
+      <strong>Rolling out in stages:</strong> per-decision metering is currently running in
+      <strong>report-only mode</strong> — usage accumulates and is visible before any overage
+      charge is ever applied. Overage billing activates only after a full report-only cycle,
+      announced in advance. Until then, the existing quota model above is what you pay.
+    </div>
+
+    <hr class="divider">
+
     <h2 id="quota-headers">Quota Headers</h2>
     <p>
       Every intent submission response includes quota usage headers:

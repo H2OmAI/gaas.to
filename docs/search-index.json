@@ -1920,5 +1920,21 @@
       "sign",
       "verify"
     ]
+  },
+  {
+    "id": "billing-priced-on-decisions",
+    "page": "Billing & Quotas",
+    "section": "Priced on Decisions",
+    "url": "billing-and-quotas.html#priced-on-decisions",
+    "body": "GaaS prices decisions, not seats. Three classes with precedence: escalation $0.25, deliberation $0.05, routine $0.002 per decision beyond included quota. Shadow and test never metered; failed deliberations bill as routine; each decision counts once; the audit record is never metered. Rolling out report-only before any overage charge applies.",
+    "tags": [
+      "pricing",
+      "decisions",
+      "overage",
+      "metering",
+      "escalation",
+      "deliberation",
+      "routine"
+    ]
   }
 ]
