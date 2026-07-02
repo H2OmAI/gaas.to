@@ -596,6 +596,30 @@
   <hr class="divider">
 
   <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION: SOC 2 TSC CONTROL MAPPING                      -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2 id="soc2-control-mapping">SOC 2 Control Mapping</h2>
+    <p>
+      GaaS maps <strong>20 SOC 2 Trust Services Criteria controls</strong> (CC1&ndash;CC9 and
+      Availability) to concrete platform capabilities, each with API evidence endpoints and
+      <code>[EXAMINE/TEST]</code> assessment procedures. This is a <strong>control mapping to
+      support your own SOC 2 audit</strong> &mdash; it is not a SOC 2 attestation of GaaS, and
+      statuses are honest: controls with open gaps (e.g. a formal penetration-testing program)
+      report <code>partial</code>, not <code>implemented</code>.
+    </p>
+    <p>
+      Fetch any control's evidence package via
+      <code>GET /v1/compliance/federal/evidence/{control_id}</code> (e.g. <code>CC6.1</code>
+      logical access, <code>CC8.1</code> change management, <code>A1.2</code> recovery
+      infrastructure). Evidence endpoints include the hash-chained audit export, chain
+      verification, SLO reports, and the policy registry.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
   <!-- SECTION 2: GOVERNANCE PROOF TOKENS                     -->
   <!-- ─────────────────────────────────────────────────────── -->
   <section>

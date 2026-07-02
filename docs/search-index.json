@@ -1951,5 +1951,20 @@
       "governance",
       "tools"
     ]
+  },
+  {
+    "id": "compliance#soc2-control-mapping",
+    "page": "Compliance",
+    "section": "SOC 2 Control Mapping",
+    "url": "compliance.html#soc2-control-mapping",
+    "body": "20 SOC 2 Trust Services Criteria controls (CC1-CC9, Availability) mapped to GaaS capabilities with API evidence endpoints and EXAMINE/TEST assessment procedures. Control mapping to support customer audits \u2014 not a SOC 2 attestation.",
+    "tags": [
+      "soc2",
+      "tsc",
+      "compliance",
+      "evidence",
+      "audit",
+      "controls"
+    ]
   }
 ]
