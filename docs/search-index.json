@@ -1981,5 +1981,21 @@
       "annex a",
       "eu ai act"
     ]
+  },
+  {
+    "id": "compliance#grc-evidence-export",
+    "page": "Compliance",
+    "section": "GRC Evidence Export",
+    "url": "compliance.html#grc-evidence-export",
+    "body": "Export all control evidence rows as CSV or JSON for Vanta, Drata, or any GRC platform: GET /v1/compliance/evidence/export with framework filter. One row per control with evidence endpoints and assessment procedures.",
+    "tags": [
+      "grc",
+      "vanta",
+      "drata",
+      "csv",
+      "export",
+      "evidence",
+      "compliance"
+    ]
   }
 ]

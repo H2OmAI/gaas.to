@@ -645,6 +645,27 @@
   <hr class="divider">
 
   <!-- ─────────────────────────────────────────────────────── -->
+  <!-- SECTION: GRC EVIDENCE EXPORT                            -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <section>
+    <h2 id="grc-evidence-export">Exporting Evidence for Your GRC Platform</h2>
+    <p>
+      Pull every control evidence row &mdash; across NIST AI RMF, NIST SP 800-53, FedRAMP,
+      CMMC, NIST CSF, SOC 2 TSC, and ISO/IEC 42001 &mdash; in one call for manual upload to
+      Vanta, Drata, or any GRC platform:
+    </p>
+    <pre><code>GET /v1/compliance/evidence/export?framework=SOC%202%20TSC&amp;format=csv</code></pre>
+    <p>
+      Omit <code>framework</code> for all frameworks. <code>format=csv</code> returns one row
+      per control (id, family, title, requirement, status, capability, evidence endpoints,
+      assessment procedures, last assessed) with a download filename;
+      <code>format=json</code> returns the full evidence packages. Operator role required.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─────────────────────────────────────────────────────── -->
   <!-- SECTION 2: GOVERNANCE PROOF TOKENS                     -->
   <!-- ─────────────────────────────────────────────────────── -->
   <section>
