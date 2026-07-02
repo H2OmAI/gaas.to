@@ -357,8 +357,8 @@ Content-Type: application/json
         time.<span class="func">sleep</span>(retry_after)
         response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)  <span class="comment"># Retry</span></code></pre>
 
-    <h3>TypeScript (@gaas/sdk)</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient, RateLimitError } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+    <h3>TypeScript (@governancehq/sdk)</h3>
+    <pre><code><span class="keyword">import</span> { GaaSClient, RateLimitError } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
 
 <span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({ baseUrl: <span class="string">'https://api.gaas.is'</span>, headers: { ... } });
 

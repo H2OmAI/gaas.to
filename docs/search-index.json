@@ -709,10 +709,10 @@
     "page": "SDKs",
     "section": "TypeScript",
     "url": "sdks.html#typescript",
-    "body": "npm install @gaas/sdk. GaaSClient class with buildIntent() and submitIntent(). Full TypeScript types for all request and response objects. Node.js 18+ and browser compatible.",
+    "body": "npm install @governancehq/sdk. GaaSClient class with buildIntent() and submitIntent(). Full TypeScript types for all request and response objects. Node.js 18+ and browser compatible.",
     "tags": [
       "npm",
-      "@gaas/sdk",
+      "@governancehq/sdk",
       "GaaSClient",
       "buildIntent",
       "submitIntent",

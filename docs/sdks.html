@@ -231,8 +231,8 @@
       </tr>
       <tr>
         <td>TypeScript</td>
-        <td><code>@gaas/sdk</code></td>
-        <td><code>npm install @gaas/sdk</code></td>
+        <td><code>@governancehq/sdk</code></td>
+        <td><code>npm install @governancehq/sdk</code></td>
         <td>Node.js 18+</td>
       </tr>
       <tr>
@@ -255,8 +255,8 @@
       </tr>
       <tr>
         <td>MCP (Claude Code / Desktop)</td>
-        <td><code>@gaas/mcp</code></td>
-        <td><code>npx -y @gaas/mcp</code></td>
+        <td><code>@governancehq/mcp</code></td>
+        <td><code>npx -y @governancehq/mcp</code></td>
         <td>Node.js 18+</td>
       </tr>
       <tr>
@@ -267,8 +267,8 @@
       </tr>
       <tr>
         <td>Vercel AI SDK</td>
-        <td><code>@gaas/vercel-ai</code></td>
-        <td><code>npm install @gaas/vercel-ai</code></td>
+        <td><code>@governancehq/vercel-ai</code></td>
+        <td><code>npm install @governancehq/vercel-ai</code></td>
         <td>Node.js 18+, ai v7</td>
       </tr>
       <tr>
@@ -406,10 +406,10 @@ intent = <span class="func">build_intent</span>(
     <h2 id="typescript">TypeScript</h2>
 
     <h3>Install</h3>
-    <pre><code>npm install @gaas/sdk</code></pre>
+    <pre><code>npm install @governancehq/sdk</code></pre>
 
     <h3>Submit an Intent</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent, ActionType, TargetType } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent, ActionType, TargetType } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
 
 <span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
   baseUrl: <span class="string">'https://api.gaas.is'</span>,
@@ -439,7 +439,7 @@ intent = <span class="func">build_intent</span>(
     </div>
 
     <h3>Error Handling</h3>
-    <pre><code><span class="keyword">import</span> { GaaSValidationError, GaaSConnectionError } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+    <pre><code><span class="keyword">import</span> { GaaSValidationError, GaaSConnectionError } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
 
 <span class="keyword">try</span> {
   <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);
@@ -749,12 +749,12 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
     <h2 id="vercel-ai">Vercel AI SDK</h2>
 
     <h3>Install</h3>
-    <pre><code>npm install @gaas/vercel-ai</code></pre>
+    <pre><code>npm install @governancehq/vercel-ai</code></pre>
     <p><code>ai</code> v7 is a peer dependency.</p>
 
     <h3>Govern a ToolSet</h3>
     <pre><code><span class="keyword">import</span> { generateText, stepCountIs } <span class="keyword">from</span> <span class="string">"ai"</span>;
-<span class="keyword">import</span> { governTools, stopOnGovernanceBlock } <span class="keyword">from</span> <span class="string">"@gaas/vercel-ai"</span>;
+<span class="keyword">import</span> { governTools, stopOnGovernanceBlock } <span class="keyword">from</span> <span class="string">"@governancehq/vercel-ai"</span>;
 
 <span class="keyword">const</span> config = { apiKey: <span class="string">"gsk_your_key"</span>, agentId: <span class="string">"my-agent"</span> };
 
@@ -791,12 +791,12 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
 
     <h2 id="mcp">MCP Server (Claude Code / Claude Desktop)</h2>
     <p>
-      <code>@gaas/mcp</code> is a Model Context Protocol server that gives Claude Code,
+      <code>@governancehq/mcp</code> is a Model Context Protocol server that gives Claude Code,
       Claude Desktop, and any MCP client direct access to the GaaS governance pipeline.
     </p>
 
     <h3>Setup — Claude Code</h3>
-    <pre><code>claude mcp add gaas --env GAAS_API_KEY=gsk_your_key -- npx -y @gaas/mcp</code></pre>
+    <pre><code>claude mcp add gaas --env GAAS_API_KEY=gsk_your_key -- npx -y @governancehq/mcp</code></pre>
 
     <h3>Setup — Claude Desktop / .mcp.json</h3>
     <pre><code>{
@@ -804,7 +804,7 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
     <span class="string">"gaas"</span>: {
       <span class="string">"type"</span>: <span class="string">"stdio"</span>,
       <span class="string">"command"</span>: <span class="string">"npx"</span>,
-      <span class="string">"args"</span>: [<span class="string">"-y"</span>, <span class="string">"@gaas/mcp"</span>],
+      <span class="string">"args"</span>: [<span class="string">"-y"</span>, <span class="string">"@governancehq/mcp"</span>],
       <span class="string">"env"</span>: {
         <span class="string">"GAAS_API_URL"</span>: <span class="string">"https://api.gaas.is"</span>,
         <span class="string">"GAAS_API_KEY"</span>: <span class="string">"gsk_your_key"</span>
@@ -848,7 +848,7 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
     </p>
 
     <h3>HTTP Mode</h3>
-    <pre><code>GAAS_API_KEY=gsk_... npx -y @gaas/mcp --http --port 3917
+    <pre><code>GAAS_API_KEY=gsk_... npx -y @governancehq/mcp --http --port 3917
 <span class="comment"># MCP endpoint: POST http://localhost:3917/mcp</span></code></pre>
 
     <hr class="divider">

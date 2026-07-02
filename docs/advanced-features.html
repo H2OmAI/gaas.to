@@ -260,8 +260,8 @@
         <span class="keyword">else</span>:
             <span class="func">print</span>(<span class="string">f"Intent {result.intent_id} failed: {result.error}"</span>)</code></pre>
 
-    <h3>TypeScript (@gaas/sdk)</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@gaas/sdk'</span>;
+    <h3>TypeScript (@governancehq/sdk)</h3>
+    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
 
 <span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
   baseUrl: <span class="string">'https://api.gaas.is'</span>,
@@ -333,7 +333,7 @@ response.results.<span class="func">forEach</span>((result) => {
     fields=<span class="string">"decision.verdict,decision.risk_assessment.score"</span>
 )</code></pre>
 
-    <h3>TypeScript (@gaas/sdk)</h3>
+    <h3>TypeScript (@governancehq/sdk)</h3>
     <pre><code><span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent, {
   fields: <span class="string">'decision.verdict,decision.risk_assessment.score'</span>,
 });</code></pre>
@@ -390,7 +390,7 @@ response = <span class="keyword">await</span> client.<span class="func">submit_i
 intent = <span class="func">build_intent</span>(..., idempotency_key=<span class="string">"unique-key-123"</span>)
 response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)</code></pre>
 
-    <h3>TypeScript (@gaas/sdk)</h3>
+    <h3>TypeScript (@governancehq/sdk)</h3>
     <pre><code><span class="comment">// Header-based (recommended)</span>
 <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent, {
   headers: { <span class="string">'Idempotency-Key'</span>: <span class="string">'unique-key-123'</span> },
