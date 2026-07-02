@@ -212,7 +212,7 @@
   <main>
     <h1>SDKs</h1>
     <p class="subtitle">
-      Official client libraries for Python, TypeScript, Java, and LangChain/LangGraph. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, and the OpenAI Agents SDK. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
     <h2 id="at-a-glance">At a Glance</h2>
@@ -245,6 +245,12 @@
         <td>LangChain / LangGraph</td>
         <td><code>gaas-langchain</code></td>
         <td><code>pip install gaas-langchain</code></td>
+        <td>Python 3.11+</td>
+      </tr>
+      <tr>
+        <td>OpenAI Agents SDK</td>
+        <td><code>gaas-openai-agents</code></td>
+        <td><code>pip install gaas-openai-agents</code></td>
         <td>Python 3.11+</td>
       </tr>
     </table>
@@ -544,6 +550,70 @@ handler.<span class="func">reset</span>()  <span class="comment"># clear log bet
     <span class="func">print</span>(e.risk_score)             <span class="comment"># 0.0–1.0</span>
     <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
     <span class="func">print</span>(e.governance_proof_token)  <span class="comment"># ECDSA-signed proof token ID</span></code></pre>
+
+    <hr class="divider">
+
+    <!-- ── OpenAI Agents SDK ────────────────────────────────────── -->
+
+    <h2 id="openai-agents">OpenAI Agents SDK</h2>
+
+    <h3>Install</h3>
+    <pre><code>pip install gaas-openai-agents[openai-agents]</code></pre>
+
+    <h3>Govern Function Tools</h3>
+    <pre><code><span class="keyword">from</span> agents <span class="keyword">import</span> Agent, Runner, function_tool
+<span class="keyword">from</span> gaas_openai_agents <span class="keyword">import</span> govern_tools, GaaSGovernanceConfig
+
+config = <span class="func">GaaSGovernanceConfig</span>(
+    api_url=<span class="string">"https://api.gaas.is"</span>,
+    api_key=<span class="string">"gsk_your_key"</span>,
+    agent_id=<span class="string">"my-agent"</span>,
+)
+
+agent = <span class="func">Agent</span>(
+    name=<span class="string">"assistant"</span>,
+    tools=<span class="func">govern_tools</span>([search_tool, email_tool], config=config),
+)
+result = <span class="keyword">await</span> Runner.<span class="func">run</span>(agent, <span class="string">"..."</span>)</code></pre>
+    <p>
+      Every tool call submits a governance intent before executing. Tool metadata
+      (name, description, schema, guardrails) is preserved. Only
+      <code>FunctionTool</code> instances can be governed &mdash; hosted tools (web
+      search, code interpreter) execute on OpenAI's side.
+    </p>
+
+    <h3>BLOCK Halts the Run</h3>
+    <pre><code><span class="keyword">from</span> gaas_openai_agents <span class="keyword">import</span> GovernanceBlockedError
+
+<span class="keyword">try</span>:
+    result = <span class="keyword">await</span> Runner.<span class="func">run</span>(agent, <span class="string">"wire $250k to the new vendor"</span>)
+<span class="keyword">except</span> <span class="type">GovernanceBlockedError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(e.verdict)               <span class="comment"># "BLOCK", "ESCALATE", "ESCALATE_DENY", ...</span>
+    <span class="func">print</span>(e.decision_id)            <span class="comment"># GaaS decision ID</span>
+    <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
+    <span class="func">print</span>(e.governance_proof_token)  <span class="comment"># ECDSA-signed proof token ID</span></code></pre>
+    <p>
+      <code>GovernanceBlockedError</code> subclasses the framework's
+      <code>AgentsException</code>, so it propagates out of <code>Runner.run()</code>
+      unchanged &mdash; a blocked action halts the run instead of becoming error text
+      the model can route around. Errors inside your own tool functions keep the
+      framework's default behaviour (formatted for the model, run continues).
+    </p>
+
+    <h3>Hold-and-Poll on ESCALATE</h3>
+    <pre><code>config = <span class="func">GaaSGovernanceConfig</span>(
+    api_key=<span class="string">"gsk_your_key"</span>,
+    agent_id=<span class="string">"my-agent"</span>,
+    hold_on_escalate=<span class="keyword">True</span>,          <span class="comment"># wait for the human decision</span>
+    escalation_poll_seconds=<span class="number">5.0</span>,
+    escalation_max_wait_seconds=<span class="number">600.0</span>,
+)</code></pre>
+    <p>
+      On ESCALATE the tool call holds while GaaS routes the escalation to a human
+      reviewer. Approve/modify lets the tool execute; deny or timeout raises
+      <code>GovernanceBlockedError</code> with verdict <code>ESCALATE_DENY</code> or
+      <code>ESCALATE_TIMEOUT</code>.
+    </p>
 
     <hr class="divider">
 
