@@ -4,7 +4,7 @@
     "page": "GaaS Documentation",
     "section": null,
     "url": "index.html",
-    "body": "Governance as a Service — five-stage governance pipeline for autonomous AI agents. Intent declaration, context enrichment, policy evaluation, deliberation, and tamper-evident audit. Every agent action evaluated before execution.",
+    "body": "Governance as a Service \u2014 five-stage governance pipeline for autonomous AI agents. Intent declaration, context enrichment, policy evaluation, deliberation, and tamper-evident audit. Every agent action evaluated before execution.",
     "tags": [
       "governance",
       "pipeline",
@@ -19,7 +19,7 @@
     "page": "Getting Started",
     "section": "Onboard Your Organization",
     "url": "getting-started.html#onboard-your-organization",
-    "body": "POST /v1/onboarding/quickstart — one call handles intake, analysis, membrane generation, and API key provisioning. Provide organization description and agent declarations. Membrane starts in shadow mode automatically.",
+    "body": "POST /v1/onboarding/quickstart \u2014 one call handles intake, analysis, membrane generation, and API key provisioning. Provide organization description and agent declarations. Membrane starts in shadow mode automatically.",
     "tags": [
       "quickstart endpoint",
       "API key",
@@ -97,7 +97,7 @@
     "page": "Intent Declaration API",
     "section": "Core Concept",
     "url": "intent-api.html#core-concept",
-    "body": "An intent is a structured declaration of what an agent wants to do before it does it. GaaS evaluates the intent through 5 stages and returns a verdict. The agent must act on the verdict — not skip it.",
+    "body": "An intent is a structured declaration of what an agent wants to do before it does it. GaaS evaluates the intent through 5 stages and returns a verdict. The agent must act on the verdict \u2014 not skip it.",
     "tags": [
       "intent",
       "concept",
@@ -155,7 +155,7 @@
     "page": "Intent Declaration API",
     "section": "Endpoints",
     "url": "intent-api.html#endpoints",
-    "body": "POST /v1/intents — submit intent. GET /v1/intents — list intents with filters. GET /v1/intents/{id} — retrieve specific intent and its decision. DELETE /v1/intents/{id} — GDPR erasure.",
+    "body": "POST /v1/intents \u2014 submit intent. GET /v1/intents \u2014 list intents with filters. GET /v1/intents/{id} \u2014 retrieve specific intent and its decision. DELETE /v1/intents/{id} \u2014 GDPR erasure.",
     "tags": [
       "endpoints",
       "GET /v1/intents",
@@ -211,7 +211,7 @@
     "page": "Policy Library",
     "section": "Coverage Overview",
     "url": "policies.html#coverage-overview",
-    "body": "33 policies organized across Tier 1 (hard blocks — fast-fail), Tier 2 (high-risk escalations), Tier 3 (risk-scored), Tier 4 (audit-only). AP2 layer covers agentic payment governance. Tier 1 violations skip all further evaluation.",
+    "body": "33 policies organized across Tier 1 (hard blocks \u2014 fast-fail), Tier 2 (high-risk escalations), Tier 3 (risk-scored), Tier 4 (audit-only). AP2 layer covers agentic payment governance. Tier 1 violations skip all further evaluation.",
     "tags": [
       "tier 1",
       "tier 2",
@@ -227,7 +227,7 @@
     "page": "Policy Library",
     "section": "How Policies Work",
     "url": "policies.html#how-policies-work",
-    "body": "Verdict ladder: approve → modify → escalate → block. Risk scored across 6 dimensions: legal, reputational, operational, financial, privacy, safety. Policies evaluated in parallel; highest-severity verdict wins.",
+    "body": "Verdict ladder: approve \u2192 modify \u2192 escalate \u2192 block. Risk scored across 6 dimensions: legal, reputational, operational, financial, privacy, safety. Policies evaluated in parallel; highest-severity verdict wins.",
     "tags": [
       "verdict ladder",
       "risk score",
@@ -244,7 +244,7 @@
     "page": "Policy Library",
     "section": "Policy Registry",
     "url": "policies.html#policy-registry",
-    "body": "Natural language policy authoring — describe a policy in plain English, GaaS compiles it into an evaluatable rule. Policy IDs follow pol_t1_xxx, pol_t2_xxx convention. Custom policies versioned and auditable.",
+    "body": "Natural language policy authoring \u2014 describe a policy in plain English, GaaS compiles it into an evaluatable rule. Policy IDs follow pol_t1_xxx, pol_t2_xxx convention. Custom policies versioned and auditable.",
     "tags": [
       "custom policy",
       "NL authoring",
@@ -259,7 +259,7 @@
     "page": "Policy Library",
     "section": "EU AI Act Compliance",
     "url": "policies.html#eu-ai-act-compliance",
-    "body": "Policies mapped to EU AI Act Articles 9–15. High-risk AI classification, transparency obligations, human oversight requirements. August 2026 compliance deadline enforced by GaaS governance layer.",
+    "body": "Policies mapped to EU AI Act Articles 9\u201315. High-risk AI classification, transparency obligations, human oversight requirements. August 2026 compliance deadline enforced by GaaS governance layer.",
     "tags": [
       "EU AI Act",
       "Articles 9-15",
@@ -274,7 +274,7 @@
     "page": "Connectors",
     "section": "Communications",
     "url": "connectors.html#communications",
-    "body": "Twilio connector — call and SMS metadata, TCPA consent status, opt-out records. Used to verify communication compliance before agent messages are sent. Returns consent signals in real-time.",
+    "body": "Twilio connector \u2014 call and SMS metadata, TCPA consent status, opt-out records. Used to verify communication compliance before agent messages are sent. Returns consent signals in real-time.",
     "tags": [
       "Twilio",
       "SMS",
@@ -289,7 +289,7 @@
     "page": "Connectors",
     "section": "CRM",
     "url": "connectors.html#crm",
-    "body": "Salesforce connector — account and contact records, permission sets, relationship data. Enriches governance decisions with CRM context for customer-facing agent actions.",
+    "body": "Salesforce connector \u2014 account and contact records, permission sets, relationship data. Enriches governance decisions with CRM context for customer-facing agent actions.",
     "tags": [
       "Salesforce",
       "CRM",
@@ -303,7 +303,7 @@
     "page": "Connectors",
     "section": "Payment",
     "url": "connectors.html#payment",
-    "body": "Stripe connector — transaction history, fraud signals, spend tracking, PCI-DSS compliance signals. AP2 Mandate store integration for agentic payment governance. Prevents unauthorized financial agent actions.",
+    "body": "Stripe connector \u2014 transaction history, fraud signals, spend tracking, PCI-DSS compliance signals. AP2 Mandate store integration for agentic payment governance. Prevents unauthorized financial agent actions.",
     "tags": [
       "Stripe",
       "payment",
@@ -319,7 +319,7 @@
     "page": "Connectors",
     "section": "Identity",
     "url": "connectors.html#identity",
-    "body": "Okta connector — identity verification, MFA status, session risk, group membership, permission scopes. Used to validate agent identity and authorization before privileged actions.",
+    "body": "Okta connector \u2014 identity verification, MFA status, session risk, group membership, permission scopes. Used to validate agent identity and authorization before privileged actions.",
     "tags": [
       "Okta",
       "identity",
@@ -335,7 +335,7 @@
     "page": "Connectors",
     "section": "Security",
     "url": "connectors.html#security",
-    "body": "SIEM connector — security event feeds, anomaly signals, threat indicators. Feeds real-time security context into governance decisions. Blocks agents during active security incidents.",
+    "body": "SIEM connector \u2014 security event feeds, anomaly signals, threat indicators. Feeds real-time security context into governance decisions. Blocks agents during active security incidents.",
     "tags": [
       "SIEM",
       "security",
@@ -349,7 +349,7 @@
     "page": "Connectors",
     "section": "Developer",
     "url": "connectors.html#developer",
-    "body": "GitHub connector — repository access, PR state, code review status. Jira connector — issue tracking, project state. Used to govern agent actions in development workflows.",
+    "body": "GitHub connector \u2014 repository access, PR state, code review status. Jira connector \u2014 issue tracking, project state. Used to govern agent actions in development workflows.",
     "tags": [
       "GitHub",
       "Jira",
@@ -364,7 +364,7 @@
     "page": "Connectors",
     "section": "Organizational",
     "url": "connectors.html#organizational",
-    "body": "Slack connector — organizational communication signals, channel membership, message history context. Used to assess communication risk and validate communication targets.",
+    "body": "Slack connector \u2014 organizational communication signals, channel membership, message history context. Used to assess communication risk and validate communication targets.",
     "tags": [
       "Slack",
       "organizational",
@@ -377,7 +377,7 @@
     "page": "Connectors",
     "section": "Operations",
     "url": "connectors.html#operations",
-    "body": "Datadog connector — infrastructure metrics, service health. PagerDuty connector — on-call status, active incidents. Prevents agent actions during system degradation or active incidents.",
+    "body": "Datadog connector \u2014 infrastructure metrics, service health. PagerDuty connector \u2014 on-call status, active incidents. Prevents agent actions during system degradation or active incidents.",
     "tags": [
       "Datadog",
       "PagerDuty",
@@ -392,7 +392,7 @@
     "page": "Connectors",
     "section": "Agent-to-Agent",
     "url": "connectors.html#agent-to-agent",
-    "body": "Agent trust connector — trust scores, delegation history, capability declarations. AP2 mandate store — active payment mandates, spend limits, validity windows. Governs inter-agent interactions.",
+    "body": "Agent trust connector \u2014 trust scores, delegation history, capability declarations. AP2 mandate store \u2014 active payment mandates, spend limits, validity windows. Governs inter-agent interactions.",
     "tags": [
       "agent trust",
       "AP2",
@@ -438,7 +438,7 @@
     "page": "A2A & Agent Networks",
     "section": "A2A Gateway",
     "url": "a2a.html#a2a-gateway",
-    "body": "POST /v1/a2a/rpc — JSON-RPC 2.0 endpoint for agent-to-agent task delegation. Caller agent governs the delegated task through the GaaS pipeline before the callee executes. Method: tasks/send.",
+    "body": "POST /v1/a2a/rpc \u2014 JSON-RPC 2.0 endpoint for agent-to-agent task delegation. Caller agent governs the delegated task through the GaaS pipeline before the callee executes. Method: tasks/send.",
     "tags": [
       "A2A Gateway",
       "/v1/a2a/rpc",
@@ -453,7 +453,7 @@
     "page": "A2A & Agent Networks",
     "section": "Agent Trust Registry",
     "url": "a2a.html#agent-trust-registry",
-    "body": "Agent Trust Registry stores trust scores, capability declarations, and suspension state. GET /v1/a2a/agents to list. POST /v1/a2a/agents to register. Trust score 0–100 affects governance thresholds.",
+    "body": "Agent Trust Registry stores trust scores, capability declarations, and suspension state. GET /v1/a2a/agents to list. POST /v1/a2a/agents to register. Trust score 0\u2013100 affects governance thresholds.",
     "tags": [
       "trust registry",
       "trust score",
@@ -556,7 +556,7 @@
     "page": "Shadow Mode",
     "section": "Membrane Lifecycle",
     "url": "shadow-mode.html#membrane-lifecycle",
-    "body": "Membrane states: draft → shadow → live → suspended. Transition from shadow to live with POST /v1/membranes/{id}/activate. Revert from live to shadow with POST /v1/membranes/{id}/suspend.",
+    "body": "Membrane states: draft \u2192 shadow \u2192 live \u2192 suspended. Transition from shadow to live with POST /v1/membranes/{id}/activate. Revert from live to shadow with POST /v1/membranes/{id}/suspend.",
     "tags": [
       "membrane",
       "draft",
@@ -573,7 +573,7 @@
     "page": "Shadow Mode",
     "section": "What Happens Differently",
     "url": "shadow-mode.html#what-happens-differently",
-    "body": "In shadow mode, verdicts are returned in the response body but not enforced — the agent proceeds regardless. Blocked decisions are logged as would_have_blocked. The full audit record is created and hash-chained.",
+    "body": "In shadow mode, verdicts are returned in the response body but not enforced \u2014 the agent proceeds regardless. Blocked decisions are logged as would_have_blocked. The full audit record is created and hash-chained.",
     "tags": [
       "would_have_blocked",
       "not enforced",
@@ -741,7 +741,7 @@
     "page": "SDKs",
     "section": "Common Patterns",
     "url": "sdks.html#common-patterns",
-    "body": "Retry with exponential backoff on 429 and 503. Detect shadow mode from response.shadow_mode flag. Route verdicts: approve → execute, block → log and skip, escalate → queue for human review, modify → use modified_payload.",
+    "body": "Retry with exponential backoff on 429 and 503. Detect shadow mode from response.shadow_mode flag. Route verdicts: approve \u2192 execute, block \u2192 log and skip, escalate \u2192 queue for human review, modify \u2192 use modified_payload.",
     "tags": [
       "retry",
       "exponential backoff",
@@ -801,7 +801,7 @@
     "page": "Onboarding",
     "section": "Shadow Mode",
     "url": "onboarding.html#shadow-mode",
-    "body": "All new membranes start in shadow mode — 30-day zero-enforcement preview. Full governance pipeline runs on every intent but verdicts are not enforced. Use to validate rules before going live.",
+    "body": "All new membranes start in shadow mode \u2014 30-day zero-enforcement preview. Full governance pipeline runs on every intent but verdicts are not enforced. Use to validate rules before going live.",
     "tags": [
       "shadow mode",
       "30-day preview",
@@ -831,7 +831,7 @@
     "page": "Authentication",
     "section": "Obtaining an API Key",
     "url": "authentication.html#obtaining-an-api-key",
-    "body": "POST /v1/onboarding/quickstart returns apiKey in the response. Or POST /v1/api-keys to create additional keys. Keys are shown only once — store them securely immediately.",
+    "body": "POST /v1/onboarding/quickstart returns apiKey in the response. Or POST /v1/api-keys to create additional keys. Keys are shown only once \u2014 store them securely immediately.",
     "tags": [
       "obtain API key",
       "create key",
@@ -873,7 +873,7 @@
     "page": "Authentication",
     "section": "Multi-Tenancy",
     "url": "authentication.html#multi-tenancy",
-    "body": "Each API key is scoped to one organization (org_id). All data — intents, decisions, audit records, membranes — is strictly isolated by org_id. No cross-org data leakage possible.",
+    "body": "Each API key is scoped to one organization (org_id). All data \u2014 intents, decisions, audit records, membranes \u2014 is strictly isolated by org_id. No cross-org data leakage possible.",
     "tags": [
       "multi-tenancy",
       "org isolation",
@@ -1008,7 +1008,7 @@
     "page": "Webhooks",
     "section": "Registering a Webhook",
     "url": "webhooks.html#registering-a-webhook",
-    "body": "POST /v1/webhooks with endpoint URL, event types array, and optional secret. Returns webhook_id and signing_secret. Store signing_secret — used to verify all incoming payloads.",
+    "body": "POST /v1/webhooks with endpoint URL, event types array, and optional secret. Returns webhook_id and signing_secret. Store signing_secret \u2014 used to verify all incoming payloads.",
     "tags": [
       "POST /v1/webhooks",
       "register",
@@ -1038,7 +1038,7 @@
     "page": "Webhooks",
     "section": "Signature Verification (HMAC-SHA256)",
     "url": "webhooks.html#signature-verification-hmac-sha256",
-    "body": "Verify the X-GaaS-Signature header on every incoming webhook. HMAC-SHA256 over the raw request body using your signing_secret. Reject requests where signature does not match — replay attack protection.",
+    "body": "Verify the X-GaaS-Signature header on every incoming webhook. HMAC-SHA256 over the raw request body using your signing_secret. Reject requests where signature does not match \u2014 replay attack protection.",
     "tags": [
       "HMAC",
       "SHA256",
@@ -1221,7 +1221,7 @@
     "page": "Load Testing",
     "section": "Three Test Profiles",
     "url": "load-testing.html#three-test-profiles",
-    "body": "Smoke: 1 VU for 30 seconds — basic sanity check. Load: 50 VUs for 10 minutes — sustained production load. Stress: ramp to 200 VUs over 15 minutes — find breaking point.",
+    "body": "Smoke: 1 VU for 30 seconds \u2014 basic sanity check. Load: 50 VUs for 10 minutes \u2014 sustained production load. Stress: ramp to 200 VUs over 15 minutes \u2014 find breaking point.",
     "tags": [
       "smoke",
       "load",
@@ -1270,7 +1270,7 @@
     "page": "Compliance & Liability Shield",
     "section": "EU AI Act Compliance",
     "url": "compliance.html#eu-ai-act-compliance",
-    "body": "GaaS enforces Articles 9–15: risk management (Art. 9), data governance (Art. 10), technical documentation (Art. 11), transparency (Art. 13), human oversight (Art. 14), accuracy (Art. 15). High-risk AI classification handled automatically.",
+    "body": "GaaS enforces Articles 9\u201315: risk management (Art. 9), data governance (Art. 10), technical documentation (Art. 11), transparency (Art. 13), human oversight (Art. 14), accuracy (Art. 15). High-risk AI classification handled automatically.",
     "tags": [
       "Article 9",
       "Article 10",
@@ -1289,7 +1289,7 @@
     "page": "Compliance & Liability Shield",
     "section": "Governance Proof Tokens",
     "url": "compliance.html#governance-proof-tokens",
-    "body": "Governance Proof Tokens (GPT) — cryptographically signed audit bundles proving governance occurred. Download via GET /v1/audit/verification-bundle/{id}. SHA-256 hash chain, ECDSA signatures, tamper-evident ZIP.",
+    "body": "Governance Proof Tokens (GPT) \u2014 cryptographically signed audit bundles proving governance occurred. Download via GET /v1/audit/verification-bundle/{id}. SHA-256 hash chain, ECDSA signatures, tamper-evident ZIP.",
     "tags": [
       "GPT",
       "Governance Proof Token",
@@ -1493,7 +1493,7 @@
     "page": "Service Level Agreement",
     "section": "Credit Calculation",
     "url": "sla.html#credit-calculation",
-    "body": "99.5%–99.9% availability: 10% monthly credit. 99.0%–99.5%: 25% credit. Below 99.0%: 50% credit. Enterprise SLA breach triggers dedicated incident review.",
+    "body": "99.5%\u201399.9% availability: 10% monthly credit. 99.0%\u201399.5%: 25% credit. Below 99.0%: 50% credit. Enterprise SLA breach triggers dedicated incident review.",
     "tags": [
       "10% credit",
       "25% credit",
@@ -1867,7 +1867,7 @@
     "page": "The Record Is Free Forever",
     "section": null,
     "url": "record-free-forever.html",
-    "body": "GaaS's standing pledge: the tamper-evident audit record — its creation, export, and cryptographic verification — is free on every plan, forever. Never paywalled, immutability never weakened. Enforced by a CI invariant that fails any change gating audit, verify, appeal, or contest endpoints.",
+    "body": "GaaS's standing pledge: the tamper-evident audit record \u2014 its creation, export, and cryptographic verification \u2014 is free on every plan, forever. Never paywalled, immutability never weakened. Enforced by a CI invariant that fails any change gating audit, verify, appeal, or contest endpoints.",
     "tags": [
       "pledge",
       "audit",
@@ -1882,7 +1882,7 @@
     "page": "The Record Is Free Forever",
     "section": "What this covers, precisely",
     "url": "record-free-forever.html#what-this-covers",
-    "body": "Record creation on every tier, bulk and streaming export, hash-chain verification, signed proof tokens, offline verification bundles, appeals and contest — all free. Retention length varies by plan; verification bundles remain verifiable offline forever.",
+    "body": "Record creation on every tier, bulk and streaming export, hash-chain verification, signed proof tokens, offline verification bundles, appeals and contest \u2014 all free. Retention length varies by plan; verification bundles remain verifiable offline forever.",
     "tags": [
       "audit export",
       "verification",
@@ -1912,7 +1912,7 @@
     "page": "The auth.md Spec",
     "section": "Validate in CI, today",
     "url": "spec.html#validate",
-    "body": "pip install gaas-spec. gaas validate exits non-zero with findings — local-only, no API key, no network. gaas sign and gaas verify handle ES256 detached attestation signatures over the bundle manifest.",
+    "body": "pip install gaas-spec. gaas validate exits non-zero with findings \u2014 local-only, no API key, no network. gaas sign and gaas verify handle ES256 detached attestation signatures over the bundle manifest.",
     "tags": [
       "cli",
       "validate",
@@ -1935,6 +1935,21 @@
       "escalation",
       "deliberation",
       "routine"
+    ]
+  },
+  {
+    "id": "sdks#pydantic-ai",
+    "page": "SDKs",
+    "section": "Pydantic AI",
+    "url": "sdks.html#pydantic-ai",
+    "body": "Govern Pydantic AI agent tools with GaaS. govern_tools / govern_toolset wrap any toolset; BLOCK raises GovernanceBlockedError and halts agent.run() natively. Hold-and-poll on ESCALATE. pip install gaas-pydantic-ai.",
+    "tags": [
+      "pydantic-ai",
+      "sdk",
+      "adapter",
+      "python",
+      "governance",
+      "tools"
     ]
   }
 ]

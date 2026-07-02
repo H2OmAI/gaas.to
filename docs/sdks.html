@@ -212,7 +212,7 @@
   <main>
     <h1>SDKs</h1>
     <p class="subtitle">
-      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, the OpenAI Agents SDK, CrewAI, and the Vercel AI SDK &mdash; plus an MCP server for Claude Code and Claude Desktop. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, the OpenAI Agents SDK, CrewAI, Pydantic AI, and the Vercel AI SDK &mdash; plus an MCP server for Claude Code and Claude Desktop. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
     <h2 id="at-a-glance">At a Glance</h2>
@@ -270,6 +270,12 @@
         <td><code>@gaas/vercel-ai</code></td>
         <td><code>npm install @gaas/vercel-ai</code></td>
         <td>Node.js 18+, ai v7</td>
+      </tr>
+      <tr>
+        <td>Pydantic AI</td>
+        <td><code>gaas-pydantic-ai</code></td>
+        <td><code>pip install gaas-pydantic-ai</code></td>
+        <td>Python 3.11+</td>
       </tr>
     </table>
 
@@ -686,6 +692,55 @@ researcher = <span class="func">Agent</span>(
     <span class="func">print</span>(e.decision_id)            <span class="comment"># GaaS decision ID</span>
     <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
     <span class="func">print</span>(e.governance_proof_token)  <span class="comment"># ECDSA-signed proof token ID</span></code></pre>
+
+    <hr class="divider">
+
+    <!-- ── Pydantic AI ──────────────────────────────────────────── -->
+
+    <h2 id="pydantic-ai">Pydantic AI</h2>
+
+    <h3>Install</h3>
+    <pre><code>pip install gaas-pydantic-ai[pydantic-ai]</code></pre>
+
+    <h3>Govern a Toolset</h3>
+    <pre><code><span class="keyword">from</span> pydantic_ai <span class="keyword">import</span> Agent
+<span class="keyword">from</span> gaas_pydantic_ai <span class="keyword">import</span> govern_tools, GaaSGovernanceConfig
+
+config = <span class="func">GaaSGovernanceConfig</span>(
+    api_url=<span class="string">"https://api.gaas.is"</span>,
+    api_key=<span class="string">"gsk_your_key"</span>,
+    agent_id=<span class="string">"my-agent"</span>,
+)
+
+agent = <span class="func">Agent</span>(
+    <span class="string">"anthropic:claude-sonnet-5"</span>,
+    toolsets=[<span class="func">govern_tools</span>([search_web, send_email], config=config)],
+)
+result = <span class="keyword">await</span> agent.<span class="func">run</span>(<span class="string">"..."</span>)</code></pre>
+    <p>
+      Wrap an existing toolset with <code>govern_toolset(toolset, config=config)</code>.
+      One wrapper governs every tool in the set; tool names and parsed arguments flow
+      into the governance intent.
+    </p>
+
+    <h3>BLOCK Halts the Run &mdash; Natively</h3>
+    <pre><code><span class="keyword">from</span> gaas_pydantic_ai <span class="keyword">import</span> GovernanceBlockedError
+
+<span class="keyword">try</span>:
+    result = <span class="keyword">await</span> agent.<span class="func">run</span>(<span class="string">"wire $250k to the new vendor"</span>)
+<span class="keyword">except</span> <span class="type">GovernanceBlockedError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(e.verdict)               <span class="comment"># "BLOCK", "ESCALATE", "ESCALATE_DENY", ...</span>
+    <span class="func">print</span>(e.decision_id)            <span class="comment"># GaaS decision ID</span>
+    <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
+    <span class="func">print</span>(e.governance_proof_token)  <span class="comment"># ECDSA-signed proof token ID</span></code></pre>
+    <p>
+      Pydantic AI propagates ordinary exceptions out of <code>agent.run()</code> by
+      design, so a blocked action halts the run without any framework workarounds.
+      The adapter deliberately never uses <code>ModelRetry</code> &mdash; the model cannot
+      route around a block. Hold-and-poll on ESCALATE is supported via
+      <code>hold_on_escalate=True</code> (approve/modify proceeds; deny/timeout raises
+      <code>ESCALATE_DENY</code> / <code>ESCALATE_TIMEOUT</code>).
+    </p>
 
     <hr class="divider">
 
