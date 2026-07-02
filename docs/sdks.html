@@ -212,7 +212,7 @@
   <main>
     <h1>SDKs</h1>
     <p class="subtitle">
-      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, the OpenAI Agents SDK, and CrewAI &mdash; plus an MCP server for Claude Code and Claude Desktop. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+      Official client libraries for Python, TypeScript, Java, LangChain/LangGraph, the OpenAI Agents SDK, CrewAI, and the Vercel AI SDK &mdash; plus an MCP server for Claude Code and Claude Desktop. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
     <h2 id="at-a-glance">At a Glance</h2>
@@ -264,6 +264,12 @@
         <td><code>gaas-crewai</code></td>
         <td><code>pip install gaas-crewai</code></td>
         <td>Python 3.11+</td>
+      </tr>
+      <tr>
+        <td>Vercel AI SDK</td>
+        <td><code>@gaas/vercel-ai</code></td>
+        <td><code>npm install @gaas/vercel-ai</code></td>
+        <td>Node.js 18+, ai v7</td>
       </tr>
     </table>
 
@@ -680,6 +686,49 @@ researcher = <span class="func">Agent</span>(
     <span class="func">print</span>(e.decision_id)            <span class="comment"># GaaS decision ID</span>
     <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
     <span class="func">print</span>(e.governance_proof_token)  <span class="comment"># ECDSA-signed proof token ID</span></code></pre>
+
+    <hr class="divider">
+
+    <!-- ── Vercel AI SDK ────────────────────────────────────────── -->
+
+    <h2 id="vercel-ai">Vercel AI SDK</h2>
+
+    <h3>Install</h3>
+    <pre><code>npm install @gaas/vercel-ai</code></pre>
+    <p><code>ai</code> v7 is a peer dependency.</p>
+
+    <h3>Govern a ToolSet</h3>
+    <pre><code><span class="keyword">import</span> { generateText, stepCountIs } <span class="keyword">from</span> <span class="string">"ai"</span>;
+<span class="keyword">import</span> { governTools, stopOnGovernanceBlock } <span class="keyword">from</span> <span class="string">"@gaas/vercel-ai"</span>;
+
+<span class="keyword">const</span> config = { apiKey: <span class="string">"gsk_your_key"</span>, agentId: <span class="string">"my-agent"</span> };
+
+<span class="keyword">const</span> result = <span class="keyword">await</span> <span class="func">generateText</span>({
+  model,
+  tools: <span class="func">governTools</span>({ sendEmail, searchWeb }, config),
+  stopWhen: [<span class="func">stepCountIs</span>(5), <span class="func">stopOnGovernanceBlock</span>()],
+  prompt: <span class="string">"..."</span>,
+});</code></pre>
+    <p>
+      Every governed tool call submits a governance intent before executing. Tool
+      metadata (<code>description</code>, <code>inputSchema</code>) is preserved; the
+      ToolSet key becomes the tool name on the intent. Provider-executed tools (no
+      <code>execute</code>) pass through unchanged.
+    </p>
+
+    <h3>Verdict Semantics</h3>
+    <p>
+      On BLOCK the tool <strong>never executes</strong> and
+      <code>GovernanceBlockedError</code> is thrown from <code>execute</code>. The AI
+      SDK surfaces tool errors to the model as <code>tool-error</code> parts and the
+      generation continues &mdash; each retry is re-governed and lands on the signed
+      audit chain. Add <code>stopOnGovernanceBlock()</code> to <code>stopWhen</code> to
+      halt the agent loop at the blocked step instead; inspect the final step's
+      <code>tool-error</code> part for the decision ID and blocking policies.
+      Hold-and-poll on ESCALATE is supported via <code>holdOnEscalate: true</code>
+      (approve/modify proceeds; deny/timeout throws <code>ESCALATE_DENY</code> /
+      <code>ESCALATE_TIMEOUT</code>).
+    </p>
 
     <hr class="divider">
 
