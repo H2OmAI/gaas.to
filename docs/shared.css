@@ -1,5 +1,12 @@
-/* ── GaaS Docs — Shared header/footer chrome ────────────────────────── */
-/* Linked by all interior pages. index.html carries its own inline styles. */
+/* ── GaaS Docs — Shared header chrome ─────────────────────────────────────
+ *
+ * Header only. Linked by search.html alone — every other page inlines its own
+ * header styles and uses a text logo, so linking this file elsewhere would
+ * silently restyle those headers (.logo-img forces a 120px image logo).
+ *
+ * The FOOTER lives in footer.css, which every page links. It used to live
+ * here too, and the duplication is exactly what let the two drift apart.
+ * ------------------------------------------------------------------------ */
 
 header {
   position: relative;
@@ -52,48 +59,12 @@ header nav .nav-cta {
 
 header nav .nav-cta:hover { background: #00e6b8; }
 
-/* ── Footer ───────────────────────────────────────────────────────────── */
-
-footer {
-  position: relative;
-  z-index: 1;
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 2rem;
-  border-top: 1px solid #1e2533;
-  font-size: 0.8rem;
-  color: #484f58;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-footer a {
-  color: #484f58;
-  text-decoration: none;
-}
-
-footer a:hover { color: #8b949e; }
-
-.cert-seal {
-  display: inline-flex;
-  align-items: center;
-  opacity: 0.85;
-  transition: opacity 0.15s, filter 0.15s;
-  text-decoration: none;
-}
-
-.cert-seal:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.3));
-}
+/* Footer rules deliberately live in footer.css, not here — see the note at
+ * the top of this file. Do not add footer or .cert-seal rules to shared.css. */
 
 /* ── Responsive ────────────────────────────────────────────────────────── */
 
 @media (max-width: 600px) {
   header { padding: 1rem 1.25rem; }
-  footer { flex-direction: column; text-align: center; }
   .logo-img { height: 80px; }
 }

@@ -169,24 +169,14 @@
       margin: 2.5rem 0;
     }
 
-    footer {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-top: 1px solid #1e2533;
-      font-size: 0.8rem;
-      color: #484f58;
-      text-align: center;
-    }
 
-    footer a { color: #484f58; text-decoration: none; }
-    footer a:hover { color: #8b949e; }
 
     @media (max-width: 600px) {
       h1 { font-size: 1.75rem; }
       main { padding: 2.5rem 1.25rem; }
     }
   </style>
+  <link rel="stylesheet" href="footer.css">
 </head>
 <body>
 <canvas id="meshCanvas"></canvas>
@@ -398,9 +388,74 @@ Content-Type: application/json
 
   </main>
 
-  <footer>
-    <a href="https://gaas.is">&copy; H2Om</a>
-  </footer>
+<footer>
+  <div class="gradient-divider"></div>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      GaaS by <a href="https://h2om.ai">H2Om</a> &copy; 2026 &mdash; BSL&nbsp;1.1 &rarr; Apache&nbsp;2.0 on 2030-02-12
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Docs</div>
+      <div class="footer-links-col">
+        <a href="index.html">Docs Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="intent-api.html">Intent API</a>
+        <a href="authentication.html">Authentication</a>
+        <a href="spec.html">Spec</a>
+        <a href="search.html">Search</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Platform</div>
+      <div class="footer-links-col">
+        <a href="policies.html">Policies</a>
+        <a href="connectors.html">Connectors</a>
+        <a href="sdks.html">SDKs</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="webhooks.html">Webhooks</a>
+        <a href="a2a.html">A2A Protocol</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Operate</div>
+      <div class="footer-links-col">
+        <a href="observability.html">Observability</a>
+        <a href="shadow-mode.html">Shadow Mode</a>
+        <a href="advanced-features.html">Advanced Features</a>
+        <a href="rate-limits.html">Rate Limits</a>
+        <a href="load-testing.html">Load Testing</a>
+        <a href="billing-and-quotas.html">Billing &amp; Quotas</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Compliance</div>
+      <div class="footer-links-col">
+        <a href="compliance.html">Compliance</a>
+        <a href="gdpr-compliance.html">GDPR</a>
+        <a href="sla.html">SLA</a>
+        <a href="record-free-forever.html">Record Free Forever</a>
+        <a href="api-reference.html">API Reference</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Company</div>
+      <div class="footer-links-col">
+        <a href="https://gaas.is">gaas.is</a>
+        <a href="https://gaas.is/pricing">Pricing</a>
+        <a href="https://gaas.is/trust">Trust &amp; Audit</a>
+        <a href="https://gaas.is/start">Get Started</a>
+        <a href="https://the.gaas.is">Sign In</a>
+        <a href="https://gaas.is/careers">Careers</a>
+        <a href="https://github.com/H2OmAI">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-legal-col">
+      <a href="https://gaas.is/privacy">Privacy</a>
+      <a href="https://gaas.is/terms">Terms</a>
+    </div>
+  </div>
+</footer>
 <script src="search.js"></script>
 <script src="constellation.js"></script>
 </body>

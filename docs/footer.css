@@ -1,0 +1,132 @@
+/* ── GaaS Docs — Shared footer ────────────────────────────────────────────
+ *
+ * Linked by EVERY page in docs/public/, immediately after that page's inline
+ * <style> block so these rules win the cascade.
+ *
+ * Ported from the gaas.is footer (marketing site) and fully de-tokenized:
+ * docs/public defines no :root and no custom properties, so an inherited
+ * var() would silently resolve to `unset` — and an invalid var() inside a
+ * `background` shorthand kills the whole declaration. Every value here is a
+ * literal. Do not reintroduce var().
+ *
+ * Colors are AA-checked against the page background #0a0e17:
+ *   #8b949e  6.27:1  PASS  (resting text and links)
+ *   #c9d1d9 12.50:1  PASS  (hover)
+ * The old footer color #484f58 was 2.33:1 and is deliberately not used here.
+ * ------------------------------------------------------------------------ */
+
+footer {
+  position: relative; /* lifts the footer above the #meshCanvas star-field */
+  z-index: 1;
+  /* Wider than the 720px body on purpose. At 720px the usable track is 656px,
+   * which fits only 3 columns at the 150px minimum -- the five link columns
+   * then wrapped 3+2 and left a ragged empty slot. 960px lands all five in one
+   * clean row. A footer wider than the content column is a standard pattern. */
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem 3rem;
+  font-size: 0.8rem;
+  color: #8b949e;
+}
+
+.gradient-divider {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  border: none;
+  margin-bottom: 52px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 170, 0.2) 20%,
+    rgba(0, 212, 170, 0.15) 50%,
+    rgba(0, 212, 170, 0.2) 80%,
+    transparent 100%
+  );
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 32px 24px;
+  align-items: start;
+}
+
+/* Brand line. gaas.is splits this across .footer-brand-col + .footer-brand;
+ * merged here because there is no logo <img> to sit beside. Its flex/gap are
+ * deliberately dropped — on raw text they gap-space every inline run. */
+.footer-brand-col {
+  grid-column: 1 / -1;
+  margin-bottom: 8px;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: #8b949e;
+}
+
+.footer-column-title {
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8b949e;
+  margin-bottom: 12px;
+}
+
+.footer-links-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* .footer-legal-col a MUST be here — without it those links fall through to
+ * the browser default #0000EE on a near-black background. */
+.footer-links-col a,
+.footer-legal-col a,
+.footer-brand-col a {
+  font-size: 14px;
+  color: #8b949e;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-links-col a:hover,
+.footer-legal-col a:hover,
+.footer-brand-col a:hover {
+  color: #c9d1d9;
+}
+
+.footer-brand-col a {
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Explicit full-width row. Without this, auto-fit places it as an extra
+ * inline column beside the link columns instead of a bottom row. */
+.footer-legal-col {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #1e2533;
+}
+
+@media (max-width: 600px) {
+  footer {
+    padding: 0 1.25rem 2.5rem;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand-col {
+    text-align: center;
+  }
+
+  .footer-legal-col {
+    justify-content: center;
+  }
+}

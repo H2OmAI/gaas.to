@@ -1,0 +1,19 @@
+# docs/public — binary asset integrity manifest
+#
+# Guards the failure mode in CLAUDE.md gotcha #43: a commit can replace an
+# image's BYTES with entirely different artwork while touching no HTML, so
+# grep, code review, and text-based CI all miss it. gaas-shield.png carried
+# the wrong artwork for ~4.5 months exactly this way.
+#
+# Verified by scripts/verify-public-docs.py (run in CI and pre-commit).
+# If you INTENTIONALLY change an asset, regenerate this file in the SAME
+# commit and state the old -> new artwork in the commit body.
+#
+# Regenerate:  python scripts/verify-public-docs.py --update-assets
+#
+# sha256  bytes  dimensions  filename
+cfb46d886fbaeaa636a0270f686191b1bf2307eb109709e15333f1446238473b  215593  500x500  favicon.png
+db88263af686591dc02aa5b9a74cb5c7bc94ff07802177290301d09c6b612239  53691  320x320  gaas-certified-seal.png
+0d391147885d53b5d8294add637fa64435b24805faf854145545f4eecce18ba9  34538  320x320  gaas-certified-seal.webp
+90c37382af49d6665bd1561d19676fce4f5a88e0114511dc0ea1f2e35c3d23ce  824894  700x701  gaas-shield.png
+d812445e77d2cdf61e1267e017424258187f265102078fbf8b10b3808c880875  65093  600x334  logo.png
