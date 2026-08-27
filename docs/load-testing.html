@@ -408,19 +408,22 @@ k6 run tests/load/stress.js</code></pre>
 
     <h2 id="ci-integration">CI Integration</h2>
     <p>
-      Load tests run automatically in the deployment pipeline after staging deploy and before production. The GitHub Actions workflow:
+      A k6 smoke run executes automatically as part of the staging gate. Every merge to <code>main</code> deploys to a real staging environment; the gate must pass before that build becomes eligible for promotion to production. The GitHub Actions workflow:
     </p>
 
     <ul>
-      <li>Pulls the freshly built API container image from GHCR</li>
-      <li>Starts it with <code>GAAS_OPEN_MODE=true</code> and <code>GAAS_RATE_LIMIT_ENABLED=false</code></li>
-      <li>Waits for the health endpoint to respond</li>
-      <li>Runs <strong>smoke</strong> tests (gate) then <strong>load</strong> tests</li>
-      <li>Uploads JSON results as build artifacts (30-day retention)</li>
+      <li>Builds both container images and pushes them to Amazon ECR, addressed by digest</li>
+      <li>Runs database migrations and deploys those exact digests to the staging cluster</li>
+      <li>Runs the smoke suite against the deployed service, then a <strong>k6 smoke</strong> run (1 virtual user, 1 iteration)</li>
+      <li>Tags the digests as promotable only if every check passes</li>
     </ul>
 
     <div class="note">
-      <strong>Rate limiting disabled in CI.</strong> Load tests measure pipeline performance, not rate limiter behavior. The stress test can be run separately with rate limiting enabled to validate backpressure handling.
+      <strong>The gate runs a smoke check, not a load test.</strong> The heavier <code>load</code> and <code>stress</code> profiles described on this page are run deliberately, not on every merge. What the gate runs is a single-iteration k6 smoke pass — its value is that it exercises the real system, not that it applies load. It runs against the deployed service with authentication and rate limiting on: k6 targets staging through the load balancer using a real organisation API key, so a run exercises the ALB, the container, Postgres and the full authentication path — not a throwaway container with its protections switched off. Correctness thresholds (request-failure rate and check success) are identical to production and are never relaxed; only latency ceilings differ, because staging runs on half of production's CPU and memory.
+    </div>
+
+    <div class="note">
+      <strong>Promotion never rebuilds.</strong> Production receives the byte-identical image digests that passed the staging gate. A rebuild would produce different bytes from the ones that were tested, which would make the gate decorative.
     </div>
 
     <hr class="divider">
