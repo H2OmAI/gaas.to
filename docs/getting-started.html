@@ -362,7 +362,7 @@ Content-Type: application/json
     <h3>Common Errors</h3>
     <p><strong>401 Unauthorized</strong> &mdash; Invalid or missing API key. Check that you're including <code>X-API-Key</code> in the request headers with the key from quickstart.</p>
     <p><strong>402 Payment Required</strong> &mdash; Monthly quota exceeded. Upgrade your plan or wait until the quota resets at the start of the next billing period.</p>
-    <p><strong>429 Too Many Requests</strong> &mdash; Rate limit exceeded. GaaS enforces per-organization rate limits (default: 100 requests/minute). Implement exponential backoff and retry after the period specified in the <code>Retry-After</code> header.</p>
+    <p><strong>429 Too Many Requests</strong> &mdash; Rate limit exceeded. GaaS enforces rate limits per API key and endpoint category (see <a href="rate-limits.html">Rate Limits</a>). Implement exponential backoff and retry after the period specified in the <code>Retry-After</code> header.</p>
 
     <hr class="divider">
 

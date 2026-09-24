@@ -726,11 +726,11 @@
     "page": "SDKs",
     "section": "Java",
     "url": "sdks.html#java",
-    "body": "Maven dependency: com.gaas/gaas-sdk. GaasClient builder pattern. CompletableFuture for async. Java 11+ required. Builder pattern for intent construction.",
+    "body": "Java SDK com.gaas:gaas-sdk — in development, not yet published to Maven Central; call the REST API directly until it is. GaaSClient with CompletableFuture for async. Java 17+. IntentBuilder for intent construction.",
     "tags": [
       "Maven",
       "gaas-sdk",
-      "GaasClient",
+      "GaaSClient",
       "Java",
       "CompletableFuture",
       "builder"
@@ -801,10 +801,10 @@
     "page": "Onboarding",
     "section": "Shadow Mode",
     "url": "onboarding.html#shadow-mode",
-    "body": "All new membranes start in shadow mode — 30-day zero-enforcement preview. Full governance pipeline runs on every intent but verdicts are not enforced. Use to validate rules before going live.",
+    "body": "All new membranes start in shadow mode — a 14-day zero-enforcement preview. Every intent is validated, enriched, and checked against your policies (deliberation is skipped in shadow mode), but verdicts are not enforced. Use to validate rules before going live.",
     "tags": [
       "shadow mode",
-      "30-day preview",
+      "14-day preview",
       "zero enforcement",
       "validate",
       "new membrane"

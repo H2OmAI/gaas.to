@@ -287,41 +287,42 @@ X-API-Key: your_api_key
 <span class="comment"># Response (when rate limit exceeded):</span>
 HTTP/1.1 429 Too Many Requests
 Retry-After: 42
-X-RateLimit-Limit: 20
-X-RateLimit-Remaining: 0
-X-RateLimit-Reset: 1707824460
+RateLimit-Limit: 20
+RateLimit-Remaining: 0
+RateLimit-Reset: 1707824460
 Content-Type: application/json
 
 {
   "error": {
     "code": "rate_limit_exceeded",
-    "message": "Rate limit exceeded for POST /v1/intents. Limit: 20 requests per minute. Retry after 42 seconds.",
-    "retry_after_seconds": 42
+    "message": "Rate limit exceeded. Please try again later.",
+    "details": [{"retry_after_seconds": 42}],
+    "request_id": "9f1c2e7a4b3d4c21a0e5f6b7c8d9e0f1"
   }
 }</code></pre>
 
     <h3>Rate Limit Headers</h3>
     <p>
-      All successful responses (2xx) include rate limit headers:
+      Every response from a rate-limited route includes these headers (IETF draft names, no <code>X-</code> prefix):
     </p>
 
     <ul>
-      <li><code>X-RateLimit-Limit</code> — Maximum requests allowed in the window</li>
-      <li><code>X-RateLimit-Remaining</code> — Requests remaining in current window</li>
-      <li><code>X-RateLimit-Reset</code> — Unix timestamp when the rate limit resets</li>
+      <li><code>RateLimit-Limit</code> — Maximum requests allowed in the window</li>
+      <li><code>RateLimit-Remaining</code> — Requests remaining in current window</li>
+      <li><code>RateLimit-Reset</code> — Unix timestamp when the rate limit resets</li>
     </ul>
 
     <p>
-      On 429 responses, the <code>Retry-After</code> header indicates the number of seconds to wait before retrying.
+      On 429 responses, the <code>Retry-After</code> header and <code>error.details[0].retry_after_seconds</code> give the number of seconds to wait before retrying. The SDKs raise their base error type (<code>GaaSError</code> in Python and TypeScript) with <code>status_code</code> / <code>statusCode</code> 429 and the same <code>details</code>.
     </p>
 
     <hr class="divider">
 
     <h2 id="rate-limit-scoping">Rate Limit Scoping</h2>
 
-    <h3>Per API Key (org_id)</h3>
+    <h3>Per API Key</h3>
     <p>
-      Most rate limits are scoped to your API key (organization). This means all requests from your organization count toward the same limit, regardless of which agent or service is making the request.
+      Rate limits are counted per API key: every request that carries the same <code>X-API-Key</code> counts toward the same limit, regardless of which agent or service sends it. Each key has its own budget, so separate keys for separate services do not share a limit. Requests without an API key are counted per client IP address.
     </p>
 
     <h3>Per IP Address</h3>
@@ -334,45 +335,52 @@ Content-Type: application/json
     <h2 id="handling-rate-limits">Handling Rate Limits</h2>
 
     <h3>Python (gaas_sdk)</h3>
-    <pre><code><span class="keyword">import</span> time
+    <pre><code><span class="keyword">import</span> asyncio
 <span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient
-<span class="keyword">from</span> gaas_sdk.exceptions <span class="keyword">import</span> RateLimitError
+<span class="keyword">from</span> gaas_sdk.exceptions <span class="keyword">import</span> GaaSError
 
 <span class="keyword">async with</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, headers={<span class="string">"X-API-Key"</span>: api_key}) <span class="keyword">as</span> client:
     <span class="keyword">try</span>:
         response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)
-    <span class="keyword">except</span> RateLimitError <span class="keyword">as</span> e:
-        retry_after = e.retry_after_seconds
+    <span class="keyword">except</span> GaaSError <span class="keyword">as</span> e:
+        <span class="keyword">if</span> e.status_code != 429:
+            <span class="keyword">raise</span>
+        retry_after = (e.details <span class="keyword">or</span> [{}])[0].<span class="func">get</span>(<span class="string">"retry_after_seconds"</span>, 1)
         <span class="func">print</span>(<span class="string">f"Rate limited. Retrying after {retry_after} seconds..."</span>)
-        time.<span class="func">sleep</span>(retry_after)
+        <span class="keyword">await</span> asyncio.<span class="func">sleep</span>(retry_after)
         response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)  <span class="comment"># Retry</span></code></pre>
 
     <h3>TypeScript (@governancehq/sdk)</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient, RateLimitError } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
+    <pre><code><span class="keyword">import</span> { GaaSClient, GaaSError } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
 
-<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({ baseUrl: <span class="string">'https://api.gaas.is'</span>, headers: { ... } });
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({ baseUrl: <span class="string">'https://api.gaas.is'</span>, headers: { <span class="string">'X-API-Key'</span>: apiKey } });
 
 <span class="keyword">try</span> {
   <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);
 } <span class="keyword">catch</span> (error) {
-  <span class="keyword">if</span> (error <span class="keyword">instanceof</span> RateLimitError) {
-    <span class="keyword">const</span> retryAfter = error.retryAfterSeconds;
+  <span class="keyword">if</span> (error <span class="keyword">instanceof</span> GaaSError &amp;&amp; error.statusCode === 429) {
+    <span class="keyword">const</span> retryAfter = <span class="func">Number</span>(error.details[0]?.retry_after_seconds ?? 1);
     console.<span class="func">log</span>(<span class="string">`Rate limited. Retrying after ${retryAfter}s...`</span>);
-    <span class="keyword">await new</span> <span class="func">Promise</span>(resolve => <span class="func">setTimeout</span>(resolve, retryAfter * 1000));
+    <span class="keyword">await new</span> <span class="func">Promise</span>(resolve =&gt; <span class="func">setTimeout</span>(resolve, retryAfter * 1000));
     <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);  <span class="comment">// Retry</span>
+  } <span class="keyword">else</span> {
+    <span class="keyword">throw</span> error;
   }
 }</code></pre>
 
     <h3>Java (com.gaas.sdk)</h3>
+    <p>The Java SDK is not yet published to Maven Central (see <a href="sdks.html#java">SDKs</a>). Once it is, the same pattern applies:</p>
     <pre><code><span class="keyword">import</span> com.gaas.sdk.GaaSClient;
-<span class="keyword">import</span> com.gaas.sdk.exceptions.RateLimitException;
+<span class="keyword">import</span> com.gaas.sdk.exceptions.GaaSException;
 
 <span class="keyword">try</span> {
     GaaSResponse response = client.<span class="func">submitIntent</span>(intent);
-} <span class="keyword">catch</span> (RateLimitException e) {
-    <span class="keyword">int</span> retryAfter = e.<span class="func">getRetryAfterSeconds</span>();
+} <span class="keyword">catch</span> (GaaSException e) {
+    <span class="keyword">if</span> (e.<span class="func">getStatusCode</span>() == <span class="keyword">null</span> || e.<span class="func">getStatusCode</span>() != 429) <span class="keyword">throw</span> e;
+    Object v = e.<span class="func">getDetails</span>().<span class="func">isEmpty</span>() ? <span class="keyword">null</span> : e.<span class="func">getDetails</span>().<span class="func">get</span>(0).<span class="func">get</span>(<span class="string">"retry_after_seconds"</span>);
+    <span class="keyword">int</span> retryAfter = v <span class="keyword">instanceof</span> Number n ? n.<span class="func">intValue</span>() : 1;
     System.out.<span class="func">println</span>(<span class="string">"Rate limited. Retrying after "</span> + retryAfter + <span class="string">" seconds..."</span>);
-    Thread.<span class="func">sleep</span>(retryAfter * 1000);
+    Thread.<span class="func">sleep</span>(retryAfter * 1000L);
     GaaSResponse response = client.<span class="func">submitIntent</span>(intent);  <span class="comment">// Retry</span>
 }</code></pre>
 
@@ -386,15 +394,14 @@ Content-Type: application/json
     </p>
 
     <pre><code><span class="keyword">async def</span> <span class="func">submit_with_backoff</span>(client, intent, max_retries=3):
-    retry_delay = 1
     <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="func">range</span>(max_retries):
         <span class="keyword">try</span>:
             <span class="keyword">return await</span> client.<span class="func">submit_intent</span>(intent)
-        <span class="keyword">except</span> RateLimitError <span class="keyword">as</span> e:
-            <span class="keyword">if</span> attempt == max_retries - 1:
-                <span class="keyword">raise</span>  <span class="comment"># Final attempt failed</span>
-            retry_delay = e.retry_after_seconds * (2 ** attempt)
-            <span class="keyword">await</span> asyncio.<span class="func">sleep</span>(retry_delay)</code></pre>
+        <span class="keyword">except</span> GaaSError <span class="keyword">as</span> e:
+            <span class="keyword">if</span> e.status_code != 429 <span class="keyword">or</span> attempt == max_retries - 1:
+                <span class="keyword">raise</span>  <span class="comment"># Not a rate limit, or final attempt failed</span>
+            retry_after = (e.details <span class="keyword">or</span> [{}])[0].<span class="func">get</span>(<span class="string">"retry_after_seconds"</span>, 1)
+            <span class="keyword">await</span> asyncio.<span class="func">sleep</span>(retry_after * (2 ** attempt))</code></pre>
 
     <h3>2. Batch Requests Where Possible</h3>
     <p>
@@ -403,10 +410,11 @@ Content-Type: application/json
 
     <h3>3. Monitor Rate Limit Headers</h3>
     <p>
-      Check <code>X-RateLimit-Remaining</code> on every response. If it's low (e.g., <10), slow down your request rate proactively to avoid hitting the limit.
+      Check <code>RateLimit-Remaining</code> on every response. If it's low (e.g., <10), slow down your request rate proactively to avoid hitting the limit.
     </p>
 
-    <pre><code>remaining = int(response.headers[<span class="string">'X-RateLimit-Remaining'</span>])
+    <pre><code><span class="comment"># With a raw HTTP client (for example httpx):</span>
+remaining = int(response.headers[<span class="string">'RateLimit-Remaining'</span>])
 <span class="keyword">if</span> remaining < 10:
     <span class="func">print</span>(<span class="string">"Approaching rate limit. Slowing down requests..."</span>)
     time.<span class="func">sleep</span>(5)  <span class="comment"># Pause before next request</span></code></pre>
@@ -444,7 +452,7 @@ Content-Type: application/json
 
     <h3>Getting 429 Errors Despite Low Traffic</h3>
     <p><strong>Cause:</strong> Multiple services or agents sharing the same API key are collectively exceeding the limit.</p>
-    <p><strong>Solution:</strong> Monitor <code>X-RateLimit-Remaining</code> headers. Consider using separate API keys for different services (requires separate organizations).</p>
+    <p><strong>Solution:</strong> Monitor <code>RateLimit-Remaining</code> headers. Consider using separate API keys for different services (requires separate organizations).</p>
 
     <h3>Rate Limit Not Resetting</h3>
     <p><strong>Cause:</strong> Sliding window means the limit resets gradually as old requests age out of the 1-minute window, not all at once.</p>
