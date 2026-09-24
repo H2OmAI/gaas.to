@@ -239,7 +239,7 @@
       <tbody>
         <tr>
           <td><strong>Intent Submission</strong></td>
-          <td>20 requests</td>
+          <td>120 requests</td>
           <td>Per minute</td>
           <td><code>POST /v1/intents</code><br><code>POST /v1/intents/batch</code></td>
         </tr>
@@ -287,7 +287,7 @@ X-API-Key: your_api_key
 <span class="comment"># Response (when rate limit exceeded):</span>
 HTTP/1.1 429 Too Many Requests
 Retry-After: 42
-RateLimit-Limit: 20
+RateLimit-Limit: 120
 RateLimit-Remaining: 0
 RateLimit-Reset: 1707824460
 Content-Type: application/json
@@ -421,7 +421,7 @@ remaining = int(response.headers[<span class="string">'RateLimit-Remaining'</spa
 
     <h3>4. Use Shadow Mode for Load Testing</h3>
     <p>
-      Shadow mode intent submissions (<code>?mode=shadow</code>) are still subject to rate limits. When load testing, ensure your test traffic doesn't exceed the 20 req/min intent submission limit. Consider using multiple API keys to distribute load.
+      Shadow mode intent submissions (<code>?mode=shadow</code>) are still subject to rate limits. When load testing, ensure your test traffic doesn't exceed the 120 req/min intent submission limit. Consider using multiple API keys to distribute load.
     </p>
 
     <h3>5. Cache Read-Only Data</h3>
@@ -441,7 +441,7 @@ remaining = int(response.headers[<span class="string">'RateLimit-Remaining'</spa
     </p>
 
     <ul>
-      <li>Higher intent submission limits (e.g., 100 req/min instead of 20)</li>
+      <li>Intent submission limits above the default 120 req/min</li>
       <li>Dedicated API endpoints with isolated rate limits</li>
       <li>Burst allowances (temporary rate limit increases)</li>
     </ul>
