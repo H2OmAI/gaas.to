@@ -517,7 +517,7 @@ config = <span class="func">GaaSGovernanceConfig</span>(
     api_key=<span class="string">"gsk_your_key"</span>,
     agent_id=<span class="string">"my-langchain-agent"</span>,
     block_on_escalate=<span class="keyword">True</span>,     <span class="comment"># raise on ESCALATE verdicts too</span>
-    timeout_seconds=<span class="number">5.0</span>,
+    timeout_seconds=<span class="number">240.0</span>,  <span class="comment"># enough for a deliberated decision (30-60 s)</span>
     sensitivity=<span class="string">"INTERNAL"</span>,
 )</code></pre>
 
@@ -808,7 +808,7 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
 }</code></pre>
     <p>
       Environment: <code>GAAS_API_KEY</code> (required), <code>GAAS_API_URL</code>
-      (default <code>https://api.gaas.is</code>), <code>GAAS_TIMEOUT_MS</code> (default 30000).
+      (default <code>https://api.gaas.is</code>), <code>GAAS_TIMEOUT_MS</code> (default 240000, enough for a deliberated decision).
     </p>
 
     <h3>Tools</h3>
