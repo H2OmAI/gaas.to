@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Public timestamps for your audit trail — GaaS Documentation">
+  <meta property="og:url" content="https://gaas.to/audit-timestamps.html">
+  <meta property="og:image" content="https://gaas.to/favicon.png">
+  <meta property="og:site_name" content="GaaS — Governance as a Service">
+  <title>Public timestamps for your audit trail — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="footer.css">
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="search.html">Search</a>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Public timestamps for your audit trail</h1>
+    <p class="subtitle">
+      Every day, GaaS stamps each organization's audit records into the Bitcoin blockchain through the free, public OpenTimestamps service. You can prove when your records existed, and that they have not changed since, without trusting GaaS.
+    </p>
+
+    <h2 id="what-it-proves">What a timestamp proves</h2>
+    <p>
+      The hash chain and signatures show that no audit record was changed after it was written, as long as you trust the chain GaaS shows you. A public timestamp removes that last piece of trust. Once a day's stamp is in a Bitcoin block, nobody, GaaS included, can rewrite, add or remove a record of that day, or backdate one into it, without the proof failing. The block's time is independent evidence that the records existed no later than that moment.
+    </p>
+    <table>
+      <tbody>
+        <tr><td>What is stamped</td><td>One digest per organization per UTC day that has audit records (<a class="link" href="#recipe">how it is computed</a>).</td></tr>
+        <tr><td>When</td><td>After the day ends, usually between 01:00 and 02:00 UTC the next day. If the calendars cannot be reached, GaaS tries again every hour for 7 days.</td></tr>
+        <tr><td>Where</td><td>Four public OpenTimestamps calendars: <code>a.pool.opentimestamps.org</code>, <code>b.pool.opentimestamps.org</code>, <code>a.pool.eternitywall.com</code> and <code>ots.btc.catallaxy.com</code>. At least two must accept a stamp. The calendars gather many stamps into one Bitcoin transaction.</td></tr>
+        <tr><td>What leaves GaaS</td><td>Only a 32-byte SHA-256 value computed from your digest and 16 random bytes, the same way the official <code>ots stamp</code> command does it. The calendars never see your digest, your records or your organization.</td></tr>
+        <tr><td>Whose data is in your proof</td><td>Only yours. Each organization's digest is stamped on its own.</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <h2 id="recipe">The digest</h2>
+    <div class="note">
+      <strong>Recipe, version 1.</strong> SHA-256 of a text file that lists the <code>hash</code> of every audit record of your organization whose <code>created_at</code> falls on that UTC day, one per line, sorted in ascending byte order, each line ending in a single newline (<code>\n</code>).
+    </div>
+    <p>
+      Sorting by hash rather than by time means you never parse timestamps or break ties: the same records always give the same file. And because the digest is simply the SHA-256 of that file, the official client checks the proof against the file itself. The API returns the recipe with every list of timestamps, as <code>recipe</code>.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="check-a-day">Check a day yourself</h2>
+
+    <h3>1. Install the official client</h3>
+    <pre><code>pip install opentimestamps-client</code></pre>
+    <p>
+      This gives you the <code>ots</code> command. It reads and upgrades proofs without a Bitcoin node; the final check against a Bitcoin block needs one (<a class="link" href="#verify">step 5</a>).
+    </p>
+
+    <h3>2. Export the day's records</h3>
+    <p>The export needs an operator or admin key. Ask for the whole UTC day; <code>end_date</code> is inclusive.</p>
+    <pre><code>DAY=2026-09-27
+curl -s "https://api.gaas.is/v1/audit/export/stream?start_date=${DAY}T00:00:00Z&amp;end_date=${DAY}T23:59:59.999999Z" \
+  -H "X-API-Key: $OPERATOR_API_KEY" &gt; $DAY.jsonl</code></pre>
+    <p>
+      Keep this export. Records older than your retention period are deleted from GaaS, and a timestamp can only ever be checked against the records themselves.
+    </p>
+
+    <h3>3. Build the hash file</h3>
+    <pre><code>jq -r '.hash // empty' $DAY.jsonl | LC_ALL=C sort &gt; $DAY.hashes
+shasum -a 256 $DAY.hashes</code></pre>
+    <p>No <code>jq</code>? The same in Python, standard library only:</p>
+    <pre><code>python3 - "$DAY" &lt;&lt;'EOF'
+import hashlib, json, sys
+day = sys.argv[1]
+hashes = sorted(r["hash"] for r in map(json.loads, open(f"{day}.jsonl")) if r.get("hash"))
+data = "".join(h + "\n" for h in hashes).encode()
+open(f"{day}.hashes", "wb").write(data)
+print(hashlib.sha256(data).hexdigest())
+EOF</code></pre>
+    <p>
+      The value printed must equal that day's <code>digest</code> in the list from step 4, and the number of lines (<code>wc -l &lt; $DAY.hashes</code>) its <code>record_count</code>.
+    </p>
+
+    <h3>4. Download the proof</h3>
+    <p>Any key of your organization can list and download proofs (viewer and up).</p>
+    <pre><code>curl -s https://api.gaas.is/v1/audit/timestamps -H "X-API-Key: $VIEWER_API_KEY"
+curl -s -o $DAY.hashes.ots https://api.gaas.is/v1/audit/timestamps/$DAY/ots \
+  -H "X-API-Key: $VIEWER_API_KEY"
+ots info $DAY.hashes.ots</code></pre>
+    <p>
+      <code>ots info</code> starts with <code>File sha256 hash:</code> followed by the day's digest, then one branch per calendar that accepted the stamp. Until Bitcoin confirms it, each branch ends in a pending attestation:
+    </p>
+    <pre><code>File sha256 hash: 839275219773624b2e43907d801b406fdc7cee51599085da5043097f61940fa2
+Timestamp:
+append 4719bbf46102dc8ae5adb28bfe43c951
+sha256
+ -&gt; append 3e4e44c0cb7295fa
+    sha256
+    …
+    verify PendingAttestation('https://alice.btc.calendar.opentimestamps.org')
+ -&gt; append 6d08014fab242085
+    …</code></pre>
+
+    <h3 id="verify">5. Complete the proof and verify it</h3>
+    <pre><code>ots upgrade $DAY.hashes.ots
+ots verify $DAY.hashes.ots</code></pre>
+    <p>Before Bitcoin has confirmed the stamp, both commands say so, one line per calendar, and exit with an error. That is expected; try again later:</p>
+    <pre><code>Calendar https://alice.btc.calendar.opentimestamps.org: Pending confirmation in Bitcoin blockchain
+Calendar https://bob.btc.calendar.opentimestamps.org: Pending confirmation in Bitcoin blockchain
+…
+Failed! Timestamp not complete</code></pre>
+    <ul>
+      <li><strong>Once confirmed,</strong> <code>ots upgrade</code> writes the path to the Bitcoin block into the proof (keeping the old file as <code>$DAY.hashes.ots.bak</code>) and reports <code>Success! Timestamp complete</code>. An upgraded proof no longer needs any calendar. Keep it with your export.</li>
+      <li><strong><code>ots verify</code> checks the block itself,</strong> so it needs a Bitcoin Core node: a local one (a pruned node is fine) or one given with <code>ots --bitcoin-node URL verify …</code>. Without a node, <code>ots --no-bitcoin verify $DAY.hashes.ots</code> prints the block height and the Merkle root to compare in any block explorer.</li>
+      <li><strong>It checks the file first.</strong> <code>ots verify</code> finds <code>$DAY.hashes</code> because the proof is named <code>$DAY.hashes.ots</code>; for another name, use <code>ots verify -f $DAY.hashes proof.ots</code>. If a single record differs from what was stamped, it stops with <code>File does not match original!</code></li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="how-long">How long it takes</h2>
+    <ul>
+      <li>GaaS stamps a day between about 01:00 and 02:00 UTC the next day. <code>stamped_at</code> in the list says exactly when.</li>
+      <li>The calendars then put the stamp into Bitcoin. In the OpenTimestamps client's words: "It takes a few hours for the timestamp to get confirmed by the Bitcoin blockchain; we're not doing one transaction per timestamp."</li>
+      <li>So run <code>ots upgrade</code> a few hours or more after <code>stamped_at</code>. If it still says pending, try again later; the calendars keep the stamp.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="api">API</h2>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Role</th><th>Returns</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>GET /v1/audit/timestamps</code></td><td>viewer and up</td><td>Your organization's stamped days, newest first (<code>limit</code> 1–366, default 90), and the recipe.</td></tr>
+        <tr><td><code>GET /v1/audit/timestamps/{day}/ots</code></td><td>viewer and up</td><td>That day's proof as <code>application/octet-stream</code>, saved as <code>{day}.hashes.ots</code>, with the digest in the <code>X-GaaS-Digest</code> header. A day without a stamp, or another organization's day, is <code>404</code>.</td></tr>
+      </tbody>
+    </table>
+    <pre><code>{
+  "timestamps": [
+    {
+      "day": "2026-09-27",
+      "digest": "839275219773624b2e43907d801b406fdc7cee51599085da5043097f61940fa2",
+      "record_count": 3,
+      "first_record_id": "aud_…",
+      "last_record_id": "aud_…",
+      "calendars": ["https://a.pool.opentimestamps.org", "https://b.pool.opentimestamps.org",
+                    "https://a.pool.eternitywall.com", "https://ots.btc.catallaxy.com"],
+      "stamped_at": "2026-09-28T01:05:12.000000+00:00",
+      "proof_url": "/v1/audit/timestamps/2026-09-27/ots"
+    }
+  ],
+  "total": 1,
+  "recipe": { "version": 1, "digest": "SHA-256 of a text file listing …", … }
+}</code></pre>
+    <p><code>calendars</code> lists the calendars that accepted the stamp. <code>first_record_id</code> and <code>last_record_id</code> are the day's first and last records by time.</p>
+
+    <hr class="divider">
+
+    <h2 id="good-to-know">Good to know</h2>
+    <ul>
+      <li>Days without audit records are not stamped: there is nothing to prove.</li>
+      <li>A stamp covers the records stored when it was made. <code>record_count</code>, <code>first_record_id</code> and <code>last_record_id</code> let you confirm you rebuilt the same set.</li>
+      <li>GaaS keeps the proof as the calendars returned it and does not upgrade it for you. Run <code>ots upgrade</code> and keep the upgraded file.</li>
+      <li>Deleting your account deletes your timestamps along with your records.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="sources">Sources</h2>
+    <p>The OpenTimestamps details on this page were checked on 2026-09-28 against:</p>
+    <ul>
+      <li><a class="link" href="https://opentimestamps.org" target="_blank" rel="noopener">OpenTimestamps</a> (the service and its public calendars)</li>
+      <li><a class="link" href="https://pypi.org/project/opentimestamps-client/" target="_blank" rel="noopener">opentimestamps-client 0.7.2</a> README (installation, verifying needs a Bitcoin Core node and a pruned one is fine, "a few hours" to confirm, the <code>upgrade</code> and <code>verify</code> output)</li>
+      <li>opentimestamps-client <code>otsclient/cmds.py</code> (the four default calendars, the random 16-byte nonce, at least two calendars, the <code>--no-bitcoin</code> message) and <code>otsclient/args.py</code></li>
+      <li>python-opentimestamps 0.4.5 <code>opentimestamps/calendar.py</code> and <code>opentimestamps/core/</code> (the calendar request and the proof format GaaS writes)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="compliance.html">Compliance</a> — Hash chain, signatures and Governance Proof Tokens</li>
+      <li><a class="link" href="advanced-features.html#co-signing">Advanced Features</a> — Co-signing records with your own key</li>
+      <li><a class="link" href="record-free-forever.html">The Record Is Free Forever</a> — Audit creation, export and verification are never paywalled</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API keys and roles</li>
+    </ul>
+  </main>
+
+<footer>
+  <div class="gradient-divider"></div>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      GaaS by <a href="https://h2om.ai">H2Om</a> &copy; 2026 &mdash; BSL&nbsp;1.1 &rarr; Apache&nbsp;2.0 on 2030-02-12
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Docs</div>
+      <div class="footer-links-col">
+        <a href="index.html">Docs Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="intent-api.html">Intent API</a>
+        <a href="authentication.html">Authentication</a>
+        <a href="spec.html">Spec</a>
+        <a href="search.html">Search</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Platform</div>
+      <div class="footer-links-col">
+        <a href="policies.html">Policies</a>
+        <a href="connectors.html">Connectors</a>
+        <a href="sdks.html">SDKs</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="webhooks.html">Webhooks</a>
+        <a href="siem.html">SIEM Alerts</a>
+        <a href="a2a.html">A2A Protocol</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Operate</div>
+      <div class="footer-links-col">
+        <a href="observability.html">Observability</a>
+        <a href="shadow-mode.html">Shadow Mode</a>
+        <a href="advanced-features.html">Advanced Features</a>
+        <a href="rate-limits.html">Rate Limits</a>
+        <a href="load-testing.html">Load Testing</a>
+        <a href="billing-and-quotas.html">Billing &amp; Quotas</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Compliance</div>
+      <div class="footer-links-col">
+        <a href="compliance.html">Compliance</a>
+        <a href="audit-timestamps.html">Audit Timestamps</a>
+        <a href="gdpr-compliance.html">GDPR</a>
+        <a href="sla.html">SLA</a>
+        <a href="record-free-forever.html">Record Free Forever</a>
+        <a href="api-reference.html">API Reference</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Company</div>
+      <div class="footer-links-col">
+        <a href="https://gaas.is">gaas.is</a>
+        <a href="https://gaas.is/pricing">Pricing</a>
+        <a href="https://gaas.is/trust">Trust &amp; Audit</a>
+        <a href="https://gaas.is/start">Get Started</a>
+        <a href="https://the.gaas.is">Sign In</a>
+        <a href="https://gaas.is/careers">Careers</a>
+        <a href="https://github.com/H2OmAI">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-legal-col">
+      <a href="https://gaas.is/privacy">Privacy</a>
+      <a href="https://gaas.is/terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="search.js"></script>
+<script src="constellation.js"></script>
+</body>
+</html>

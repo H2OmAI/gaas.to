@@ -1847,19 +1847,71 @@
     ]
   },
   {
-    "id": "advanced-features#dlt-anchoring",
+    "id": "advanced-features#public-timestamps",
     "page": "Advanced Features",
-    "section": "DLT Temporal Anchoring",
-    "url": "advanced-features.html#dlt-anchoring",
-    "body": "Distributed Ledger Technology anchoring for tamper-evident audit records. Fire-and-forget, never blocks the governance pipeline. Controlled by GAAS_DLT_ANCHOR_ENABLED (default false) and GAAS_DLT_ANCHOR_BACKEND (sqlite or ethereum). Anchors batch every 100 records or 3600 seconds. AnchorReceipt with SHA-256 confirmation hash.",
+    "section": "Public Timestamps",
+    "url": "advanced-features.html#public-timestamps",
+    "body": "Every day, each organization's audit records are stamped into Bitcoin through the public OpenTimestamps calendars. GET /v1/audit/timestamps lists the days; GET /v1/audit/timestamps/{day}/ots downloads a proof for the official ots client.",
     "tags": [
-      "dlt",
-      "blockchain",
-      "anchoring",
+      "OpenTimestamps",
+      "Bitcoin",
+      "timestamp",
       "audit",
-      "tamper-evident",
-      "ethereum",
-      "sqlite"
+      "tamper-evident"
+    ]
+  },
+  {
+    "id": "audit-timestamps",
+    "page": "Public timestamps for your audit trail",
+    "section": null,
+    "url": "audit-timestamps.html",
+    "body": "GaaS stamps each organization's audit records into Bitcoin every day through the free, public OpenTimestamps service, so you can prove when your records existed and that they have not changed, without trusting GaaS.",
+    "tags": [
+      "OpenTimestamps",
+      "Bitcoin",
+      "timestamp",
+      "proof",
+      "audit trail",
+      "ots"
+    ]
+  },
+  {
+    "id": "audit-timestamps#recipe",
+    "page": "Public timestamps for your audit trail",
+    "section": "The digest",
+    "url": "audit-timestamps.html#recipe",
+    "body": "SHA-256 of a text file listing the hash of every audit record of your organization whose created_at falls on that UTC day, one per line, sorted in ascending byte order, each line ending in a newline.",
+    "tags": [
+      "digest",
+      "SHA-256",
+      "recipe",
+      "hash file"
+    ]
+  },
+  {
+    "id": "audit-timestamps#check-a-day",
+    "page": "Public timestamps for your audit trail",
+    "section": "Check a day yourself",
+    "url": "audit-timestamps.html#check-a-day",
+    "body": "Export the day's records, build the sorted hash file with jq and sort, download the day's .ots proof, then run ots info, ots upgrade and ots verify. Verifying against a Bitcoin block needs a Bitcoin Core node; a pruned node is fine.",
+    "tags": [
+      "ots verify",
+      "ots upgrade",
+      "export",
+      "jq",
+      "Bitcoin Core"
+    ]
+  },
+  {
+    "id": "audit-timestamps#how-long",
+    "page": "Public timestamps for your audit trail",
+    "section": "How long it takes",
+    "url": "audit-timestamps.html#how-long",
+    "body": "A day is stamped between about 01:00 and 02:00 UTC the next day. The calendars then take a few hours to confirm it in Bitcoin; run ots upgrade after that.",
+    "tags": [
+      "confirmation",
+      "pending",
+      "Bitcoin"
     ]
   },
   {

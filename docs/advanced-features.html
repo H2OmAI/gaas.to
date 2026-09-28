@@ -598,16 +598,14 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
 
     <hr class="divider">
 
-    <h2 id="dlt-anchoring">DLT Temporal Anchoring</h2>
+    <h2 id="public-timestamps">Public Timestamps</h2>
     <p>
-      Audit records can be anchored to a distributed ledger for independent temporal verification.
-      Anchoring is fire-and-forget — it never blocks the governance pipeline.
+      Every day, GaaS stamps each organization's audit records into Bitcoin through the public OpenTimestamps calendars, so you can prove when your records existed without trusting GaaS. There is nothing to switch on, and the decision pipeline never waits for it.
     </p>
     <ul>
-      <li>Enable: <code>GAAS_DLT_ANCHOR_ENABLED=true</code></li>
-      <li>Backend: <code>GAAS_DLT_ANCHOR_BACKEND=sqlite</code> (default) or <code>ethereum</code></li>
-      <li>Batching: 100 records or 3,600 seconds (1 hour), whichever comes first</li>
-      <li>Confirmation hash: <code>SHA-256("{anchor_id}:{chain_head_hash}:{chain_position}:{timestamp.isoformat()}")</code></li>
+      <li>One digest per organization per UTC day with records: SHA-256 of the day's record hashes, sorted, one per line</li>
+      <li>List: <code>GET /v1/audit/timestamps</code>; download a day's proof: <code>GET /v1/audit/timestamps/{day}/ots</code> (viewer and up)</li>
+      <li>Check a proof with the official <code>ots</code> client: see <a class="link" href="audit-timestamps.html">Public timestamps for your audit trail</a></li>
     </ul>
 
     <hr class="divider">
@@ -765,6 +763,7 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
       <div class="footer-column-title">Compliance</div>
       <div class="footer-links-col">
         <a href="compliance.html">Compliance</a>
+        <a href="audit-timestamps.html">Audit Timestamps</a>
         <a href="gdpr-compliance.html">GDPR</a>
         <a href="sla.html">SLA</a>
         <a href="record-free-forever.html">Record Free Forever</a>
