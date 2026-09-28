@@ -259,14 +259,13 @@
     "page": "Policy Library",
     "section": "EU AI Act Compliance",
     "url": "policies.html#eu-ai-act-compliance",
-    "body": "Policies mapped to EU AI Act Articles 9–15. High-risk AI classification, transparency obligations, human oversight requirements. August 2026 compliance deadline enforced by GaaS governance layer.",
+    "body": "Policies mapped to EU AI Act Articles 9, 10, 13, 14 and 15. High-risk AI classification, transparency obligations, human oversight requirements. High-risk requirements apply from 2 December 2027 (Annex III), enforced by the GaaS governance layer.",
     "tags": [
       "EU AI Act",
-      "Articles 9-15",
       "high-risk AI",
       "transparency",
-      "August 2026",
-      "human oversight"
+      "human oversight",
+      "December 2027"
     ]
   },
   {
@@ -1270,11 +1269,10 @@
     "page": "Compliance & Liability Shield",
     "section": "EU AI Act Compliance",
     "url": "compliance.html#eu-ai-act-compliance",
-    "body": "GaaS enforces Articles 9–15: risk management (Art. 9), data governance (Art. 10), technical documentation (Art. 11), transparency (Art. 13), human oversight (Art. 14), accuracy (Art. 15). High-risk AI classification handled automatically.",
+    "body": "GaaS enforces Articles 9, 10, 13, 14 and 15: risk management (Art. 9), data governance (Art. 10), transparency (Art. 13), human oversight (Art. 14), accuracy (Art. 15). High-risk AI classification handled automatically.",
     "tags": [
       "Article 9",
       "Article 10",
-      "Article 11",
       "Article 13",
       "Article 14",
       "Article 15",
@@ -1633,7 +1631,7 @@
     "page": "Policies",
     "section": "EU AI Act Policies",
     "url": "policies.html#eu-ai-act",
-    "body": "5 EU AI Act enforcement policies (pol_euaia_001-005) covering Articles 9-15. Risk management, data governance, transparency, human oversight, and accuracy requirements for high-risk AI systems. Tier 2 evaluation. Enforcement date August 2 2026, 30M euro maximum fine.",
+    "body": "5 EU AI Act enforcement policies (pol_euaia_001-005) covering Articles 9, 10, 13, 14 and 15. Risk management, data governance, transparency, human oversight, and accuracy requirements for high-risk AI systems. Tier 2 evaluation. The requirements apply from 2 December 2027 (Annex III); breaching them can cost up to 15M euro or 3% of turnover.",
     "tags": [
       "eu ai act",
       "policies",

@@ -363,18 +363,18 @@
   <section>
     <h2 id="eu-ai-act-compliance">EU AI Act Compliance</h2>
     <p>
-      The EU AI Act becomes fully enforceable on <strong>August 2, 2026</strong>. GaaS implements five governance policies covering Articles 9 through 15, giving high-risk AI deployments a compliance-ready audit trail from day one.
+      The EU AI Act's high-risk requirements apply from <strong>2 December 2027</strong> for Annex III systems, and from 2 August 2028 for AI in Annex I products (Digital Omnibus on AI, Regulation (EU) 2026/1744). GaaS implements five governance policies covering Articles 9, 10, 13, 14 and 15, giving high-risk AI deployments a compliance-ready audit trail from day one.
     </p>
 
     <div class="info-box">
       <div class="info-meta">
         <div class="info-item">
-          <span class="info-label">Enforcement Date</span>
-          <span class="info-value warning-text">August 2, 2026</span>
+          <span class="info-label">High-risk requirements apply</span>
+          <span class="info-value warning-text">2 December 2027</span>
         </div>
         <div class="info-item">
           <span class="info-label">Maximum Fine</span>
-          <span class="info-value danger">&euro;30M</span>
+          <span class="info-value danger">&euro;15M or 3%</span>
         </div>
         <div class="info-item">
           <span class="info-label">Turnover Cap</span>
@@ -450,18 +450,33 @@
 <span class="comment">// X-API-Key: your_api_key</span>
 
 {
-  <span class="prop">"org_id"</span>: <span class="string">"org_abc123"</span>,
-  <span class="prop">"as_of"</span>: <span class="string">"2026-08-02T00:00:00Z"</span>,
-  <span class="prop">"overall_status"</span>: <span class="string">"compliant"</span>,
-  <span class="prop">"policies"</span>: {
-    <span class="prop">"pol_euaia_001"</span>: { <span class="prop">"status"</span>: <span class="string">"pass"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 9"</span>, <span class="prop">"checks_passed"</span>: <span class="num">4</span>, <span class="prop">"checks_total"</span>: <span class="num">4</span> },
-    <span class="prop">"pol_euaia_002"</span>: { <span class="prop">"status"</span>: <span class="string">"conditional"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 10"</span>, <span class="prop">"pending_actions"</span>: [<span class="string">"data_lineage_attestation"</span>] },
-    <span class="prop">"pol_euaia_003"</span>: { <span class="prop">"status"</span>: <span class="string">"conditional"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 13"</span>, <span class="prop">"pending_actions"</span>: [<span class="string">"transparency_notice_deployment"</span>] },
-    <span class="prop">"pol_euaia_004"</span>: { <span class="prop">"status"</span>: <span class="string">"pass"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 14"</span>, <span class="prop">"escalation_coverage"</span>: <span class="string">"100%"</span> },
-    <span class="prop">"pol_euaia_005"</span>: { <span class="prop">"status"</span>: <span class="string">"pass"</span>, <span class="prop">"article"</span>: <span class="string">"Art. 15"</span>, <span class="prop">"accuracy_score"</span>: <span class="num">0.97</span> }
-  },
-  <span class="prop">"high_risk_decisions_last_30d"</span>: <span class="num">1482</span>,
-  <span class="prop">"human_oversight_rate"</span>: <span class="string">"100%"</span>
+  <span class="prop">"compliance"</span>: {
+    <span class="prop">"org_id"</span>: <span class="string">"org_abc123"</span>,
+    <span class="prop">"assessed_at"</span>: <span class="string">"2026-09-28T18:30:00"</span>,
+    <span class="prop">"overall_status"</span>: <span class="string">"partial"</span>,
+    <span class="prop">"implemented_count"</span>: <span class="num">6</span>,
+    <span class="prop">"partial_count"</span>: <span class="num">4</span>,
+    <span class="prop">"requires_action_count"</span>: <span class="num">1</span>,
+    <span class="prop">"not_applicable_count"</span>: <span class="num">0</span>,
+    <span class="prop">"high_risk_ai_detected"</span>: <span class="num">true</span>,
+    <span class="prop">"enforcement_deadline"</span>: <span class="string">"2027-12-02"</span>,
+    <span class="prop">"articles"</span>: [
+      {
+        <span class="prop">"article"</span>: <span class="string">"Article 9"</span>,
+        <span class="prop">"title"</span>: <span class="string">"Risk management system"</span>,
+        <span class="prop">"requirement"</span>: <span class="string">"Establish, implement, document and maintain a risk management system throughout the lifecycle of the high-risk AI system."</span>,
+        <span class="prop">"status"</span>: <span class="string">"implemented"</span>,
+        <span class="prop">"gaas_capability"</span>: <span class="string">"GaaS governance membranes define the risk boundary for each AI agent. The 5-stage pipeline (intent validation → enrichment → policy evaluation → deliberation → decision assembly) constitutes the risk management system. Audit trail provides lifecycle documentation."</span>,
+        <span class="prop">"evidence"</span>: [
+          <span class="string">"GET /v1/onboarding/membranes"</span>,
+          <span class="string">"GET /v1/audit/chain"</span>,
+          <span class="string">"pol_euaia_001"</span>
+        ],
+        <span class="prop">"notes"</span>: <span class="num">null</span>
+      }
+      <span class="comment">// … one entry per article</span>
+    ]
+  }
 }</code></pre>
   </section>
 
