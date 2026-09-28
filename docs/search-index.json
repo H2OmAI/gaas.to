@@ -1722,14 +1722,14 @@
     "page": "Intent API",
     "section": "Governance Explainability",
     "url": "intent-api.html#explainability",
-    "body": "GovernanceExplanation field on every decision response when GAAS_FEATURE_EXPLAIN_DECISIONS is enabled. LLM-generated plain-language explanations with template fallback. session_trust_remaining field shows remaining trust budget for the session. Powered by Claude Haiku for low-latency explanation generation.",
+    "body": "Plain-English explanations of live block, escalate, approve_modified and high-risk approve decisions when GAAS_FEATURE_EXPLAIN_DECISIONS is enabled, written by Claude with a template fallback. Explanations arrive shortly after the verdict: the agent never waits; fetch GET /v1/intents/{intent_id}/explanation — 200 when ready, 202 while pending (poll after Retry-After), 404 when none will be produced. session_trust_remaining field shows remaining trust budget for the session.",
     "tags": [
       "explainability",
       "explanation",
       "trust",
       "session trust",
       "feature flag",
-      "haiku",
+      "polling",
       "decision"
     ]
   },
