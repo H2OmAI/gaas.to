@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Send GaaS alerts to your SIEM — GaaS Documentation">
+  <meta property="og:url" content="https://gaas.to/siem.html">
+  <meta property="og:image" content="https://gaas.to/favicon.png">
+  <meta property="og:site_name" content="GaaS — Governance as a Service">
+  <title>Send GaaS alerts to your SIEM — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="footer.css">
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="search.html">Search</a>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Send GaaS alerts to your SIEM</h1>
+    <p class="subtitle">
+      Point your organization's own webhooks at Splunk, Microsoft Sentinel, Datadog, or any SIEM that accepts HTTPS. Every delivery is signed, retried, and recorded if it fails.
+    </p>
+
+    <h2 id="how-it-works">How it works</h2>
+    <p>
+      When GaaS blocks or escalates an agent's action, it can POST the event to an HTTPS address that your organization registers. That is the whole integration: there is no separate SIEM feed to switch on. Each organization has its own webhooks, its own signing secrets and its own delivery records, so your events never share a pipe with anyone else's.
+    </p>
+    <p>
+      Some SIEMs accept GaaS's POST exactly as it is sent. Others want their own envelope, or an auth header GaaS doesn't send. For those, a small adapter sits in between: it checks the signature, reshapes the event and forwards it.
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>SIEM</th><th>Straight from GaaS?</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><a class="link" href="#datadog">Datadog</a></td><td>Yes</td><td>The logs intake takes any JSON object and accepts the API key as a URL parameter.</td></tr>
+        <tr><td><a class="link" href="#splunk">Splunk</a> (HTTP Event Collector)</td><td>No, use the adapter</td><td>HEC wants an <code>Authorization: Splunk &lt;token&gt;</code> header and an <code>{"event": …}</code> envelope.</td></tr>
+        <tr><td><a class="link" href="#sentinel">Microsoft Sentinel</a></td><td>No, use a Logic App or the adapter</td><td>The Logs Ingestion API needs a Microsoft Entra token and a JSON array.</td></tr>
+        <tr><td>Anything else</td><td>Usually via <a class="link" href="#adapter">the adapter</a></td><td>Verify, reshape, forward.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Reading from your SIEM instead?</strong> GaaS can also <em>query</em> Splunk, QRadar or Sentinel for a user's risk while it evaluates an intent. That is the inbound SIEM connector on the <a class="link" href="connectors.html">Connectors</a> page. This page is about sending GaaS's decisions out.
+    </div>
+
+    <hr class="divider">
+
+    <h2 id="which-events">Which events to send</h2>
+    <table>
+      <thead>
+        <tr><th>Event</th><th>Sent when</th><th>Worth sending to a SIEM?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>decision.blocked</code></td><td>GaaS blocked an agent's action</td><td>Yes, the main signal</td></tr>
+        <tr><td><code>decision.escalated</code></td><td>GaaS held an action for human review</td><td>Yes</td></tr>
+        <tr><td><code>escalation.decided</code></td><td>A reviewer approved or rejected a held action</td><td>Usually, it closes the loop on an escalation</td></tr>
+        <tr><td><code>escalation.timed_out</code></td><td>Nobody reviewed a held action in time</td><td>Yes</td></tr>
+        <tr><td><code>escalation.cancelled</code>, <code>escalation.reassigned</code></td><td>An escalation was cancelled, or handed to other reviewers</td><td>Optional</td></tr>
+        <tr><td><code>quota.exceeded</code></td><td>Your organization reached its hard usage limit, so GaaS is refusing new intents</td><td>Yes</td></tr>
+        <tr><td><code>decision.approved</code></td><td>An action was approved, with or without modifications</td><td>Usually not: it fires for every approved action</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Decision events are sent in every pipeline mode. The <code>data.pipeline_mode</code> field tells you which one: <code>live</code>, <code>shadow</code> or <code>test</code>. Most SIEM rules should act on <code>live</code> only.
+    </p>
+    <div class="warning">
+      <strong>Not delivered today:</strong> registration also accepts <code>rate_limit.exceeded</code>, <code>observation.recorded</code>, <code>policy.calibrated</code> and <code>pattern.detected</code>, but the hosted service does not currently send them. Don't build alerts on them.
+    </div>
+
+    <hr class="divider">
+
+    <h2 id="register">Register a webhook</h2>
+    <p>
+      Use an API key with the <strong>admin</strong> role. List only the events you want; if you leave out <code>event_types</code>, the webhook receives every event type.
+    </p>
+    <pre><code>curl -X POST https://api.gaas.is/v1/escalations/webhooks \
+  -H "X-API-Key: $ADMIN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://siem-adapter.example.com/gaas",
+    "event_types": ["decision.blocked", "decision.escalated", "escalation.timed_out", "quota.exceeded"],
+    "description": "SIEM forwarder"
+  }'</code></pre>
+
+    <p>GaaS answers <code>201 Created</code>:</p>
+    <pre><code>{
+  "webhook": {
+    "id": "wh_81af440d0481",
+    "created_at": "2026-09-28T17:52:54.924800Z",
+    "url": "https://siem-adapter.example.com/gaas",
+    "organization_id": "org_acme",
+    "escalation_id": null,
+    "event_types": [
+      "decision.blocked",
+      "decision.escalated",
+      "escalation.timed_out",
+      "quota.exceeded"
+    ],
+    "secret": "whsec_5b0e6c1d9a8f4e2b8c7d6e5f4a3b2c1d",
+    "active": true,
+    "description": "SIEM forwarder"
+  }
+}</code></pre>
+
+    <ul>
+      <li><strong><code>secret</code></strong> is generated by GaaS and shown in full only in this response. Listing your webhooks later shows <code>"***"</code>. Store it where your adapter can read it. To rotate it, register a new webhook, switch your adapter over, then delete the old one.</li>
+      <li><strong>Leave out <code>escalation_id</code>.</strong> A webhook tied to one escalation only hears about that escalation, and never receives <code>decision.*</code> or <code>quota.exceeded</code> events.</li>
+      <li><strong><code>url</code></strong> must be HTTPS and publicly reachable, with no <code>user:password@</code> in it. Private, loopback and cloud-metadata addresses are refused. A query string is fine, and the Datadog and Logic App options below rely on one.</li>
+      <li><strong>Anyone in your organization who can list webhooks sees the full URL.</strong> <code>GET /v1/escalations/webhooks</code> masks the secret, not the URL, so a key or signature inside the URL is visible to them too.</li>
+      <li>An unknown event type or a refused URL gets <code>400</code> with <code>"code": "validation_error"</code>. Send an <code>Idempotency-Key</code> header if you might repeat the call.</li>
+    </ul>
+    <p>
+      To see what is registered, call <code>GET /v1/escalations/webhooks</code>. To stop deliveries, call <code>DELETE /v1/escalations/webhooks/{webhook_id}</code> with an admin key.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="what-gaas-sends">What GaaS sends</h2>
+    <p>Each delivery is an HTTPS <code>POST</code> with these headers:</p>
+    <table>
+      <thead>
+        <tr><th>Header</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Content-Type</code></td><td><code>application/json</code></td></tr>
+        <tr><td><code>X-GaaS-Signature</code></td><td><code>sha256=</code> followed by the hex HMAC-SHA256 of the body (see <a class="link" href="#verify">Verify the signature</a>)</td></tr>
+        <tr><td><code>X-GaaS-Event</code></td><td>The event type, for example <code>decision.blocked</code></td></tr>
+        <tr><td><code>X-GaaS-Delivery</code></td><td>The delivery ID (<code>dlv_…</code>). Automatic retries of one delivery reuse it.</td></tr>
+        <tr><td><code>X-GaaS-Retry</code></td><td><code>true</code>, only on a <a class="link" href="#retries">manual retry</a></td></tr>
+      </tbody>
+    </table>
+
+    <p>A <code>decision.blocked</code> body, indented here for reading:</p>
+    <pre><code>{
+  "data": {
+    "decision_id": "dec_0f0de7b67fcd4e1487fe6bc5030eacf6",
+    "intent_id": "int_85e46e12d8d949ff9c207bffac3afca5",
+    "pipeline_mode": "live",
+    "risk_score": 0.562,
+    "timestamp": "2026-09-28T17:52:54.955690+00:00",
+    "verdict": "block"
+  },
+  "decision_id": "dec_0f0de7b67fcd4e1487fe6bc5030eacf6",
+  "escalation_id": null,
+  "escalation_status": null,
+  "event_type": "decision.blocked",
+  "intent_id": "int_85e46e12d8d949ff9c207bffac3afca5",
+  "observation_id": null,
+  "organization_id": "org_acme",
+  "pattern_id": null,
+  "policy_id": null,
+  "timestamp": "2026-09-28T17:52:54.959796Z",
+  "webhook_id": "wh_81af440d0481"
+}</code></pre>
+    <p>
+      On the wire the body is compact JSON with its keys in alphabetical order. Always check the signature against the bytes you received, never against JSON you have parsed and re-encoded.
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Field</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>event_type</code></td><td>Same as the <code>X-GaaS-Event</code> header</td></tr>
+        <tr><td><code>timestamp</code></td><td>When GaaS built this delivery (UTC)</td></tr>
+        <tr><td><code>webhook_id</code>, <code>organization_id</code></td><td>Which of your webhooks, and which organization</td></tr>
+        <tr><td><code>intent_id</code>, <code>decision_id</code></td><td>Set on decision events; <code>null</code> otherwise</td></tr>
+        <tr><td><code>escalation_id</code>, <code>escalation_status</code></td><td>Set on escalation events; <code>null</code> otherwise</td></tr>
+        <tr><td><code>data</code></td><td>
+          Decision events: <code>verdict</code> (<code>approve</code>, <code>approve_modified</code>, <code>escalate</code> or <code>block</code>, always lowercase), <code>risk_score</code> (0 to 1), <code>pipeline_mode</code>, and the decision's own <code>timestamp</code>.<br>
+          Escalation events: the full escalation record.<br>
+          <code>quota.exceeded</code>: <code>plan_id</code>, <code>included_actions</code>, <code>used_actions</code>, <code>hard_limit</code>, <code>batch_size</code>, <code>timestamp</code>.
+        </td></tr>
+        <tr><td><code>observation_id</code>, <code>policy_id</code>, <code>pattern_id</code></td><td>Always <code>null</code> in the events listed above</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>Need the agent, the action, or the policies that fired?</strong> Decision events don't carry them. Fetch the full, hash-chained audit record with <code>GET /v1/intents/{intent_id}/audit</code>, using any API key from your organization.
+    </div>
+
+    <hr class="divider">
+
+    <h2 id="verify">Verify the signature</h2>
+    <p>The signature in <code>X-GaaS-Signature</code> is built like this:</p>
+    <ul>
+      <li><strong>Algorithm:</strong> HMAC-SHA256.</li>
+      <li><strong>Key:</strong> your webhook's secret, the whole <code>whsec_…</code> string, as UTF-8 bytes.</li>
+      <li><strong>Message:</strong> the raw request body, byte for byte.</li>
+      <li><strong>Header value:</strong> <code>sha256=</code> followed by the lowercase hex digest.</li>
+    </ul>
+    <pre><code data-doc-test="verify">import hashlib
+import hmac
+
+
+def is_from_gaas(headers: dict[str, str], raw_body: bytes, secret: str) -&gt; bool:
+    """True if X-GaaS-Signature matches the exact bytes that were received."""
+    received = next((v for k, v in headers.items() if k.lower() == "x-gaas-signature"), "")
+    expected = "sha256=" + hmac.new(secret.encode("utf-8"), raw_body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(received, expected)</code></pre>
+    <p>
+      The signature covers the body only; it carries no timestamp. To stop someone replaying a captured request, remember the <code>X-GaaS-Delivery</code> IDs you have already accepted and ignore repeats. Automatic retries reuse the same ID and the same bytes, so this also removes duplicates.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="retries">Retries and failed deliveries</h2>
+    <ul>
+      <li>GaaS makes up to <strong>3 attempts</strong> per delivery. It waits <strong>5 seconds</strong> after the first failure and <strong>25 seconds</strong> after the second.</li>
+      <li>Each attempt waits up to <strong>10 seconds</strong> for your answer. Any <code>2xx</code> status counts as delivered. Any other status, a timeout or a refused connection counts as a failure.</li>
+      <li>After the third failure the delivery is marked failed and kept, so you can find it.</li>
+    </ul>
+
+    <h3>List failed deliveries</h3>
+    <p>Use an operator or admin key. Add <code>?webhook_id=wh_…</code> to narrow the list to one webhook.</p>
+    <pre><code>curl https://api.gaas.is/v1/escalations/webhooks/deliveries/failed \
+  -H "X-API-Key: $OPERATOR_API_KEY"</code></pre>
+    <pre><code>{
+  "deliveries": [
+    {
+      "id": "dlv_d4cadf8e3fc6",
+      "webhook_id": "wh_81af440d0481",
+      "event_type": "decision.blocked",
+      "status": "failed",
+      "attempts": 3,
+      "max_attempts": 3,
+      "last_attempt_at": "2026-09-28T17:55:31.755677Z",
+      "response_status": 503,
+      "error": null,
+      "created_at": "2026-09-28T17:55:31.737650Z",
+      "escalation_id": null,
+      "intent_id": "int_bc99eb55235c40d997a6cef7df9dc321",
+      "entity_id": "int_bc99eb55235c40d997a6cef7df9dc321"
+    }
+  ],
+  "total": 1
+}</code></pre>
+
+    <h3>Retry one</h3>
+    <pre><code>curl -X POST https://api.gaas.is/v1/escalations/webhooks/deliveries/dlv_d4cadf8e3fc6/retry \
+  -H "X-API-Key: $OPERATOR_API_KEY"</code></pre>
+    <p>
+      The answer is <code>{"success": true|false, "delivery_id": "…", "message": "…"}</code>. A delivery that doesn't exist, or hasn't failed, gets <code>404</code>.
+    </p>
+    <div class="warning">
+      <strong>A manual retry does not resend the original event.</strong> It sends a short notice with <code>X-GaaS-Retry: true</code>, the same event type, and <code>data.original_delivery_id</code>. Its <code>intent_id</code> and <code>decision_id</code> are <code>null</code>. To recover what was missed, take <code>intent_id</code> from the failed-delivery record and fetch <code>GET /v1/intents/{intent_id}/audit</code>. For a whole time window, use <code>GET /v1/audit/export/stream?start_date=…&amp;end_date=…</code> (operator or admin key), which returns one audit record per line.
+    </div>
+    <p>
+      Webhooks are a live feed, not the system of record. The audit trail is. If your SIEM has to be complete, reconcile it against the audit export on a schedule.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="datadog">Datadog: send directly</h2>
+    <p>Register this as the webhook URL. It is shown for the US1 site; use the intake host for your own Datadog site.</p>
+    <pre><code>https://http-intake.logs.datadoghq.com/api/v2/logs?dd-api-key=YOUR_DATADOG_API_KEY&amp;ddsource=gaas</code></pre>
+    <ul>
+      <li>Datadog's logs intake accepts a single JSON object and answers <code>202</code>, which GaaS counts as delivered. The GaaS fields arrive as log attributes.</li>
+      <li>The trade-off: your Datadog API key sits in the URL, where anyone in your GaaS organization who lists webhooks can read it, and Datadog does not check <code>X-GaaS-Signature</code>. Use a dedicated key you can revoke.</li>
+      <li>If you want the signature checked, run <a class="link" href="#adapter">the adapter</a> instead and send the key in a <code>DD-API-KEY</code> header.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="splunk">Splunk: HTTP Event Collector, via the adapter</h2>
+    <p>
+      HEC's <code>/services/collector/event</code> endpoint expects an <code>Authorization: Splunk &lt;token&gt;</code> header and the event inside an <code>"event"</code> key. GaaS sends neither. Its body has no <code>"event"</code> key, so HEC refuses it with status code 12, "Event field is required" (HTTP 400).
+    </p>
+    <p>
+      HEC can take the token in the query string instead, but only if query-string authentication is enabled for that token (<code>allowQueryStringAuth = true</code>; on Splunk Cloud Platform, through a support case). The envelope is still required, so the adapter is the practical route. Give it this <code>wrap</code> function:
+    </p>
+    <pre><code data-doc-test="splunk-wrap">from datetime import datetime
+
+
+def to_splunk(event: dict) -&gt; dict:
+    return {
+        "time": datetime.fromisoformat(event["timestamp"]).timestamp(),  # UNIX time (Python 3.11+ parses the Z)
+        "source": "gaas",
+        "sourcetype": "gaas:webhook",
+        "event": event,
+    }
+
+# SIEM_URL     = "https://YOUR-HEC-HOST:8088/services/collector/event"
+# SIEM_HEADERS = {"Authorization": "Splunk YOUR_HEC_TOKEN"}</code></pre>
+
+    <hr class="divider">
+
+    <h2 id="sentinel">Microsoft Sentinel: a Logic App, or the adapter</h2>
+    <p>
+      Sentinel reads from a Log Analytics workspace. The supported way to push custom events into one is the Azure Monitor Logs Ingestion API, and that API needs a Microsoft Entra bearer token, a data collection rule (DCR) and a JSON array body. A GaaS webhook can't supply any of those, so something sits in between.
+    </p>
+    <p><strong>Both options need:</strong></p>
+    <ul>
+      <li>A custom table in the workspace (its name ends in <code>_CL</code>). If you create it in the Azure portal from a sample GaaS payload, the portal creates the DCR, and any transformation it needs, for you.</li>
+      <li>The <strong>Monitoring Metrics Publisher</strong> role on the DCR for whatever identity sends the data.</li>
+    </ul>
+
+    <h3>Option A: Logic App (no code)</h3>
+    <ol>
+      <li>Start a workflow with the <strong>When a HTTP request is received</strong> trigger and save it. Copy the URL it generates. The URL contains a shared access signature (<code>sig=…</code>), so treat it as a secret. Register it as your GaaS webhook URL.</li>
+      <li>Leave out a Response action. The trigger then answers <code>202</code> straight away, which GaaS counts as delivered.</li>
+      <li>Add an <strong>HTTP</strong> action that POSTs to <code>{endpoint}/dataCollectionRules/{dcrImmutableId}/streams/{streamName}?api-version=2023-01-01</code>, with authentication set to the Logic App's managed identity and <strong>Audience</strong> set to <code>https://monitor.azure.com</code>. Send the trigger body, wrapped in a JSON array, as <code>application/json</code>.</li>
+    </ol>
+    <p>
+      This option does not check <code>X-GaaS-Signature</code>. The secret <code>sig</code> in the trigger URL is what keeps others out, and anyone in your GaaS organization who lists webhooks can see that URL.
+    </p>
+
+    <h3>Option B: the adapter, with the signature checked</h3>
+    <p>
+      Run <a class="link" href="#adapter">the adapter</a> (an Azure Function works) and, instead of forwarding over plain HTTP, upload with the Azure Monitor Ingestion client library (<code>pip install azure-monitor-ingestion azure-identity</code>):
+    </p>
+    <pre><code>from azure.identity import DefaultAzureCredential
+from azure.monitor.ingestion import LogsIngestionClient
+
+client = LogsIngestionClient(endpoint=YOUR_DCR_OR_DCE_ENDPOINT, credential=DefaultAzureCredential())
+client.upload(rule_id=YOUR_DCR_IMMUTABLE_ID, stream_name=YOUR_STREAM_NAME, logs=[event])</code></pre>
+
+    <hr class="divider">
+
+    <h2 id="adapter">A tiny adapter for any SIEM</h2>
+    <p>
+      This function checks one GaaS delivery and forwards it. Call it from any web framework or serverless function: pass the request headers and the exact raw body bytes, and answer GaaS with the status it returns. It needs only the Python standard library.
+    </p>
+    <pre><code data-doc-test="adapter">import hashlib
+import hmac
+import json
+import os
+import urllib.request
+
+SECRET = os.environ["WEBHOOK_SECRET"]                           # the whsec_… value from registration
+SIEM_URL = os.environ["SIEM_URL"]                               # where your SIEM accepts events
+SIEM_HEADERS = json.loads(os.environ.get("SIEM_HEADERS", "{}"))  # e.g. {"Authorization": "Splunk …"}
+
+
+def handle(headers: dict[str, str], raw_body: bytes, wrap=lambda event: event) -&gt; int:
+    """Verify one GaaS delivery and forward it. Returns the status to answer GaaS with."""
+    h = {k.lower(): v for k, v in headers.items()}
+    expected = "sha256=" + hmac.new(SECRET.encode("utf-8"), raw_body, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(h.get("x-gaas-signature", ""), expected):
+        return 401                                              # not from GaaS: refuse it
+    if h.get("x-gaas-retry") == "true":
+        return 200                                              # manual-retry notice: no event data inside
+    body = json.dumps(wrap(json.loads(raw_body))).encode("utf-8")
+    request = urllib.request.Request(SIEM_URL, data=body, method="POST",
+                                     headers={"Content-Type": "application/json", **SIEM_HEADERS})
+    try:
+        with urllib.request.urlopen(request, timeout=5) as response:
+            return 200 if 200 &lt;= response.status &lt; 300 else 502
+    except OSError:
+        return 502                                              # SIEM unreachable or refused: GaaS retries</code></pre>
+    <ul>
+      <li><strong>Splunk:</strong> <code>wrap=to_splunk</code> from <a class="link" href="#splunk">above</a>, with the HEC URL and <code>Authorization</code> header.</li>
+      <li><strong>Datadog, signature checked:</strong> <code>SIEM_URL=https://http-intake.logs.datadoghq.com/api/v2/logs</code> (or your site's intake host) and <code>SIEM_HEADERS={"DD-API-KEY": "…"}</code>.</li>
+      <li><strong>Sentinel:</strong> replace the forwarding lines with the <code>client.upload(…)</code> call <a class="link" href="#sentinel">above</a>.</li>
+      <li>Answer quickly. GaaS waits up to 10 seconds; the example gives your SIEM 5. Returning an error makes GaaS try again.</li>
+      <li>Keep a short-lived record of <code>X-GaaS-Delivery</code> IDs you have forwarded, and skip repeats.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2 id="sources">Vendor sources</h2>
+    <p>The vendor details on this page were checked against these pages on 2026-09-28:</p>
+    <ul>
+      <li>Splunk: <a class="link" href="https://help.splunk.com/en/splunk-enterprise/get-started/get-data-in/10.4/get-data-with-http-event-collector/format-events-for-http-event-collector" target="_blank" rel="noopener">Format events for HTTP Event Collector</a> (endpoint, <code>Authorization: Splunk</code> header, envelope keys, query-string token authentication)</li>
+      <li>Splunk: <a class="link" href="https://help.splunk.com/en/splunk-cloud-platform/get-started/get-data-in/10.5.2605/get-data-with-http-event-collector/troubleshoot-http-event-collector" target="_blank" rel="noopener">Troubleshoot HTTP Event Collector</a> (status code 12, "Event field is required")</li>
+      <li>Datadog: <a class="link" href="https://docs.datadoghq.com/api/latest/logs/send-logs/" target="_blank" rel="noopener">Send logs API</a> (intake endpoint, <code>DD-API-KEY</code> header, JSON body, <code>202</code> response)</li>
+      <li>Datadog: <a class="link" href="https://docs.datadoghq.com/logs/guide/apigee/" target="_blank" rel="noopener">Apigee log collection guide</a> (intake URL with <code>dd-api-key</code> and <code>ddsource</code> query parameters)</li>
+      <li>Microsoft: <a class="link" href="https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview" target="_blank" rel="noopener">Logs Ingestion API in Azure Monitor</a> (URI format, bearer token, JSON array body, Monitoring Metrics Publisher role, portal-created DCRs)</li>
+      <li>Microsoft: <a class="link" href="https://learn.microsoft.com/en-us/azure/connectors/connectors-native-reqres" target="_blank" rel="noopener">Receive and respond to inbound HTTPS calls</a> (Request trigger, <code>202</code> without a Response action)</li>
+      <li>Microsoft: <a class="link" href="https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-http-endpoint" target="_blank" rel="noopener">Create callable workflows</a> (shared access signature in the trigger URL)</li>
+      <li>Microsoft: <a class="link" href="https://learn.microsoft.com/en-us/azure/logic-apps/authenticate-with-managed-identity" target="_blank" rel="noopener">Authenticate with managed identities</a> (HTTP action, Audience)</li>
+      <li>Microsoft: <a class="link" href="https://learn.microsoft.com/en-us/python/api/overview/azure/monitor-ingestion-readme" target="_blank" rel="noopener">Azure Monitor Ingestion client library for Python</a> (<code>LogsIngestionClient.upload</code>)</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a class="link" href="webhooks.html">Webhooks</a> — Every event type, payload and header in one place</li>
+      <li><a class="link" href="connectors.html">Connectors</a> — Reading risk context from your SIEM during evaluation</li>
+      <li><a class="link" href="advanced-features.html">Advanced Features</a> — Signing, anchoring and other audit-trail features</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API keys and roles</li>
+    </ul>
+  </main>
+
+<footer>
+  <div class="gradient-divider"></div>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      GaaS by <a href="https://h2om.ai">H2Om</a> &copy; 2026 &mdash; BSL&nbsp;1.1 &rarr; Apache&nbsp;2.0 on 2030-02-12
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Docs</div>
+      <div class="footer-links-col">
+        <a href="index.html">Docs Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="intent-api.html">Intent API</a>
+        <a href="authentication.html">Authentication</a>
+        <a href="spec.html">Spec</a>
+        <a href="search.html">Search</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Platform</div>
+      <div class="footer-links-col">
+        <a href="policies.html">Policies</a>
+        <a href="connectors.html">Connectors</a>
+        <a href="sdks.html">SDKs</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="webhooks.html">Webhooks</a>
+        <a href="siem.html">SIEM Alerts</a>
+        <a href="a2a.html">A2A Protocol</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Operate</div>
+      <div class="footer-links-col">
+        <a href="observability.html">Observability</a>
+        <a href="shadow-mode.html">Shadow Mode</a>
+        <a href="advanced-features.html">Advanced Features</a>
+        <a href="rate-limits.html">Rate Limits</a>
+        <a href="load-testing.html">Load Testing</a>
+        <a href="billing-and-quotas.html">Billing &amp; Quotas</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Compliance</div>
+      <div class="footer-links-col">
+        <a href="compliance.html">Compliance</a>
+        <a href="gdpr-compliance.html">GDPR</a>
+        <a href="sla.html">SLA</a>
+        <a href="record-free-forever.html">Record Free Forever</a>
+        <a href="api-reference.html">API Reference</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Company</div>
+      <div class="footer-links-col">
+        <a href="https://gaas.is">gaas.is</a>
+        <a href="https://gaas.is/pricing">Pricing</a>
+        <a href="https://gaas.is/trust">Trust &amp; Audit</a>
+        <a href="https://gaas.is/start">Get Started</a>
+        <a href="https://the.gaas.is">Sign In</a>
+        <a href="https://gaas.is/careers">Careers</a>
+        <a href="https://github.com/H2OmAI">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-legal-col">
+      <a href="https://gaas.is/privacy">Privacy</a>
+      <a href="https://gaas.is/terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="search.js"></script>
+<script src="constellation.js"></script>
+</body>
+</html>

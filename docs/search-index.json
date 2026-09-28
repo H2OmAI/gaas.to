@@ -991,14 +991,14 @@
     "page": "Webhooks",
     "section": "Available Events",
     "url": "webhooks.html#available-events",
-    "body": "Event types: intent.decision (every governance decision), escalation.created (new escalation queued), escalation.resolved (escalation resolved), quota.warning (80% quota used), quota.exceeded, membrane.activated, membrane.suspended.",
+    "body": "Event types: decision.approved, decision.blocked, decision.escalated, escalation.decided, escalation.timed_out, escalation.cancelled, escalation.reassigned, quota.exceeded. Decision events are sent in every pipeline mode; data.pipeline_mode says which.",
     "tags": [
-      "intent.decision",
-      "escalation.created",
-      "escalation.resolved",
-      "quota.warning",
+      "decision.blocked",
+      "decision.escalated",
+      "decision.approved",
+      "escalation.decided",
+      "escalation.timed_out",
       "quota.exceeded",
-      "membrane.activated",
       "event types"
     ]
   },
@@ -1007,13 +1007,14 @@
     "page": "Webhooks",
     "section": "Registering a Webhook",
     "url": "webhooks.html#registering-a-webhook",
-    "body": "POST /v1/webhooks with endpoint URL, event types array, and optional secret. Returns webhook_id and signing_secret. Store signing_secret — used to verify all incoming payloads.",
+    "body": "POST /v1/escalations/webhooks with an admin API key: url (HTTPS, public), optional event_types, optional escalation_id, optional description. GaaS generates the whsec_ signing secret and returns it once in the 201 response.",
     "tags": [
-      "POST /v1/webhooks",
+      "POST /v1/escalations/webhooks",
       "register",
-      "endpoint URL",
-      "signing_secret",
-      "webhook_id"
+      "event_types",
+      "secret",
+      "whsec_",
+      "admin"
     ]
   },
   {
@@ -1021,14 +1022,14 @@
     "page": "Webhooks",
     "section": "Event Payload Structure",
     "url": "webhooks.html#event-payload-structure",
-    "body": "Every event includes event_type, event_id, timestamp (ISO 8601), org_id, and data object specific to the event type. The data object for intent.decision includes the full GovernanceDecision schema.",
+    "body": "Every delivery carries event_type, timestamp, webhook_id, organization_id and data. Decision events add intent_id and decision_id, with verdict, risk_score and pipeline_mode in data. Headers: X-GaaS-Signature, X-GaaS-Event, X-GaaS-Delivery.",
     "tags": [
       "event_type",
-      "event_id",
       "timestamp",
-      "org_id",
-      "data",
-      "GovernanceDecision",
+      "organization_id",
+      "intent_id",
+      "decision_id",
+      "X-GaaS-Delivery",
       "payload structure"
     ]
   },
@@ -1037,7 +1038,7 @@
     "page": "Webhooks",
     "section": "Signature Verification (HMAC-SHA256)",
     "url": "webhooks.html#signature-verification-hmac-sha256",
-    "body": "Verify the X-GaaS-Signature header on every incoming webhook. HMAC-SHA256 over the raw request body using your signing_secret. Reject requests where signature does not match — replay attack protection.",
+    "body": "Verify the X-GaaS-Signature header on every incoming webhook: sha256= plus the hex HMAC-SHA256 of the raw request body, keyed with the whole whsec_ secret. Compare in constant time; deduplicate on X-GaaS-Delivery to stop replays.",
     "tags": [
       "HMAC",
       "SHA256",
@@ -1053,13 +1054,13 @@
     "page": "Webhooks",
     "section": "Retry Policy",
     "url": "webhooks.html#retry-policy",
-    "body": "Failed deliveries retried up to 3 times with exponential backoff: 1 min, 10 min, 1 hour. Events abandoned after 24 hours. Your endpoint must return 2xx within 10 seconds or delivery is marked failed.",
+    "body": "Up to 3 attempts per delivery: immediately, after 5 seconds, then after a further 25 seconds. Each attempt waits up to 10 seconds for a 2xx. Failed deliveries are listed at GET /v1/escalations/webhooks/deliveries/failed and can be retried; a manual retry sends a notice, not the original event.",
     "tags": [
       "retry",
-      "3 times",
+      "3 attempts",
       "exponential backoff",
-      "24 hours",
       "10 seconds",
+      "failed deliveries",
       "delivery failure"
     ]
   },
@@ -1068,13 +1069,95 @@
     "page": "Webhooks",
     "section": "Testing Webhooks",
     "url": "webhooks.html#testing-webhooks",
-    "body": "POST /v1/webhooks/{id}/test sends a test event to your endpoint. Use ngrok or similar for local development. Test payload is identically structured to production events.",
+    "body": "Use ngrok or webhook.site to give a local receiver a public HTTPS address, then register it with POST /v1/escalations/webhooks.",
     "tags": [
       "test webhook",
-      "POST /v1/webhooks/test",
       "ngrok",
-      "local development",
-      "test event"
+      "webhook.site",
+      "local development"
+    ]
+  },
+  {
+    "id": "siem",
+    "page": "Send GaaS alerts to your SIEM",
+    "section": null,
+    "url": "siem.html",
+    "body": "Send GaaS blocks, escalations and quota alerts to your SIEM through your organization's own signed webhooks. Datadog can take them directly; Splunk and Microsoft Sentinel need a small adapter or a Logic App.",
+    "tags": [
+      "SIEM",
+      "Splunk",
+      "Sentinel",
+      "Datadog",
+      "webhooks",
+      "security alerts"
+    ]
+  },
+  {
+    "id": "siem#which-events",
+    "page": "Send GaaS alerts to your SIEM",
+    "section": "Which events to send",
+    "url": "siem.html#which-events",
+    "body": "Send decision.blocked, decision.escalated, escalation.timed_out and quota.exceeded; escalation.decided closes the loop. Filter on data.pipeline_mode = live.",
+    "tags": [
+      "decision.blocked",
+      "decision.escalated",
+      "quota.exceeded",
+      "pipeline_mode",
+      "SIEM events"
+    ]
+  },
+  {
+    "id": "siem#splunk",
+    "page": "Send GaaS alerts to your SIEM",
+    "section": "Splunk: HTTP Event Collector, via the adapter",
+    "url": "siem.html#splunk",
+    "body": "Splunk HEC needs an Authorization: Splunk token header and an event envelope, so a GaaS webhook goes through a small adapter that verifies the signature and wraps the event.",
+    "tags": [
+      "Splunk",
+      "HEC",
+      "HTTP Event Collector",
+      "adapter"
+    ]
+  },
+  {
+    "id": "siem#sentinel",
+    "page": "Send GaaS alerts to your SIEM",
+    "section": "Microsoft Sentinel: a Logic App, or the adapter",
+    "url": "siem.html#sentinel",
+    "body": "Microsoft Sentinel ingests through the Azure Monitor Logs Ingestion API. Use a Logic App with a Request trigger and managed identity, or the adapter with the Azure Monitor Ingestion client library.",
+    "tags": [
+      "Microsoft Sentinel",
+      "Azure",
+      "Logic App",
+      "Logs Ingestion API",
+      "data collection rule"
+    ]
+  },
+  {
+    "id": "siem#datadog",
+    "page": "Send GaaS alerts to your SIEM",
+    "section": "Datadog: send directly",
+    "url": "siem.html#datadog",
+    "body": "Register the Datadog HTTP logs intake URL with dd-api-key and ddsource query parameters as your GaaS webhook. Use a dedicated API key; Datadog does not check the GaaS signature.",
+    "tags": [
+      "Datadog",
+      "logs intake",
+      "dd-api-key",
+      "HTTP logs"
+    ]
+  },
+  {
+    "id": "siem#adapter",
+    "page": "Send GaaS alerts to your SIEM",
+    "section": "A tiny adapter for any SIEM",
+    "url": "siem.html#adapter",
+    "body": "A standard-library Python function that verifies X-GaaS-Signature, skips manual-retry notices and forwards the event to any SIEM HTTP endpoint.",
+    "tags": [
+      "adapter",
+      "HMAC",
+      "X-GaaS-Signature",
+      "forward",
+      "SIEM"
     ]
   },
   {
