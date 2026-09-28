@@ -273,6 +273,10 @@
       <strong>All SDKs are Apache-2.0 licensed.</strong> Source and full documentation at <a class="link" href="https://github.com/H2OmAI/gaas">github.com/H2OmAI/gaas</a> under <code>sdks/</code>.
     </div>
 
+    <div class="warning" id="fail-closed">
+      <strong>Framework plugins fail closed.</strong> If GaaS cannot give a decision &mdash; it is unreachable, it times out, or it answers with any HTTP error, including a wrong API key (401) &mdash; the governed tool <strong>does not run</strong>. The plugin reports it exactly as a BLOCK, with <code>GovernanceBlockedError</code> and verdict <code>UNEVALUATED</code> (plus a short <code>reason</code> such as <code>HTTP 401</code> or <code>timeout</code>). To run tools anyway when GaaS cannot answer, set <code>fail_open=True</code> (Python) or <code>failOpen: true</code> (Vercel AI); the action then runs ungoverned and a warning is logged. <code>raise_on_governance_error</code> / <code>raiseOnGovernanceError</code> still re-raises the underlying error and takes precedence. This is the default from gaas-langchain 0.3.0, gaas-crewai 0.2.0, gaas-openai-agents 0.2.0, gaas-pydantic-ai 0.2.0 and @governancehq/vercel-ai 0.2.0; earlier versions ran the tool ungoverned on any error.
+    </div>
+
     <hr class="divider">
 
     <!-- ── Python ──────────────────────────────────────────────── -->
@@ -519,7 +523,13 @@ config = <span class="func">GaaSGovernanceConfig</span>(
     block_on_escalate=<span class="keyword">True</span>,     <span class="comment"># raise on ESCALATE verdicts too</span>
     timeout_seconds=<span class="number">240.0</span>,  <span class="comment"># enough for a deliberated decision (30-60 s)</span>
     sensitivity=<span class="string">"INTERNAL"</span>,
+    fail_open=<span class="keyword">False</span>,        <span class="comment"># no decision from GaaS: block the tool (default)</span>
 )</code></pre>
+    <p>
+      If GaaS cannot give a decision, the tool, node or (with <code>enforce=True</code>) callback raises
+      <code>GovernanceBlockedError</code> with verdict <code>UNEVALUATED</code> and the tool does not run.
+      Set <code>fail_open=True</code> to run it anyway, ungoverned (see <a class="link" href="#fail-closed">Framework plugins fail closed</a>).
+    </p>
 
     <h3>Govern a Single Tool</h3>
     <pre><code><span class="keyword">from</span> gaas_langchain <span class="keyword">import</span> govern_tool
@@ -563,7 +573,8 @@ handler.<span class="func">reset</span>()  <span class="comment"># clear log bet
 <span class="keyword">try</span>:
     result = safe_tool.<span class="func">run</span>(<span class="string">"send payment"</span>)
 <span class="keyword">except</span> <span class="type">GovernanceBlockedError</span> <span class="keyword">as</span> e:
-    <span class="func">print</span>(e.verdict)              <span class="comment"># "BLOCK" or "ESCALATE"</span>
+    <span class="func">print</span>(e.verdict)              <span class="comment"># "BLOCK", "ESCALATE", ... or "UNEVALUATED"</span>
+    <span class="func">print</span>(e.reason)               <span class="comment"># UNEVALUATED only: "HTTP 401", "timeout", ...</span>
     <span class="func">print</span>(e.decision_id)           <span class="comment"># GaaS decision ID</span>
     <span class="func">print</span>(e.risk_score)             <span class="comment"># 0.0–1.0</span>
     <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_002", ...]</span>
@@ -616,6 +627,9 @@ result = <span class="keyword">await</span> Runner.<span class="func">run</span>
       unchanged &mdash; a blocked action halts the run instead of becoming error text
       the model can route around. Errors inside your own tool functions keep the
       framework's default behaviour (formatted for the model, run continues).
+      When GaaS cannot give a decision, the run halts the same way, with verdict
+      <code>UNEVALUATED</code>, unless <code>fail_open=True</code>
+      (see <a class="link" href="#fail-closed">Framework plugins fail closed</a>).
     </p>
 
     <h3>Hold-and-Poll on ESCALATE</h3>
@@ -673,7 +687,9 @@ researcher = <span class="func">Agent</span>(
       is re-blocked, and every attempt lands on the signed audit chain. Hold-and-poll
       on ESCALATE is supported via <code>hold_on_escalate=True</code>
       (approve/modify proceeds; deny/timeout raises <code>ESCALATE_DENY</code> /
-      <code>ESCALATE_TIMEOUT</code>).
+      <code>ESCALATE_TIMEOUT</code>). When GaaS cannot give a decision, the tool does not
+      execute either: <code>GovernanceBlockedError</code> with verdict <code>UNEVALUATED</code>,
+      unless <code>fail_open=True</code> (see <a class="link" href="#fail-closed">Framework plugins fail closed</a>).
     </p>
 
     <h3>Error Handling</h3>
@@ -733,7 +749,9 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
       The adapter deliberately never uses <code>ModelRetry</code> &mdash; the model cannot
       route around a block. Hold-and-poll on ESCALATE is supported via
       <code>hold_on_escalate=True</code> (approve/modify proceeds; deny/timeout raises
-      <code>ESCALATE_DENY</code> / <code>ESCALATE_TIMEOUT</code>).
+      <code>ESCALATE_DENY</code> / <code>ESCALATE_TIMEOUT</code>). When GaaS cannot give a
+      decision, the run aborts the same way, with verdict <code>UNEVALUATED</code>, unless
+      <code>fail_open=True</code> (see <a class="link" href="#fail-closed">Framework plugins fail closed</a>).
     </p>
 
     <hr class="divider">
@@ -776,7 +794,10 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
       <code>tool-error</code> part for the decision ID and blocking policies.
       Hold-and-poll on ESCALATE is supported via <code>holdOnEscalate: true</code>
       (approve/modify proceeds; deny/timeout throws <code>ESCALATE_DENY</code> /
-      <code>ESCALATE_TIMEOUT</code>).
+      <code>ESCALATE_TIMEOUT</code>). When GaaS cannot give a decision, the tool does not
+      execute either: <code>GovernanceBlockedError</code> with verdict <code>UNEVALUATED</code>
+      (<code>stopOnGovernanceBlock()</code> stops on it too), unless <code>failOpen: true</code>
+      (see <a class="link" href="#fail-closed">Framework plugins fail closed</a>).
     </p>
 
     <hr class="divider">
@@ -839,6 +860,12 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
       <code>governance://policy-packs</code>, <code>governance://spec</code>.
       No write-side policy tools &mdash; applying governance bundles from an LLM
       session is the wrong trust direction.
+    </p>
+    <p>
+      If <code>gaas_submit_intent</code> gets no decision (network error, timeout, or any HTTP
+      error, including a wrong API key), its error result begins
+      &ldquo;GaaS could not evaluate this action, so it is not approved. Do not perform it.&rdquo;
+      An error from <code>gaas_check_decision</code> says the same: the action is not approved.
     </p>
 
     <h3>HTTP Mode</h3>
