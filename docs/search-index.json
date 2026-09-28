@@ -1883,12 +1883,12 @@
     "page": "Advanced Features",
     "section": "Policy Epoch Tracking",
     "url": "advanced-features.html#policy-epoch",
-    "body": "Policy epoch versioning stamps every audit record with the current policy version. HMAC-SHA256 integrity verification on Redis-stored epoch values (GAAS_POLICY_EPOCH_HMAC_KEY). Fail-closed design: HMAC verification failure returns last known-good value. 5-second local cache TTL. epoch_stale boolean indicates if the decision used a potentially outdated policy set.",
+    "body": "Policy epoch versioning stamps every audit record with the current policy version. One epoch counter shared by every API instance, stored in Postgres with HMAC-SHA256 integrity verification (GAAS_POLICY_EPOCH_HMAC_KEY). Fail-closed design: HMAC verification failure returns last known-good value. 5-second local cache TTL. epoch_stale boolean indicates if the decision used a potentially outdated policy set.",
     "tags": [
       "policy epoch",
       "hmac",
       "versioning",
-      "redis",
+      "postgres",
       "integrity",
       "fail-closed",
       "audit"

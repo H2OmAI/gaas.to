@@ -635,7 +635,7 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
       Every audit record is stamped with <code>policy_epoch</code> (integer) and <code>epoch_stale</code> (boolean), identifying exactly which version of your policy configuration was active when the decision was made.
     </p>
     <ul>
-      <li>Stored in Redis at <code>gaas:policy_epoch:current</code> with HMAC-SHA256 integrity (<code>GAAS_POLICY_EPOCH_HMAC_KEY</code>)</li>
+      <li>One counter shared by every API instance, stored in Postgres under <code>gaas:policy_epoch:current</code> with HMAC-SHA256 integrity (<code>GAAS_POLICY_EPOCH_HMAC_KEY</code>)</li>
       <li>Local cache TTL: 5 seconds. If HMAC verification fails, the system uses the last known-good value (fail-closed)</li>
       <li>Fields live on <code>AuditPipelineMetadata</code> (not <code>GovernanceDecision</code>)</li>
     </ul>

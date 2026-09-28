@@ -258,7 +258,7 @@
         <li>Sensitive data handling controls</li>
         <li>Resource isolation validation</li>
         <li>Session trust decay enforcement (pol_t1_015 — blocks when trust budget ≤ 0.10)</li>
-        <li>Behavioral anomaly detection (pol_t1_016)</li>
+        <li>Prompt injection blocking (pol_t1_016)</li>
       </ul>
     </div>
 
@@ -426,7 +426,12 @@
     <div class="tier-section">
       <h3>Security <span class="tier-badge">1 POLICY</span></h3>
       <p>
-        Additional security enforcement policy (pol_security_001) for prompt injection detection and security boundary enforcement.
+        Behavioral anomaly blocking (pol_security_001): blocks an agent's action when it is unusual for that
+        agent's own last 200 live decisions — an action type or data sensitivity it has never used, or has used in
+        under 2% of them, or an amount far above its usual ones (at least 7 spreads above its average and more
+        than 3x its largest). Scoring starts once the agent has 15 live decisions on record; blocked attempts
+        never become part of its history. An operator can reset an agent with
+        <code>POST /v1/agents/{agent_id}/trust/reset</code>.
       </p>
     </div>
 
