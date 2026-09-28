@@ -251,8 +251,11 @@
       that gracefully degrades when a data source is unavailable.
     </p>
     <p>
-      GaaS ships with <strong>27 production connectors</strong> spanning communications, identity, security, developer tooling, payments, IoT, agriculture, fleet management, and multi-agent networks.
+      GaaS ships with <strong>29 built connectors</strong> spanning communications, identity, security, developer tooling, payments, IoT, agriculture, fleet management, and multi-agent networks.
       Connectors run in parallel — enrichment adds minimal latency while maximising context fidelity.
+      A connector answers only once it is configured. <strong>The hosted service at api.gaas.is has none configured yet</strong>:
+      it uses GaaS's own decision history, marks every other kind of context as unknown, and its policies treat
+      unknown context as risk. It never substitutes simulated data, and each audit record lists the sources that answered.
     </p>
 
     <div class="note">
