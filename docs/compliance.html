@@ -658,10 +658,14 @@
   <section>
     <h2 id="governance-proof-tokens">Governance Proof Tokens</h2>
     <p>
-      Every decision produced by GaaS carries a <strong>Governance Proof Token (GPT)</strong> — an ECDSA P-256 signed artefact that cryptographically binds the verdict, the policies evaluated, and the full audit reference into a single tamper-evident object.
+      When a GaaS deployment has a signing key configured, every <strong>live</strong> decision carries a
+      <strong>Governance Proof Token (GPT)</strong> in <code>decision.governance_proof_token</code>: a signed record of
+      what was decided, for which agent, and which audit record anchors it. Every field is signed, so changing any of
+      them — the verdict, the organization, the audit hash — breaks the signature. Shadow and test decisions get no token.
     </p>
     <p>
-      Think of it as the exhibit in an AI liability lawsuit: an independently verifiable, court-admissible record proving that governance was applied at decision time.
+      Anyone holding a token can check it: an auditor, a regulator, an insurer, or the other party to a transaction.
+      They need no GaaS account.
     </p>
 
     <h3>Token Fields</h3>
@@ -675,80 +679,121 @@
       <tbody>
         <tr>
           <td><code>token_id</code></td>
-          <td>Unique stable identifier for the proof token (<code>gpt_</code> prefix)</td>
+          <td>Random UUID4. Anyone holding it can check the token.</td>
         </tr>
         <tr>
-          <td><code>decision_id</code></td>
-          <td>The decision this token covers</td>
+          <td><code>issued_at</code></td>
+          <td>When GaaS issued the token (UTC).</td>
+        </tr>
+        <tr>
+          <td><code>decision_id / intent_id</code></td>
+          <td>The decision and intent this token covers.</td>
+        </tr>
+        <tr>
+          <td><code>agent_id / org_id</code></td>
+          <td>The agent that asked, and its organization.</td>
         </tr>
         <tr>
           <td><code>verdict</code></td>
-          <td>Final governance verdict: <code>approve</code>, <code>block</code>, <code>escalate</code>, or <code>modify</code></td>
+          <td>The decision's verdict as the API returns it: <code>approve</code>, <code>approve_modified</code>, <code>block</code> or <code>escalate</code>.</td>
         </tr>
         <tr>
-          <td><code>policies_evaluated</code></td>
-          <td>Count of policies run against the intent</td>
+          <td><code>pipeline_mode</code></td>
+          <td>Always <code>live</code>: shadow and test decisions get no token.</td>
         </tr>
         <tr>
-          <td><code>policies_passed</code></td>
-          <td>Count of policies that returned PASS or CONDITIONAL</td>
+          <td><code>policies_evaluated / policies_passed</code></td>
+          <td>How many policies ran, and how many passed.</td>
         </tr>
         <tr>
-          <td><code>risk_score</code></td>
-          <td>6-dimensional composite risk score (0.0 – 1.0)</td>
+          <td><code>risk_score / risk_classification</code></td>
+          <td>The decision's risk score (0.0–1.0) and class.</td>
         </tr>
         <tr>
-          <td><code>risk_classification</code></td>
-          <td><code>low</code>, <code>medium</code>, <code>high</code>, or <code>critical</code></td>
+          <td><code>audit_ref / audit_hash</code></td>
+          <td>The audit record the decision is anchored to, and that record's hash in the tamper-evident audit chain.</td>
         </tr>
         <tr>
-          <td><code>audit_ref</code></td>
-          <td>Foreign key into the immutable audit record chain</td>
-        </tr>
-        <tr>
-          <td><code>audit_hash</code></td>
-          <td>SHA-256 hash of the referenced audit record for chain verification</td>
+          <td><code>key_id</code></td>
+          <td>Which signing key; matches <code>kid</code> in <code>/.well-known/gaas-audit-keys.json</code>.</td>
         </tr>
         <tr>
           <td><code>gaas_signature</code></td>
-          <td>ECDSA P-256 signature over the token payload (base64url-encoded DER)</td>
+          <td>ECDSA P-256 with SHA-256, DER-encoded, hex — over every other field (see below).</td>
         </tr>
       </tbody>
     </table>
 
-    <p>
-      The token is embedded directly in every <code>GovernanceDecision</code> response at the <code>governance_proof_token</code> field — no additional API call required.
-    </p>
-
-    <h3>Verification Endpoint</h3>
+    <h3>Checking a token online</h3>
     <ul class="endpoint-list">
       <li>
         <span class="method method-get">GET</span>
         <span class="endpoint-path">/v1/verify/proof/{token_id}</span>
-        <span class="endpoint-desc">— Verify a token by ID. Public endpoint — no API key required.</span>
+        <span class="endpoint-desc">— Public, no API key. Checks the signature, and that the anchoring audit record still matches <code>audit_hash</code>. 404 when no token has that id.</span>
+      </li>
+      <li>
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/.well-known/gaas-audit-keys.json</span>
+        <span class="endpoint-desc">— Public. The signing key as a JWK Set (also as PEM), for checking offline.</span>
       </li>
     </ul>
 
-    <h3>Example Token</h3>
+    <h3>Example token</h3>
 <pre><code>{
-  <span class="prop">"governance_proof_token"</span>: {
-    <span class="prop">"token_id"</span>:            <span class="string">"gpt_7xk9mR2pLqN4vBs"</span>,
-    <span class="prop">"decision_id"</span>:         <span class="string">"dec_abc123"</span>,
-    <span class="prop">"verdict"</span>:             <span class="string">"approve"</span>,
-    <span class="prop">"policies_evaluated"</span>:  <span class="num">18</span>,
-    <span class="prop">"policies_passed"</span>:     <span class="num">18</span>,
-    <span class="prop">"risk_score"</span>:          <span class="num">0.12</span>,
-    <span class="prop">"risk_classification"</span>: <span class="string">"low"</span>,
-    <span class="prop">"audit_ref"</span>:           <span class="string">"aud_f3a8c2d1e94b"</span>,
-    <span class="prop">"audit_hash"</span>:          <span class="string">"sha256:a3f1e2d4b9..."</span>,
-    <span class="prop">"issued_at"</span>:           <span class="string">"2026-08-01T14:32:07.421Z"</span>,
-    <span class="prop">"gaas_signature"</span>:      <span class="string">"MEYCIQDx2k...base64url...Q=="</span>
-  }
+  <span class="prop">"token_id"</span>: <span class="string">"ea3fb059-42d6-4663-b9a5-366aefa536f0"</span>,
+  <span class="prop">"issued_at"</span>: <span class="string">"2026-09-28T18:45:17.265864Z"</span>,
+  <span class="prop">"decision_id"</span>: <span class="string">"dec_001d59151d7b4d629c482c5544e6c93f"</span>,
+  <span class="prop">"intent_id"</span>: <span class="string">"int_94fb1d4e6e034df287c112d2dd81340d"</span>,
+  <span class="prop">"agent_id"</span>: <span class="string">"agent_farm_bot"</span>,
+  <span class="prop">"org_id"</span>: <span class="string">"org_default"</span>,
+  <span class="prop">"verdict"</span>: <span class="string">"approve"</span>,
+  <span class="prop">"pipeline_mode"</span>: <span class="string">"live"</span>,
+  <span class="prop">"policies_evaluated"</span>: <span class="num">10</span>,
+  <span class="prop">"policies_passed"</span>: <span class="num">10</span>,
+  <span class="prop">"risk_score"</span>: <span class="num">0.0001</span>,
+  <span class="prop">"risk_classification"</span>: <span class="string">"low"</span>,
+  <span class="prop">"audit_ref"</span>: <span class="string">"aud_05f7496b8a614707b135b822905368f2"</span>,
+  <span class="prop">"audit_hash"</span>: <span class="string">"25a4fef2a81c9872b30609828ad092a50ae69f5da03f873f8c0e340399999fa5"</span>,
+  <span class="prop">"key_id"</span>: <span class="string">"b3e18dff8282417d"</span>,
+  <span class="prop">"gaas_version"</span>: <span class="string">"0.3.0"</span>,
+  <span class="prop">"gaas_signature"</span>: <span class="string">"3046022100a4d7519db157a1e049526e7f391509607d6a05ddc5e4141ee63be486a8e4d5420221009ac5c64e2dde91721b140150fe1161d165dd4e4d45205ea6646ff56e985e3a60"</span>
 }</code></pre>
 
-    <div class="note">
-      <strong>Signature Algorithm:</strong> ECDSA P-256 (modern, compact, FIPS 186-4 compliant). The signature covers <code>SHA-256("{token_id}:{decision_id}:{audit_hash}")</code>. Verify any token via <code>GET /v1/verify/proof/{token_id}</code>.
-    </div>
+    <h3>Example check</h3>
+<pre><code><span class="comment">// GET https://api.gaas.is/v1/verify/proof/ea3fb059-42d6-4663-b9a5-366aefa536f0  (no API key; "token" field omitted here)</span>
+{
+  <span class="prop">"token_id"</span>: <span class="string">"ea3fb059-42d6-4663-b9a5-366aefa536f0"</span>,
+  <span class="prop">"valid"</span>: <span class="num">true</span>,
+  <span class="prop">"signature_valid"</span>: <span class="num">true</span>,
+  <span class="prop">"chain_integrity"</span>: <span class="num">true</span>,
+  <span class="prop">"verdict"</span>: <span class="string">"approve"</span>,
+  <span class="prop">"agent_id"</span>: <span class="string">"agent_farm_bot"</span>,
+  <span class="prop">"org_id"</span>: <span class="string">"org_default"</span>,
+  <span class="prop">"issued_at"</span>: <span class="string">"2026-09-28T18:45:17.265864Z"</span>,
+  <span class="prop">"key_id"</span>: <span class="string">"b3e18dff8282417d"</span>,
+  <span class="prop">"error"</span>: <span class="num">null</span>
+}</code></pre>
+
+    <h3>Checking a token offline</h3>
+    <p>
+      The signed bytes are the token's JSON with <code>gaas_signature</code> removed, keys sorted, and no whitespace.
+      The signature is ordinary ECDSA P-256 / SHA-256 over those bytes, so any crypto library can check it:
+    </p>
+<pre><code><span class="comment"># Python (pip install cryptography)</span>
+import json
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import ec
+
+token = json.load(open("token.json"))
+signature = bytes.fromhex(token.pop("gaas_signature"))
+payload = json.dumps(token, sort_keys=True, separators=(",", ":")).encode()
+key = serialization.load_pem_public_key(open("gaas-audit-key.pem", "rb").read())  <span class="comment"># "pem" in the JWK</span>
+key.verify(signature, payload, ec.ECDSA(hashes.SHA256()))  <span class="comment"># raises InvalidSignature if anything changed</span>
+
+<span class="comment"># Or with jq 1.7+ (it keeps numbers exactly as written) and OpenSSL</span>
+jq -cS 'del(.gaas_signature)' token.json | tr -d '\n' &gt; payload.json
+jq -r .gaas_signature token.json | xxd -r -p &gt; signature.der
+openssl dgst -sha256 -verify gaas-audit-key.pem -signature signature.der payload.json   <span class="comment"># Verified OK</span></code></pre>
   </section>
 
   <hr class="divider">

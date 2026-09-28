@@ -588,11 +588,11 @@ GAAS_READ_REPLICA_ENABLED=true</code></pre>
 
     <h2 id="governance-proof-tokens">Governance Proof Tokens</h2>
     <p>
-      Every decision carries a <code>governance_proof_token</code> — an ECDSA P-256 signed artefact that binds the verdict, policies evaluated, risk score, and audit hash into a tamper-evident object. The signed payload is <code>SHA-256("{token_id}:{decision_id}:{audit_hash}")</code>.
+      When a signing key is configured, every live decision carries a <code>governance_proof_token</code> — an ECDSA P-256 signed record of the verdict, the agent and organization, the policies evaluated, the risk score and the anchoring audit hash. Every field is signed; changing any of them breaks the signature.
     </p>
     <ul>
       <li>Verification: <code>GET /v1/verify/proof/{token_id}</code> — public endpoint, no API key required</li>
-      <li>Returns: <code>TokenVerificationResult</code> with <code>valid</code>, <code>signature_valid</code>, and <code>chain_integrity</code> fields</li>
+      <li>Returns <code>valid</code>, <code>signature_valid</code> and <code>chain_integrity</code>, plus the signed token for checking offline with the key at <code>/.well-known/gaas-audit-keys.json</code></li>
       <li>See <a class="link" href="compliance.html#governance-proof-tokens">Compliance &gt; Governance Proof Tokens</a> for full field reference</li>
     </ul>
 

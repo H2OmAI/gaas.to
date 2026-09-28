@@ -1370,7 +1370,7 @@
     "page": "Compliance & Liability Shield",
     "section": "Governance Proof Tokens",
     "url": "compliance.html#governance-proof-tokens",
-    "body": "Governance Proof Tokens (GPT) — cryptographically signed audit bundles proving governance occurred. Download via GET /v1/audit/verification-bundle/{id}. SHA-256 hash chain, ECDSA signatures, tamper-evident ZIP.",
+    "body": "Governance Proof Tokens (GPT) — with a signing key configured, every live decision carries an ECDSA P-256 signed token, every field signed. Anyone can check it at GET /v1/verify/proof/{token_id} (no API key) or offline with the key at /.well-known/gaas-audit-keys.json.",
     "tags": [
       "GPT",
       "Governance Proof Token",
@@ -1835,7 +1835,7 @@
     "page": "Advanced Features",
     "section": "Governance Proof Tokens",
     "url": "advanced-features.html#governance-proof-tokens",
-    "body": "ECDSA P-256 signed proof tokens minted on every governance decision. Provides cryptographic evidence that a decision was made by the GaaS pipeline. GET /v1/verify/proof/{token_id} for public verification. Signed payload is SHA-256 of token_id, decision_id, and audit_hash. Included as governance_proof_token field on GovernanceDecision.",
+    "body": "ECDSA P-256 signed proof tokens on every live decision when a signing key is configured; every field is signed. GET /v1/verify/proof/{token_id} for public verification, no API key; the signing key is at /.well-known/gaas-audit-keys.json.",
     "tags": [
       "proof token",
       "ecdsa",
