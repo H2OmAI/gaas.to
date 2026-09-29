@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gaas.to/schemas/context-endpoint-request.v1.json",
+  "title": "GaaS context endpoint request, version 1",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "request_id",
+    "sent_at",
+    "mode",
+    "test",
+    "categories",
+    "intent"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "enum": [
+        "live",
+        "shadow",
+        "test"
+      ]
+    },
+    "test": {
+      "type": "boolean",
+      "description": "True for a Test connection request from GaaS."
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "environmental",
+          "entity_state",
+          "regulatory",
+          "organizational",
+          "identity",
+          "security"
+        ]
+      }
+    },
+    "intent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "agent": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "framework": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "verb": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "identifier": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "sensitivity": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "jurisdiction": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "estimated_impact": {
+              "type": "object",
+              "properties": {
+                "reversible": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "financial_exposure_usd": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "audience_size": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "data_categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "regulatory_domains": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "context_provided": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "user_state": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "environment": {
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

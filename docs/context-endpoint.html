@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Connect your systems: the context endpoint — GaaS Documentation">
+  <meta property="og:url" content="https://gaas.to/context-endpoint.html">
+  <meta property="og:image" content="https://gaas.to/favicon.png">
+  <meta property="og:site_name" content="GaaS — Governance as a Service">
+  <title>Connect your systems: the context endpoint — GaaS Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    #meshCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 1px solid #1e2533;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    header .logo span { color: #58a6ff; }
+
+    header nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    header nav a:hover { color: #e6edf3; }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #8b949e;
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.9375rem; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+      color: #e6edf3;
+    }
+
+    p code, li code {
+      background: #161b22;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .note strong { color: #58a6ff; }
+
+    .warning {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning strong { color: #d29922; }
+
+    ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.9375rem; }
+
+    a.link { color: #58a6ff; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+
+    .comment { color: #8b949e; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .func { color: #d2a8ff; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e2533;
+      margin: 2.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #161b22;
+      color: #e6edf3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #30363d;
+    }
+
+    tr:nth-child(even) { background: #0d1117; }
+
+
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      main { padding: 2.5rem 1.25rem; }
+    }
+    .muted { color: #8b949e; font-size: 0.85em; }
+  </style>
+  <link rel="stylesheet" href="footer.css">
+</head>
+<body>
+<canvas id="meshCanvas"></canvas>
+  <header>
+    <a class="logo" href="index.html">G<span>aa</span>S</a>
+    <nav>
+      <a href="search.html">Search</a>
+      <a href="index.html">Docs</a>
+      <a href="https://gaas.is">Home</a>
+      <a href="https://github.com/H2OmAI">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Connect your systems: the context endpoint</h1>
+    <p class="subtitle">
+      Give GaaS one HTTPS address of your own. When your agent proposes an action, GaaS asks that address for the facts its policies check (is the channel encrypted, is there an active security incident, has the customer consented, what is this agent's spending limit) and decides with them. You answer from your own systems, in one small JSON shape.
+    </p>
+
+    <h2 id="why">Why it matters</h2>
+    <p>
+      Policies decide on facts. When GaaS has no source for a fact, it treats the gap as risk: the context is reported as missing, confidence drops, and a policy that needs the fact to allow an action does not allow it. For example, <code>pol_t1_001</code> blocks sending payment-card data unless <code>environmental.channel_encryption</code> is <code>true</code>. Your endpoint is how GaaS learns facts only you know.
+    </p>
+
+    <hr class="divider">
+
+    <h2 id="how">How it works</h2>
+    <table>
+      <tbody>
+        <tr><td>When</td><td>During every decision for your organization, in <code>live</code>, <code>shadow</code> and <code>test</code> mode, for the categories you chose that matter to the action (below). One request per decision.</td></tr>
+        <tr><td>What GaaS sends</td><td>A signed <code>POST</code> describing the action: agent, action type and verb, target, sensitivity, estimated impact and the context your agent declared. Never the action's free-text summary or content.</td></tr>
+        <tr><td>What you answer</td><td>The facts you know, per category. Every fact is optional; leave out what you don't know.</td></tr>
+        <tr><td>Time limit</td><td>One attempt, within your endpoint's time limit: 1.5 seconds by default, 200 ms to 3 seconds. No retries, and redirects are not followed.</td></tr>
+        <tr><td>If it fails</td><td>The decision still happens. The categories it should have answered count as missing context, which is risk, and the audit record says why (<a class="link" href="#audit">below</a>).</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="categories">Which categories GaaS asks for</h3>
+    <p>You choose which of the six categories your endpoint answers. For each action GaaS asks only for those that matter to it:</p>
+    <table>
+      <thead><tr><th>Category</th><th>Asked when</th></tr></thead>
+      <tbody>
+        <tr><td><code>environmental</code></td><td>Always</td></tr>
+        <tr><td><code>entity_state</code></td><td>The action is <code>transact</code>, <code>access</code>, <code>modify</code> or <code>control</code></td></tr>
+        <tr><td><code>regulatory</code></td><td>The target is <code>regulated</code>, or the agent declared regulatory domains</td></tr>
+        <tr><td><code>organizational</code></td><td>The action has financial exposure, or the agent is not <code>certified</code></td></tr>
+        <tr><td><code>identity</code></td><td>The action is <code>access</code>, <code>modify</code> or <code>control</code></td></tr>
+        <tr><td><code>security</code></td><td>The target is not <code>public</code>, or the action has financial exposure</td></tr>
+      </tbody>
+    </table>
+    <p>GaaS keeps its own history, behaviour and session-trust context; those categories are not asked for.</p>
+
+    <hr class="divider">
+
+    <h2 id="set-up">Set it up</h2>
+    <p>
+      In the dashboard: <strong>Settings → Connected systems</strong>. Only an organization admin who signed in with two-factor can change it. Enter the address, choose the categories, and give the secret your endpoint expects, if any (sent as <code>Authorization: Bearer …</code> or in a header you name). GaaS then shows you a <strong>signing secret, once</strong>: store it, because your endpoint uses it to check that requests come from GaaS. Press <strong>Test connection</strong>; when every category answers correctly you can switch the endpoint on. Changing the address, categories, secret or time limit switches it off until you test again.
+    </p>
+    <p>The same with the API (admin key to change, operator or admin key to read):</p>
+    <table>
+      <thead><tr><th>Endpoint</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><code>GET /v1/context-endpoint</code></td><td>Your settings. Secrets appear only as their last four characters.</td></tr>
+        <tr><td><code>PUT /v1/context-endpoint</code></td><td>Create or replace: <code>url</code>, <code>categories</code>, <code>auth_type</code> (<code>none</code>, <code>bearer</code>, <code>header</code>), <code>auth_header_name</code>, <code>auth_secret</code> (write-only; omit to keep), <code>timeout_ms</code>, <code>enabled</code>. The first save returns the <code>signing_secret</code>, once.</td></tr>
+        <tr><td><code>POST /v1/context-endpoint/test</code></td><td>Sends a signed test request (<code>"test": true</code>, <code>"mode": "test"</code>) and reports each category. At most 6 a minute.</td></tr>
+        <tr><td><code>POST /v1/context-endpoint/rotate-signing-secret</code></td><td>A new signing secret, returned once, used from the next request.</td></tr>
+        <tr><td><code>DELETE /v1/context-endpoint</code></td><td>Remove it. Decisions go on without it at once.</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>Try it in shadow mode first.</strong> Send your agent's intents with <code>?mode=shadow</code>: GaaS calls your endpoint and records what it would decide, without enforcing anything. Compare the verdicts and the audit records before you rely on it in <code>live</code>.
+    </div>
+
+    <hr class="divider">
+
+    <h2 id="request">The request</h2>
+    <table>
+      <thead><tr><th>Header</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td><code>Content-Type</code></td><td><code>application/json</code></td></tr>
+        <tr><td><code>X-GaaS-Request-Id</code></td><td>Unique per request, also in the body as <code>request_id</code></td></tr>
+        <tr><td><code>X-GaaS-Timestamp</code></td><td>Unix seconds when GaaS signed the request</td></tr>
+        <tr><td><code>X-GaaS-Signature</code></td><td><code>v1=</code> + hex HMAC-SHA256 of <code>&lt;timestamp&gt;.&lt;raw body&gt;</code> with your signing secret</td></tr>
+        <tr><td><code>Authorization</code> or your header</td><td>The secret you saved, if any</td></tr>
+      </tbody>
+    </table>
+    <pre data-example="request"><code>{
+  &quot;contract_version&quot;: &quot;1&quot;,
+  &quot;request_id&quot;: &quot;ctxreq_5f0c2a9e41d7b3a8c6e2f190&quot;,
+  &quot;sent_at&quot;: &quot;2026-09-29T15:04:05.123456Z&quot;,
+  &quot;mode&quot;: &quot;live&quot;,
+  &quot;test&quot;: false,
+  &quot;categories&quot;: [
+    &quot;environmental&quot;,
+    &quot;regulatory&quot;
+  ],
+  &quot;intent&quot;: {
+    &quot;id&quot;: &quot;8c1e1a4e-3f7a-4d8e-9f10-2b7c5d6e7f80&quot;,
+    &quot;agent&quot;: {
+      &quot;id&quot;: &quot;billing-agent&quot;,
+      &quot;name&quot;: &quot;Billing agent&quot;,
+      &quot;framework&quot;: &quot;langchain&quot;
+    },
+    &quot;action&quot;: {
+      &quot;type&quot;: &quot;communicate&quot;,
+      &quot;verb&quot;: &quot;send_email&quot;,
+      &quot;target&quot;: {
+        &quot;type&quot;: &quot;person&quot;,
+        &quot;identifier&quot;: &quot;cust_42&quot;,
+        &quot;sensitivity&quot;: &quot;confidential&quot;,
+        &quot;jurisdiction&quot;: &quot;US-CA&quot;
+      },
+      &quot;estimated_impact&quot;: {
+        &quot;reversible&quot;: true,
+        &quot;financial_exposure_usd&quot;: 0,
+        &quot;audience_size&quot;: 1,
+        &quot;data_categories&quot;: [
+          &quot;PCI&quot;
+        ],
+        &quot;regulatory_domains&quot;: [
+          &quot;PCI-DSS&quot;
+        ]
+      }
+    },
+    &quot;context_provided&quot;: {
+      &quot;session_id&quot;: &quot;sess_19&quot;,
+      &quot;user_state&quot;: null,
+      &quot;environment&quot;: {
+        &quot;channel&quot;: &quot;email&quot;
+      }
+    }
+  }
+}</code></pre>
+    <p>Full schema: <a class="link" href="schemas/context-endpoint-request.v1.json">context-endpoint-request.v1.json</a>.</p>
+
+    <h3 id="verify">Verify the signature</h3>
+    <p>Check every request before you answer it. Reject a timestamp more than five minutes from your clock, so a recorded request cannot be replayed. Python, standard library only:</p>
+    <pre data-example="verify-python"><code>import hashlib, hmac, time
+
+def verify(secret: str, headers: dict, body: bytes) -&gt; bool:
+    &quot;&quot;&quot;True only if GaaS signed this exact body within the last five minutes.&quot;&quot;&quot;
+    lower = {k.lower(): v for k, v in headers.items()}
+    timestamp = lower.get(&quot;x-gaas-timestamp&quot;, &quot;&quot;)
+    signature = lower.get(&quot;x-gaas-signature&quot;, &quot;&quot;)
+    if not timestamp.isdigit() or abs(time.time() - int(timestamp)) &gt; 300:
+        return False
+    expected = &quot;v1=&quot; + hmac.new(secret.encode(), timestamp.encode() + b&quot;.&quot; + body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, signature)</code></pre>
+
+    <hr class="divider">
+
+    <h2 id="response">The response</h2>
+    <p>Answer <code>200</code> with <code>Content-Type: application/json</code>:</p>
+    <pre data-example="response"><code>{
+  &quot;contract_version&quot;: &quot;1&quot;,
+  &quot;facts&quot;: {
+    &quot;environmental&quot;: {
+      &quot;channel_encryption&quot;: true,
+      &quot;tls_version&quot;: &quot;1.3&quot;,
+      &quot;protocol&quot;: &quot;https&quot;
+    },
+    &quot;regulatory&quot;: {
+      &quot;applicable_frameworks&quot;: {
+        &quot;PCI-DSS&quot;: {
+          &quot;level&quot;: 1
+        }
+      },
+      &quot;cardholder_data_environment&quot;: false
+    }
+  },
+  &quot;as_of&quot;: {
+    &quot;environmental&quot;: &quot;2026-09-29T15:04:00Z&quot;,
+    &quot;regulatory&quot;: &quot;2026-09-29T00:00:00Z&quot;
+  }
+}</code></pre>
+    <ul>
+      <li>Put each category's facts under <code>facts.&lt;category&gt;</code>. Answer every category GaaS asked for; an empty object is fine.</li>
+      <li><code>as_of</code> is optional: when each category's facts were last true, with a time zone. Old facts count as stale context.</li>
+      <li>A fact with the wrong type fails its whole category (the others still count). <code>null</code> means "not known".</li>
+      <li>Keys that are not in the table below are kept, so your organization's own policies can read them. Keys are lower case, letters, digits and <code>_</code>; at most 200 per category, nested at most five levels.</li>
+      <li>The whole answer must be at most 256 KB.</li>
+    </ul>
+    <p>Full schema: <a class="link" href="schemas/context-endpoint-response.v1.json">context-endpoint-response.v1.json</a>.</p>
+
+    <h3 id="facts">The facts GaaS's policies read</h3>
+    <p>This is every fact a built-in policy checks. Supply the ones you can; a policy that does not get the fact it needs treats it as missing.</p>
+    <table>
+      <thead><tr><th>Category</th><th>Fact</th><th>Type</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr data-fact="environmental.channel_encryption"><td><code>environmental</code></td><td><code>channel_encryption</code></td><td>boolean</td><td>The channel the action uses is encrypted end to end.</td></tr>
+        <tr data-fact="environmental.tls_version"><td><code>environmental</code></td><td><code>tls_version</code></td><td>string or number</td><td>TLS version of that channel, e.g. &quot;1.3&quot;.</td></tr>
+        <tr data-fact="environmental.protocol"><td><code>environmental</code></td><td><code>protocol</code></td><td>string</td><td>Transport protocol, e.g. &quot;https&quot;, &quot;sftp&quot;, &quot;ftp&quot;.</td></tr>
+        <tr data-fact="environmental.network_segment"><td><code>environmental</code></td><td><code>network_segment</code></td><td>string</td><td>Network segment the target sits in, e.g. &quot;cde&quot;, &quot;internal&quot;, &quot;public&quot;.</td></tr>
+        <tr data-fact="environmental.global_privacy_control"><td><code>environmental</code></td><td><code>global_privacy_control</code></td><td>boolean</td><td>The consumer sent a Global Privacy Control signal.</td></tr>
+        <tr data-fact="environmental.communication_channel"><td><code>environmental</code></td><td><code>communication_channel</code></td><td>string</td><td>Channel for an outbound communication: &quot;voice&quot;, &quot;sms&quot;, &quot;email&quot;, ….</td></tr>
+        <tr data-fact="environmental.communication_method"><td><code>environmental</code></td><td><code>communication_method</code></td><td>string</td><td>How it is placed, e.g. &quot;autodialer&quot;, &quot;prerecorded&quot;, &quot;ai_voice&quot;, &quot;manual&quot;.</td></tr>
+        <tr data-fact="environmental.recipient_local_hour"><td><code>environmental</code></td><td><code>recipient_local_hour</code></td><td>integer</td><td>Recipient&#x27;s local hour, 0–23.</td></tr>
+        <tr data-fact="environmental.recipient_state"><td><code>environmental</code></td><td><code>recipient_state</code></td><td>string</td><td>Recipient&#x27;s US state, two letters, e.g. &quot;FL&quot;.</td></tr>
+        <tr data-fact="environmental.ai_voice_detected"><td><code>environmental</code></td><td><code>ai_voice_detected</code></td><td>boolean</td><td>The call uses an AI-generated voice.</td></tr>
+        <tr data-fact="environmental.ai_voice_disclosure"><td><code>environmental</code></td><td><code>ai_voice_disclosure</code></td><td>boolean or string</td><td>The call discloses that the voice is AI-generated.</td></tr>
+        <tr data-fact="environmental.boundary_crossing_approved"><td><code>environmental</code></td><td><code>boundary_crossing_approved</code></td><td>boolean</td><td>Data leaving the FedRAMP authorization boundary is approved.</td></tr>
+        <tr data-fact="environmental.encryption_standard"><td><code>environmental</code></td><td><code>encryption_standard</code></td><td>string</td><td>Encryption module standard, e.g. &quot;fips_140_3&quot;.</td></tr>
+        <tr data-fact="environmental.transport_security"><td><code>environmental</code></td><td><code>transport_security</code></td><td>string</td><td>Transport security for CUI, e.g. &quot;tls_1_3&quot;, &quot;fips_validated&quot;.</td></tr>
+        <tr data-fact="entity_state.account_balance_usd"><td><code>entity_state</code></td><td><code>account_balance_usd</code></td><td>number</td><td>Current balance of the account the action touches, in USD.</td></tr>
+        <tr data-fact="entity_state.account_status"><td><code>entity_state</code></td><td><code>account_status</code></td><td>string</td><td>Status of that account, e.g. &quot;active&quot;, &quot;frozen&quot;, &quot;closed&quot;.</td></tr>
+        <tr data-fact="regulatory.applicable_frameworks"><td><code>regulatory</code></td><td><code>applicable_frameworks</code></td><td>object</td><td>Frameworks that apply, keyed by domain, e.g. {&quot;PCI-DSS&quot;: {...}}.</td></tr>
+        <tr data-fact="regulatory.gdpr_consent"><td><code>regulatory</code></td><td><code>gdpr_consent</code></td><td>object</td><td>The data subject&#x27;s GDPR consent record.<br><span class="muted"><code>status</code>: &quot;active&quot; | &quot;withdrawn&quot; | …</span></td></tr>
+        <tr data-fact="regulatory.hipaa_access_purpose"><td><code>regulatory</code></td><td><code>hipaa_access_purpose</code></td><td>string</td><td>HIPAA purpose of the access: &quot;treatment&quot;, &quot;payment&quot;, &quot;operations&quot;, &quot;research&quot;, ….</td></tr>
+        <tr data-fact="regulatory.patient_authorization"><td><code>regulatory</code></td><td><code>patient_authorization</code></td><td>boolean</td><td>A documented patient authorization covers this use.</td></tr>
+        <tr data-fact="regulatory.minimum_necessary_override"><td><code>regulatory</code></td><td><code>minimum_necessary_override</code></td><td>string or boolean</td><td>Documented reason to override minimum necessary (e.g. emergency care).</td></tr>
+        <tr data-fact="regulatory.patient_access_request"><td><code>regulatory</code></td><td><code>patient_access_request</code></td><td>object</td><td>A patient&#x27;s right-of-access request being answered.<br><span class="muted"><code>response_deadline_days</code>: number, <code>extension_granted</code>: boolean, <code>elapsed_days</code>: number, <code>denial</code>: boolean, <code>denial_reason</code>: string</span></td></tr>
+        <tr data-fact="regulatory.cardholder_data_environment"><td><code>regulatory</code></td><td><code>cardholder_data_environment</code></td><td>boolean</td><td>The target is inside the cardholder data environment.</td></tr>
+        <tr data-fact="regulatory.ccpa_opt_out"><td><code>regulatory</code></td><td><code>ccpa_opt_out</code></td><td>object</td><td>The consumer&#x27;s CCPA sale/share opt-out.<br><span class="muted"><code>status</code>: &quot;opted_out&quot; | …</span></td></tr>
+        <tr data-fact="regulatory.consumer_age"><td><code>regulatory</code></td><td><code>consumer_age</code></td><td>number</td><td>The consumer&#x27;s age in years.</td></tr>
+        <tr data-fact="regulatory.ccpa_minor_opt_in"><td><code>regulatory</code></td><td><code>ccpa_minor_opt_in</code></td><td>object</td><td>Opt-in for a consumer under 16.<br><span class="muted"><code>status</code>: &quot;active&quot; | …, <code>consent_source</code>: &quot;parent_guardian&quot; | &quot;self&quot;</span></td></tr>
+        <tr data-fact="regulatory.gpc_override_consent"><td><code>regulatory</code></td><td><code>gpc_override_consent</code></td><td>object</td><td>Consent that overrides a Global Privacy Control signal.<br><span class="muted"><code>status</code>: &quot;active&quot; | …</span></td></tr>
+        <tr data-fact="regulatory.ferpa_record_type"><td><code>regulatory</code></td><td><code>ferpa_record_type</code></td><td>string</td><td>Kind of education record, e.g. &quot;grades&quot;, &quot;directory_information&quot;.</td></tr>
+        <tr data-fact="regulatory.ferpa_consent"><td><code>regulatory</code></td><td><code>ferpa_consent</code></td><td>object</td><td>Written consent to disclose the education record.<br><span class="muted"><code>status</code>: &quot;active&quot; | …</span></td></tr>
+        <tr data-fact="regulatory.ferpa_disclosure_purpose"><td><code>regulatory</code></td><td><code>ferpa_disclosure_purpose</code></td><td>string</td><td>FERPA exception relied on, e.g. &quot;school_official&quot;, &quot;judicial_order&quot;.</td></tr>
+        <tr data-fact="regulatory.ferpa_directory_opt_out"><td><code>regulatory</code></td><td><code>ferpa_directory_opt_out</code></td><td>boolean</td><td>The student opted out of directory-information disclosure.</td></tr>
+        <tr data-fact="regulatory.sox_scope"><td><code>regulatory</code></td><td><code>sox_scope</code></td><td>object</td><td>The action is in SOX scope.<br><span class="muted"><code>action</code>: &quot;approve&quot; | &quot;certify&quot; | …, <code>initiated_by</code>: string, <code>reporting_period</code>: string, <code>control_override</code>: boolean</span></td></tr>
+        <tr data-fact="regulatory.tcpa"><td><code>regulatory</code></td><td><code>tcpa</code></td><td>object</td><td>TCPA context, when kept together.<br><span class="muted"><code>communication_channel</code>: string, <code>tcpa_consent</code>: object (as tcpa_consent)</span></td></tr>
+        <tr data-fact="regulatory.tcpa_consent"><td><code>regulatory</code></td><td><code>tcpa_consent</code></td><td>object</td><td>The recipient&#x27;s TCPA consent record.<br><span class="muted"><code>status</code>: &quot;active&quot; | &quot;revoked&quot; | …, <code>consent_type</code>: &quot;prior_express_written&quot; | &quot;prior_express&quot; | &quot;oral&quot; | …, <code>consent_form_valid</code>: boolean, <code>pewc_elements</code>: object, <code>revocation_requested_at</code>: ISO 8601 string, <code>revocation_processed_at</code>: ISO 8601 string</span></td></tr>
+        <tr data-fact="regulatory.dnc_registry_status"><td><code>regulatory</code></td><td><code>dnc_registry_status</code></td><td>string</td><td>National Do Not Call status of the number, e.g. &quot;listed&quot;, &quot;not_listed&quot;.</td></tr>
+        <tr data-fact="regulatory.established_business_relationship"><td><code>regulatory</code></td><td><code>established_business_relationship</code></td><td>object</td><td>An established business relationship with the recipient.<br><span class="muted"><code>status</code>: string, <code>last_transaction_date</code>: ISO 8601 date, <code>last_inquiry_date</code>: ISO 8601 date</span></td></tr>
+        <tr data-fact="regulatory.dnc_last_scrub_date"><td><code>regulatory</code></td><td><code>dnc_last_scrub_date</code></td><td>string</td><td>When the list was last scrubbed against the DNC registry (ISO 8601 date).</td></tr>
+        <tr data-fact="regulatory.internal_dnc_listed"><td><code>regulatory</code></td><td><code>internal_dnc_listed</code></td><td>boolean</td><td>The number is on your own do-not-call list.</td></tr>
+        <tr data-fact="regulatory.revocation_sla_exceeded"><td><code>regulatory</code></td><td><code>revocation_sla_exceeded</code></td><td>boolean</td><td>A consent revocation was not processed within its deadline.</td></tr>
+        <tr data-fact="regulatory.revocation_business_days_elapsed"><td><code>regulatory</code></td><td><code>revocation_business_days_elapsed</code></td><td>number</td><td>Business days since the revocation request.</td></tr>
+        <tr data-fact="regulatory.ai_voice_detected"><td><code>regulatory</code></td><td><code>ai_voice_detected</code></td><td>boolean</td><td>The call uses an AI-generated voice.</td></tr>
+        <tr data-fact="regulatory.ai_voice_disclosure"><td><code>regulatory</code></td><td><code>ai_voice_disclosure</code></td><td>boolean or string</td><td>The call discloses that the voice is AI-generated.</td></tr>
+        <tr data-fact="regulatory.recipient_state"><td><code>regulatory</code></td><td><code>recipient_state</code></td><td>string</td><td>Recipient&#x27;s US state, two letters.</td></tr>
+        <tr data-fact="organizational.delegation_limit_usd"><td><code>organizational</code></td><td><code>delegation_limit_usd</code></td><td>number</td><td>The most this agent may commit on its own, in USD.</td></tr>
+        <tr data-fact="organizational.gdpr_legal_basis"><td><code>organizational</code></td><td><code>gdpr_legal_basis</code></td><td>string</td><td>GDPR Article 6 basis, e.g. &quot;contract&quot;, &quot;legitimate_interest&quot;.</td></tr>
+        <tr data-fact="organizational.legitimate_interest_assessment"><td><code>organizational</code></td><td><code>legitimate_interest_assessment</code></td><td>string or boolean or object</td><td>A documented legitimate-interest assessment.</td></tr>
+        <tr data-fact="organizational.phi_access_scope"><td><code>organizational</code></td><td><code>phi_access_scope</code></td><td>string or array</td><td>The documented scope of PHI this agent may access.</td></tr>
+        <tr data-fact="organizational.bulk_access_justification"><td><code>organizational</code></td><td><code>bulk_access_justification</code></td><td>string</td><td>Why bulk access to PHI is needed.</td></tr>
+        <tr data-fact="organizational.ssl_certificate_valid"><td><code>organizational</code></td><td><code>ssl_certificate_valid</code></td><td>boolean</td><td>The target&#x27;s TLS certificate is valid.</td></tr>
+        <tr data-fact="organizational.certificate_expiry_days"><td><code>organizational</code></td><td><code>certificate_expiry_days</code></td><td>number</td><td>Days until that certificate expires.</td></tr>
+        <tr data-fact="organizational.pci_network_segmentation"><td><code>organizational</code></td><td><code>pci_network_segmentation</code></td><td>string</td><td>&quot;compliant&quot; or &quot;non_compliant&quot;.</td></tr>
+        <tr data-fact="organizational.legitimate_educational_interest"><td><code>organizational</code></td><td><code>legitimate_educational_interest</code></td><td>boolean</td><td>The requester has a legitimate educational interest.</td></tr>
+        <tr data-fact="organizational.ferpa_annual_notice_issued"><td><code>organizational</code></td><td><code>ferpa_annual_notice_issued</code></td><td>boolean</td><td>The annual FERPA directory-information notice was issued.</td></tr>
+        <tr data-fact="organizational.sox_audit_trail"><td><code>organizational</code></td><td><code>sox_audit_trail</code></td><td>object</td><td>Audit trail for SOX-relevant actions.<br><span class="muted"><code>status</code>: &quot;active&quot; | …</span></td></tr>
+        <tr data-fact="organizational.sox_management_certification"><td><code>organizational</code></td><td><code>sox_management_certification</code></td><td>object</td><td>Management certification.<br><span class="muted"><code>period</code>: string, <code>status</code>: &quot;certified&quot; | …</span></td></tr>
+        <tr data-fact="organizational.sox_override_authorization"><td><code>organizational</code></td><td><code>sox_override_authorization</code></td><td>object</td><td>Authorization for a SOX control override.<br><span class="muted"><code>status</code>: &quot;approved&quot; | …</span></td></tr>
+        <tr data-fact="organizational.risk_management_system"><td><code>organizational</code></td><td><code>risk_management_system</code></td><td>string or boolean</td><td>An AI risk-management system is in place (EU AI Act Art. 9).</td></tr>
+        <tr data-fact="organizational.risk_framework_ref"><td><code>organizational</code></td><td><code>risk_framework_ref</code></td><td>string</td><td>Reference to that risk framework.</td></tr>
+        <tr data-fact="organizational.training_data_lineage"><td><code>organizational</code></td><td><code>training_data_lineage</code></td><td>string or boolean or object</td><td>Training-data lineage is documented (Art. 10).</td></tr>
+        <tr data-fact="organizational.data_sheet"><td><code>organizational</code></td><td><code>data_sheet</code></td><td>string or object</td><td>A data sheet for the model&#x27;s data (Art. 10).</td></tr>
+        <tr data-fact="organizational.explainability_enabled"><td><code>organizational</code></td><td><code>explainability_enabled</code></td><td>boolean</td><td>The agent&#x27;s decisions can be explained (Art. 13).</td></tr>
+        <tr data-fact="organizational.explanation_method"><td><code>organizational</code></td><td><code>explanation_method</code></td><td>string</td><td>How they are explained.</td></tr>
+        <tr data-fact="organizational.asset_inventory_ref"><td><code>organizational</code></td><td><code>asset_inventory_ref</code></td><td>string</td><td>Reference to the asset inventory entry (NIST CSF ID.AM).</td></tr>
+        <tr data-fact="organizational.system_asset_id"><td><code>organizational</code></td><td><code>system_asset_id</code></td><td>string</td><td>The system&#x27;s asset ID.</td></tr>
+        <tr data-fact="organizational.incident_response_plan_ref"><td><code>organizational</code></td><td><code>incident_response_plan_ref</code></td><td>string</td><td>Reference to the incident response plan.</td></tr>
+        <tr data-fact="organizational.incident_report_ref"><td><code>organizational</code></td><td><code>incident_report_ref</code></td><td>string</td><td>Reference to the incident report (NIST 800-53 IR-6).</td></tr>
+        <tr data-fact="organizational.ato_status"><td><code>organizational</code></td><td><code>ato_status</code></td><td>string</td><td>FedRAMP Authority to Operate: &quot;authorized&quot;, &quot;in_process&quot;, &quot;not_started&quot;.</td></tr>
+        <tr data-fact="organizational.supply_chain_assessment_ref"><td><code>organizational</code></td><td><code>supply_chain_assessment_ref</code></td><td>string</td><td>Reference to the supply-chain risk assessment.</td></tr>
+        <tr data-fact="organizational.cui_handling_procedures_ref"><td><code>organizational</code></td><td><code>cui_handling_procedures_ref</code></td><td>string</td><td>Reference to CUI handling procedures (CMMC).</td></tr>
+        <tr data-fact="organizational.configuration_baseline_ref"><td><code>organizational</code></td><td><code>configuration_baseline_ref</code></td><td>string</td><td>Reference to the configuration baseline.</td></tr>
+        <tr data-fact="organizational.change_management_ticket"><td><code>organizational</code></td><td><code>change_management_ticket</code></td><td>string</td><td>Change ticket covering this change.</td></tr>
+        <tr data-fact="organizational.monitoring_enabled"><td><code>organizational</code></td><td><code>monitoring_enabled</code></td><td>boolean</td><td>Continuous monitoring is enabled for the system.</td></tr>
+        <tr data-fact="organizational.telemetry_endpoint"><td><code>organizational</code></td><td><code>telemetry_endpoint</code></td><td>string</td><td>Where the system&#x27;s telemetry goes.</td></tr>
+        <tr data-fact="identity.authenticated_agent_id"><td><code>identity</code></td><td><code>authenticated_agent_id</code></td><td>string</td><td>The agent identity your identity provider authenticated.</td></tr>
+        <tr data-fact="identity.account_status"><td><code>identity</code></td><td><code>account_status</code></td><td>string</td><td>Status of the agent&#x27;s account, e.g. &quot;active&quot;, &quot;provisioned&quot;, &quot;suspended&quot;.</td></tr>
+        <tr data-fact="identity.last_account_review_days"><td><code>identity</code></td><td><code>last_account_review_days</code></td><td>number</td><td>Days since the agent&#x27;s access was last reviewed.</td></tr>
+        <tr data-fact="identity.assigned_permissions"><td><code>identity</code></td><td><code>assigned_permissions</code></td><td>array</td><td>Permissions assigned to the agent.</td></tr>
+        <tr data-fact="identity.delegation_limit_usd"><td><code>identity</code></td><td><code>delegation_limit_usd</code></td><td>number</td><td>The agent&#x27;s delegation limit, in USD.</td></tr>
+        <tr data-fact="identity.recovery_authorization"><td><code>identity</code></td><td><code>recovery_authorization</code></td><td>boolean</td><td>The agent is authorized to run recovery actions.</td></tr>
+        <tr data-fact="identity.clearance_status"><td><code>identity</code></td><td><code>clearance_status</code></td><td>string</td><td>Clearance for CUI, e.g. &quot;cleared&quot;, &quot;uncleared&quot;.</td></tr>
+        <tr data-fact="identity.clearance_verified"><td><code>identity</code></td><td><code>clearance_verified</code></td><td>boolean</td><td>The clearance was verified.</td></tr>
+        <tr data-fact="security.privilege_escalation_alert"><td><code>security</code></td><td><code>privilege_escalation_alert</code></td><td>boolean</td><td>Your security tooling raised a privilege-escalation alert for this agent.</td></tr>
+        <tr data-fact="security.prompt_injection_detected"><td><code>security</code></td><td><code>prompt_injection_detected</code></td><td>boolean</td><td>A prompt injection was detected in this agent&#x27;s inputs.</td></tr>
+        <tr data-fact="security.active_security_incident"><td><code>security</code></td><td><code>active_security_incident</code></td><td>boolean</td><td>An active security incident affects the target or agent.</td></tr>
+        <tr data-fact="security.siem_ref"><td><code>security</code></td><td><code>siem_ref</code></td><td>string</td><td>Where this system&#x27;s events go in your SIEM.</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Reserved.</strong> GaaS sets these itself; a value from your endpoint is dropped and flagged <code>reserved_key_ignored</code>:</p>
+    <ul><li><code>environmental.context_confidence</code> — GaaS computes context confidence itself.</li><li><code>regulatory.ap2_mandate_present</code> — Set by GaaS&#x27;s AP2 mandate check.</li><li><code>regulatory.ap2_mandate_valid</code> — Set by GaaS&#x27;s AP2 mandate check.</li><li><code>regulatory.ap2_conditions_met</code> — Set by GaaS&#x27;s AP2 mandate check.</li></ul>
+
+    <hr class="divider">
+
+    <h2 id="audit">In the audit record</h2>
+    <p>
+      Every decision's audit record shows your endpoint as one source per category, <code>customer_endpoint_&lt;category&gt;</code>, in <code>stage_2_enrichment.sources_queried</code>, with its status and latency. A category that failed is also in <code>sources_failed</code>, and <code>missing_context</code> gives the reason, for example <code>Source customer_endpoint_environmental returned status timed_out (timeout)</code>.
+    </p>
+    <table>
+      <thead><tr><th>Reason</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>timeout</code></td><td>No answer within the time limit</td></tr>
+        <tr><td><code>http_error</code>, <code>redirect</code></td><td>A status other than 200 (redirects are not followed)</td></tr>
+        <tr><td><code>invalid_response</code>, <code>contract_version_mismatch</code>, <code>too_large</code></td><td>The answer is not this contract's JSON, or is over 256 KB</td></tr>
+        <tr><td><code>category_missing</code>, <code>invalid_fact:&lt;key&gt;</code>, <code>invalid_key</code>, <code>too_deep:&lt;key&gt;</code>, <code>too_many_keys</code></td><td>That category was absent or broke a rule above</td></tr>
+        <tr><td><code>connect_error</code>, <code>ssrf_blocked</code></td><td>GaaS could not connect, or the address resolved to a private or internal network</td></tr>
+        <tr><td><code>circuit_open</code></td><td>Five calls in a row failed, so GaaS pauses calls for 30 seconds</td></tr>
+        <tr><td><code>concurrency_limited</code></td><td>Too many calls to your endpoint were already in flight</td></tr>
+        <tr><td><code>secret_unavailable</code></td><td>GaaS could not open the saved secrets; the call was not made</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <h2 id="security">Security</h2>
+    <ul>
+      <li>HTTPS on port 443 only, to a host name with a public TLS certificate. GaaS resolves the name before every call and refuses it if any address is private or internal, then connects to the address it checked.</li>
+      <li>Your secrets are encrypted with AWS KMS before they are stored, bound to your organization, and opened only in memory to make the call. GaaS never shows them again, only their last four characters.</li>
+      <li>Facts from your endpoint can let an action through that would otherwise be blocked; that is the point, so answer only what your systems know. Every decision records which categories your endpoint supplied.</li>
+      <li>An organization admin can switch the endpoint off or remove it at any time, from the dashboard or the API.</li>
+    </ul>
+
+    <h2 id="related">Related</h2>
+    <ul>
+      <li><a class="link" href="connectors.html">Connectors</a> — built-in integrations</li>
+      <li><a class="link" href="shadow-mode.html">Shadow Mode</a> — evaluate without enforcing</li>
+      <li><a class="link" href="policies.html">Policies</a> — what each policy checks</li>
+      <li><a class="link" href="authentication.html">Authentication</a> — API keys and roles</li>
+    </ul>
+  </main>
+
+<footer>
+  <div class="gradient-divider"></div>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      GaaS by <a href="https://h2om.ai">H2Om</a> &copy; 2026 &mdash; BSL&nbsp;1.1 &rarr; Apache&nbsp;2.0 on 2030-02-12
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Docs</div>
+      <div class="footer-links-col">
+        <a href="index.html">Docs Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="intent-api.html">Intent API</a>
+        <a href="authentication.html">Authentication</a>
+        <a href="spec.html">Spec</a>
+        <a href="search.html">Search</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Platform</div>
+      <div class="footer-links-col">
+        <a href="policies.html">Policies</a>
+        <a href="connectors.html">Connectors</a>
+        <a href="sdks.html">SDKs</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="webhooks.html">Webhooks</a>
+        <a href="siem.html">SIEM Alerts</a>
+        <a href="a2a.html">A2A Protocol</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Operate</div>
+      <div class="footer-links-col">
+        <a href="observability.html">Observability</a>
+        <a href="shadow-mode.html">Shadow Mode</a>
+        <a href="advanced-features.html">Advanced Features</a>
+        <a href="rate-limits.html">Rate Limits</a>
+        <a href="load-testing.html">Load Testing</a>
+        <a href="billing-and-quotas.html">Billing &amp; Quotas</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Compliance</div>
+      <div class="footer-links-col">
+        <a href="compliance.html">Compliance</a>
+        <a href="audit-timestamps.html">Audit Timestamps</a>
+        <a href="gdpr-compliance.html">GDPR</a>
+        <a href="sla.html">SLA</a>
+        <a href="record-free-forever.html">Record Free Forever</a>
+        <a href="api-reference.html">API Reference</a>
+      </div>
+    </div>
+    <div class="footer-column">
+      <div class="footer-column-title">Company</div>
+      <div class="footer-links-col">
+        <a href="https://gaas.is">gaas.is</a>
+        <a href="https://gaas.is/pricing">Pricing</a>
+        <a href="https://gaas.is/trust">Trust &amp; Audit</a>
+        <a href="https://gaas.is/start">Get Started</a>
+        <a href="https://the.gaas.is">Sign In</a>
+        <a href="https://gaas.is/careers">Careers</a>
+        <a href="https://github.com/H2OmAI">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-legal-col">
+      <a href="https://gaas.is/privacy">Privacy</a>
+      <a href="https://gaas.is/terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="search.js"></script>
+<script src="constellation.js"></script>
+</body>
+</html>

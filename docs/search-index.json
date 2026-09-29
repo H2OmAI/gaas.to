@@ -1876,6 +1876,23 @@
     ]
   },
   {
+    "id": "context-endpoint",
+    "page": "Connect your systems: the context endpoint",
+    "section": null,
+    "url": "context-endpoint.html",
+    "body": "Give GaaS one HTTPS address of your own. During every decision GaaS sends it a signed request and reads the facts its policies check, per category: channel encryption, consent, security incidents, delegation limits and more. Set it up in Settings → Connected systems or with PUT /v1/context-endpoint.",
+    "tags": [
+      "context endpoint",
+      "connect your systems",
+      "connected systems",
+      "enrichment",
+      "facts",
+      "signing secret",
+      "KMS",
+      "integrations"
+    ]
+  },
+  {
     "id": "audit-timestamps#recipe",
     "page": "Public timestamps for your audit trail",
     "section": "The digest",

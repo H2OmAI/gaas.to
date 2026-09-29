@@ -257,6 +257,11 @@
       it uses GaaS's own decision history, marks every other kind of context as unknown, and its policies treat
       unknown context as risk. It never substitutes simulated data, and each audit record lists the sources that answered.
     </p>
+    <div class="note">
+      <strong>Connect your own systems:</strong> on the hosted service, give GaaS your own
+      <a class="link" href="context-endpoint.html">context endpoint</a> — one HTTPS address that answers the facts GaaS's
+      policies check, set up in the dashboard (Settings → Connected systems) or the API.
+    </div>
 
     <div class="note">
       <strong>Configuration:</strong> Set <code>GAAS_CONNECTOR_CONFIG</code> to a YAML or JSON config file path, and
@@ -800,29 +805,28 @@
     <ul>
       <li><strong>Retry:</strong> Up to 3 attempts with exponential backoff on transient failures (5xx, timeouts)</li>
       <li><strong>Timeout:</strong> Configurable per-connector (default 5s). Prevents slow upstream from blocking the pipeline</li>
-      <li><strong>Circuit breaker:</strong> Opens after consecutive failures; enters HALF-OPEN after a cooldown period. Failed connectors return cached or empty context — governance continues rather than halting</li>
+      <li><strong>Circuit breaker:</strong> Opens after consecutive failures; enters HALF-OPEN after a cooldown period. A failed connector returns no context: its category counts as missing, which policies treat as risk, and governance continues rather than halting</li>
       <li><strong>Error classification:</strong> HTTP 4xx errors (auth failure, not found) are returned as structured <code>ConnectorResult</code> with <code>status: FAILED</code>; network/timeout errors trigger the retry and circuit-breaker path</li>
     </ul>
 
-    <pre><code><span style="color:#8b949e"># Example connector configuration (GAAS_CONNECTOR_CONFIG)</span>
-connectors:
-  okta:
-    domain: your-org.okta.com
-    client_id: ${OKTA_CLIENT_ID}
-    client_secret: ${OKTA_CLIENT_SECRET}
-    timeout_seconds: 5
-    max_retries: 3
-
-  siem:
-    provider: splunk          # splunk | qradar | sentinel
-    host: splunk.internal.example.com
-    port: 8089
-    token: ${SPLUNK_TOKEN}
-    timeout_seconds: 8
-
-  github:
-    token: ${GITHUB_TOKEN}   # Personal access token or GitHub App
-    org: your-org</code></pre>
+    <p>For a self-hosted deployment, <code>GAAS_CONNECTOR_CONFIG</code> points to a file like this. Secrets never go in the file: each connector names the environment variable that holds its secret.</p>
+    <pre data-example="connector-config"><code><span style="color:#8b949e"># Example connector configuration (GAAS_CONNECTOR_CONFIG)</span>
+mode: production
+category_overrides:
+  identity: okta
+  security: siem
+okta:
+  base_url: https://your-org.okta.com
+  api_token_env: OKTA_API_TOKEN      # the variable that holds the token
+  timeout_seconds: 5
+  retry_max_attempts: 3
+siem:
+  platform: splunk                   # splunk | qradar | sentinel
+  base_url: https://splunk.example.com:8089
+  api_token_env: SPLUNK_API_TOKEN
+github:
+  base_url: https://api.github.com
+  token_env: GITHUB_TOKEN</code></pre>
 
     <h2>Related Pages</h2>
     <ul>

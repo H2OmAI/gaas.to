@@ -1,0 +1,695 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gaas.to/schemas/context-endpoint-response.v1.json",
+  "title": "GaaS context endpoint response, version 1",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "facts"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "1"
+    },
+    "facts": {
+      "type": "object",
+      "properties": {
+        "environmental": {
+          "type": "object",
+          "description": "Facts for the environmental category. Keys outside this list are kept for your own policies.",
+          "properties": {
+            "channel_encryption": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The channel the action uses is encrypted end to end."
+            },
+            "tls_version": {
+              "type": [
+                "string",
+                "number",
+                "null"
+              ],
+              "description": "TLS version of that channel, e.g. \"1.3\"."
+            },
+            "protocol": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Transport protocol, e.g. \"https\", \"sftp\", \"ftp\"."
+            },
+            "network_segment": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Network segment the target sits in, e.g. \"cde\", \"internal\", \"public\"."
+            },
+            "global_privacy_control": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The consumer sent a Global Privacy Control signal."
+            },
+            "communication_channel": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Channel for an outbound communication: \"voice\", \"sms\", \"email\", …."
+            },
+            "communication_method": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "How it is placed, e.g. \"autodialer\", \"prerecorded\", \"ai_voice\", \"manual\"."
+            },
+            "recipient_local_hour": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Recipient's local hour, 0–23."
+            },
+            "recipient_state": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Recipient's US state, two letters, e.g. \"FL\"."
+            },
+            "ai_voice_detected": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The call uses an AI-generated voice."
+            },
+            "ai_voice_disclosure": {
+              "type": [
+                "boolean",
+                "string",
+                "null"
+              ],
+              "description": "The call discloses that the voice is AI-generated."
+            },
+            "boundary_crossing_approved": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Data leaving the FedRAMP authorization boundary is approved."
+            },
+            "encryption_standard": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Encryption module standard, e.g. \"fips_140_3\"."
+            },
+            "transport_security": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Transport security for CUI, e.g. \"tls_1_3\", \"fips_validated\"."
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "maxProperties": 200
+        },
+        "entity_state": {
+          "type": "object",
+          "description": "Facts for the entity_state category. Keys outside this list are kept for your own policies.",
+          "properties": {
+            "account_balance_usd": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "Current balance of the account the action touches, in USD."
+            },
+            "account_status": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Status of that account, e.g. \"active\", \"frozen\", \"closed\"."
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "maxProperties": 200
+        },
+        "regulatory": {
+          "type": "object",
+          "description": "Facts for the regulatory category. Keys outside this list are kept for your own policies.",
+          "properties": {
+            "applicable_frameworks": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Frameworks that apply, keyed by domain, e.g. {\"PCI-DSS\": {...}}."
+            },
+            "gdpr_consent": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "The data subject's GDPR consent record."
+            },
+            "hipaa_access_purpose": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "HIPAA purpose of the access: \"treatment\", \"payment\", \"operations\", \"research\", …."
+            },
+            "patient_authorization": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "A documented patient authorization covers this use."
+            },
+            "minimum_necessary_override": {
+              "type": [
+                "string",
+                "boolean",
+                "null"
+              ],
+              "description": "Documented reason to override minimum necessary (e.g. emergency care)."
+            },
+            "patient_access_request": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "A patient's right-of-access request being answered."
+            },
+            "cardholder_data_environment": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The target is inside the cardholder data environment."
+            },
+            "ccpa_opt_out": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "The consumer's CCPA sale/share opt-out."
+            },
+            "consumer_age": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "The consumer's age in years."
+            },
+            "ccpa_minor_opt_in": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Opt-in for a consumer under 16."
+            },
+            "gpc_override_consent": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Consent that overrides a Global Privacy Control signal."
+            },
+            "ferpa_record_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Kind of education record, e.g. \"grades\", \"directory_information\"."
+            },
+            "ferpa_consent": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Written consent to disclose the education record."
+            },
+            "ferpa_disclosure_purpose": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "FERPA exception relied on, e.g. \"school_official\", \"judicial_order\"."
+            },
+            "ferpa_directory_opt_out": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The student opted out of directory-information disclosure."
+            },
+            "sox_scope": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "The action is in SOX scope."
+            },
+            "tcpa": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "TCPA context, when kept together."
+            },
+            "tcpa_consent": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "The recipient's TCPA consent record."
+            },
+            "dnc_registry_status": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "National Do Not Call status of the number, e.g. \"listed\", \"not_listed\"."
+            },
+            "established_business_relationship": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "An established business relationship with the recipient."
+            },
+            "dnc_last_scrub_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "When the list was last scrubbed against the DNC registry (ISO 8601 date)."
+            },
+            "internal_dnc_listed": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The number is on your own do-not-call list."
+            },
+            "revocation_sla_exceeded": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "A consent revocation was not processed within its deadline."
+            },
+            "revocation_business_days_elapsed": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "Business days since the revocation request."
+            },
+            "ai_voice_detected": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The call uses an AI-generated voice."
+            },
+            "ai_voice_disclosure": {
+              "type": [
+                "boolean",
+                "string",
+                "null"
+              ],
+              "description": "The call discloses that the voice is AI-generated."
+            },
+            "recipient_state": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Recipient's US state, two letters."
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "maxProperties": 200
+        },
+        "organizational": {
+          "type": "object",
+          "description": "Facts for the organizational category. Keys outside this list are kept for your own policies.",
+          "properties": {
+            "delegation_limit_usd": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "The most this agent may commit on its own, in USD."
+            },
+            "gdpr_legal_basis": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "GDPR Article 6 basis, e.g. \"contract\", \"legitimate_interest\"."
+            },
+            "legitimate_interest_assessment": {
+              "type": [
+                "string",
+                "boolean",
+                "object",
+                "null"
+              ],
+              "description": "A documented legitimate-interest assessment."
+            },
+            "phi_access_scope": {
+              "type": [
+                "string",
+                "array",
+                "null"
+              ],
+              "description": "The documented scope of PHI this agent may access."
+            },
+            "bulk_access_justification": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Why bulk access to PHI is needed."
+            },
+            "ssl_certificate_valid": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The target's TLS certificate is valid."
+            },
+            "certificate_expiry_days": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "Days until that certificate expires."
+            },
+            "pci_network_segmentation": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "\"compliant\" or \"non_compliant\"."
+            },
+            "legitimate_educational_interest": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The requester has a legitimate educational interest."
+            },
+            "ferpa_annual_notice_issued": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The annual FERPA directory-information notice was issued."
+            },
+            "sox_audit_trail": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Audit trail for SOX-relevant actions."
+            },
+            "sox_management_certification": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Management certification."
+            },
+            "sox_override_authorization": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Authorization for a SOX control override."
+            },
+            "risk_management_system": {
+              "type": [
+                "string",
+                "boolean",
+                "null"
+              ],
+              "description": "An AI risk-management system is in place (EU AI Act Art. 9)."
+            },
+            "risk_framework_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to that risk framework."
+            },
+            "training_data_lineage": {
+              "type": [
+                "string",
+                "boolean",
+                "object",
+                "null"
+              ],
+              "description": "Training-data lineage is documented (Art. 10)."
+            },
+            "data_sheet": {
+              "type": [
+                "string",
+                "object",
+                "null"
+              ],
+              "description": "A data sheet for the model's data (Art. 10)."
+            },
+            "explainability_enabled": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The agent's decisions can be explained (Art. 13)."
+            },
+            "explanation_method": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "How they are explained."
+            },
+            "asset_inventory_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to the asset inventory entry (NIST CSF ID.AM)."
+            },
+            "system_asset_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The system's asset ID."
+            },
+            "incident_response_plan_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to the incident response plan."
+            },
+            "incident_report_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to the incident report (NIST 800-53 IR-6)."
+            },
+            "ato_status": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "FedRAMP Authority to Operate: \"authorized\", \"in_process\", \"not_started\"."
+            },
+            "supply_chain_assessment_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to the supply-chain risk assessment."
+            },
+            "cui_handling_procedures_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to CUI handling procedures (CMMC)."
+            },
+            "configuration_baseline_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reference to the configuration baseline."
+            },
+            "change_management_ticket": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Change ticket covering this change."
+            },
+            "monitoring_enabled": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Continuous monitoring is enabled for the system."
+            },
+            "telemetry_endpoint": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Where the system's telemetry goes."
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "maxProperties": 200
+        },
+        "identity": {
+          "type": "object",
+          "description": "Facts for the identity category. Keys outside this list are kept for your own policies.",
+          "properties": {
+            "authenticated_agent_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The agent identity your identity provider authenticated."
+            },
+            "account_status": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Status of the agent's account, e.g. \"active\", \"provisioned\", \"suspended\"."
+            },
+            "last_account_review_days": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "Days since the agent's access was last reviewed."
+            },
+            "assigned_permissions": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "description": "Permissions assigned to the agent."
+            },
+            "delegation_limit_usd": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "The agent's delegation limit, in USD."
+            },
+            "recovery_authorization": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The agent is authorized to run recovery actions."
+            },
+            "clearance_status": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Clearance for CUI, e.g. \"cleared\", \"uncleared\"."
+            },
+            "clearance_verified": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "The clearance was verified."
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "maxProperties": 200
+        },
+        "security": {
+          "type": "object",
+          "description": "Facts for the security category. Keys outside this list are kept for your own policies.",
+          "properties": {
+            "privilege_escalation_alert": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Your security tooling raised a privilege-escalation alert for this agent."
+            },
+            "prompt_injection_detected": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "A prompt injection was detected in this agent's inputs."
+            },
+            "active_security_incident": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "An active security incident affects the target or agent."
+            },
+            "siem_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Where this system's events go in your SIEM."
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "maxProperties": 200
+        }
+      },
+      "additionalProperties": false
+    },
+    "as_of": {
+      "type": "object",
+      "description": "When each category's facts were last true (ISO 8601 with a time zone). Old facts count as stale.",
+      "additionalProperties": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  }
+}
