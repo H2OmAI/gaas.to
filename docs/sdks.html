@@ -840,7 +840,7 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
       </tr>
       <tr>
         <td><code>gaas_submit_intent</code></td>
-        <td>Submit a governance intent and receive the decision (APPROVE / ESCALATE / BLOCK) with risk assessment and signed proof token. <code>mode=shadow</code> evaluates without enforcement.</td>
+        <td>Submit a governance intent and receive the decision (APPROVE / ESCALATE / BLOCK) with its risk assessment. A live decision's signed proof token is shown by its ID; anyone can check it at <code>/v1/verify/proof/{token_id}</code> without an API key. <code>mode=shadow</code> evaluates without enforcement.</td>
       </tr>
       <tr>
         <td><code>gaas_check_decision</code></td>
