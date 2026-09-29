@@ -323,6 +323,14 @@ X-API-Key: your_api_key
       wait for an approval before retrying. A <code>decision.overridden</code> webhook fires when a person
       approves. The approval link is signed and needs no sign-in, so anyone holding the email can use it.
     </p>
+    <p>
+      <strong>Approving in the dashboard.</strong> An operator or admin whose sign-in passed two-factor can
+      approve any of the organization's blocked actions at <code>https://the.gaas.is/approvals/{intent_id}</code>
+      &mdash; including blocks that were not emailed because of the one-per-hour limit. The approval records
+      who approved. An admin can turn on <em>Settings &rarr; Organization &rarr; Approve blocked actions only in
+      the dashboard, with two-factor sign-in</em>: the email's Approve button then opens that page instead of
+      approving.
+    </p>
 
     <h3>Agent Retry Tracking</h3>
     <p>
