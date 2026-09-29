@@ -256,6 +256,11 @@
           <td>GaaS escalates an intent</td>
         </tr>
         <tr>
+          <td><code>decision.overridden</code></td>
+          <td>Block approved by a person</td>
+          <td>A person approves a blocked action; the agent's next retry of that same action within 24 hours is approved once</td>
+        </tr>
+        <tr>
           <td><code>escalation.decided</code></td>
           <td>Review completed</td>
           <td>A reviewer submits a decision on an escalation</td>
@@ -341,6 +346,7 @@ Content-Type: application/json
     <pre><code>{
   "data": {
     "decision_id": "dec_0f0de7b67fcd4e1487fe6bc5030eacf6",
+    "human_override_id": null,
     "intent_id": "int_85e46e12d8d949ff9c207bffac3afca5",
     "pipeline_mode": "live",
     "risk_score": 0.562,
@@ -360,7 +366,7 @@ Content-Type: application/json
   "webhook_id": "wh_81af440d0481"
 }</code></pre>
     <p>
-      Escalation events set <code>escalation_id</code> and <code>escalation_status</code>, and carry the full escalation record in <code>data</code>. <code>quota.exceeded</code> carries <code>plan_id</code>, <code>included_actions</code>, <code>used_actions</code>, <code>hard_limit</code>, <code>batch_size</code> and <code>timestamp</code> in <code>data</code>. Verdicts are lowercase: <code>approve</code>, <code>approve_modified</code>, <code>escalate</code>, <code>block</code>.
+      Escalation events set <code>escalation_id</code> and <code>escalation_status</code>, and carry the full escalation record in <code>data</code>. In decision events, <code>data.human_override_id</code> is set when a person's approval turned a block into this approval, and <code>null</code> otherwise. <code>decision.overridden</code> carries <code>override_id</code>, <code>agent_id</code>, <code>approved_by</code>, <code>approved_at</code>, <code>expires_at</code> and <code>policies_overridden</code> in <code>data</code>. <code>quota.exceeded</code> carries <code>plan_id</code>, <code>included_actions</code>, <code>used_actions</code>, <code>hard_limit</code>, <code>batch_size</code> and <code>timestamp</code> in <code>data</code>. Verdicts are lowercase: <code>approve</code>, <code>approve_modified</code>, <code>escalate</code>, <code>block</code>.
     </p>
 
     <p><strong>Headers sent with webhook:</strong></p>

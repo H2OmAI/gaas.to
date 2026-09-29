@@ -245,6 +245,7 @@
         <tr><td><code>escalation.timed_out</code></td><td>Nobody reviewed a held action in time</td><td>Yes</td></tr>
         <tr><td><code>escalation.cancelled</code>, <code>escalation.reassigned</code></td><td>An escalation was cancelled, or handed to other reviewers</td><td>Optional</td></tr>
         <tr><td><code>quota.exceeded</code></td><td>Your organization reached its hard usage limit, so GaaS is refusing new intents</td><td>Yes</td></tr>
+        <tr><td><code>decision.overridden</code></td><td>A person approved a blocked action, so the agent's next retry of that same action is approved once</td><td>Yes: a person set a block aside</td></tr>
         <tr><td><code>decision.approved</code></td><td>An action was approved, with or without modifications</td><td>Usually not: it fires for every approved action</td></tr>
       </tbody>
     </table>
@@ -322,6 +323,7 @@
     <pre><code>{
   "data": {
     "decision_id": "dec_0f0de7b67fcd4e1487fe6bc5030eacf6",
+    "human_override_id": null,
     "intent_id": "int_85e46e12d8d949ff9c207bffac3afca5",
     "pipeline_mode": "live",
     "risk_score": 0.562,
@@ -355,7 +357,8 @@
         <tr><td><code>intent_id</code>, <code>decision_id</code></td><td>Set on decision events; <code>null</code> otherwise</td></tr>
         <tr><td><code>escalation_id</code>, <code>escalation_status</code></td><td>Set on escalation events; <code>null</code> otherwise</td></tr>
         <tr><td><code>data</code></td><td>
-          Decision events: <code>verdict</code> (<code>approve</code>, <code>approve_modified</code>, <code>escalate</code> or <code>block</code>, always lowercase), <code>risk_score</code> (0 to 1), <code>pipeline_mode</code>, and the decision's own <code>timestamp</code>.<br>
+          Decision events: <code>verdict</code> (<code>approve</code>, <code>approve_modified</code>, <code>escalate</code> or <code>block</code>, always lowercase), <code>risk_score</code> (0 to 1), <code>pipeline_mode</code>, the decision's own <code>timestamp</code>, and <code>human_override_id</code> — set when a person's approval turned a block into this approval, otherwise <code>null</code>.<br>
+          <code>decision.overridden</code>: <code>intent_id</code> and <code>decision_id</code> of the blocked action, <code>override_id</code>, <code>agent_id</code>, <code>approved_by</code>, <code>approved_at</code>, <code>expires_at</code> and <code>policies_overridden</code>.<br>
           Escalation events: the full escalation record.<br>
           <code>quota.exceeded</code>: <code>plan_id</code>, <code>included_actions</code>, <code>used_actions</code>, <code>hard_limit</code>, <code>batch_size</code>, <code>timestamp</code>.
         </td></tr>
