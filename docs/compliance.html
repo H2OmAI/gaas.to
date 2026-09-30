@@ -352,7 +352,7 @@
 <main>
   <h1>Compliance</h1>
   <p class="subtitle">
-    EU AI Act enforcement, Federal Compliance (NIST, FedRAMP, CMMC), Governance Proof Tokens, SR 11-7 model inventory, and the Policy Registry.
+    EU AI Act enforcement, Federal Compliance (NIST, FedRAMP, CMMC), Governance Proof Tokens, the model inventory, and the Policy Registry.
   </p>
 
   <hr class="divider">
@@ -799,12 +799,15 @@ openssl dgst -sha256 -verify gaas-audit-key.pem -signature signature.der payload
   <hr class="divider">
 
   <!-- ─────────────────────────────────────────────────────── -->
-  <!-- SECTION 3: SR 11-7 MODEL INVENTORY                     -->
+  <!-- SECTION 3: MODEL INVENTORY                             -->
   <!-- ─────────────────────────────────────────────────────── -->
   <section>
-    <h2 id="sr-11-7-model-inventory">SR 11-7 Model Inventory</h2>
+    <h2 id="sr-11-7-model-inventory">Model Inventory</h2>
     <p>
-      The Federal Reserve's SR 11-7 guidance requires financial institutions to maintain a comprehensive inventory of all models in use, including their validation status, ownership, and purpose. GaaS auto-generates an SR 11-7 compliant model inventory from agent profiles and live audit data — no spreadsheet required.
+      GaaS auto-generates an inventory of every AI agent in your organization from agent profiles and live audit data &mdash; purpose, owner, validation status and decision history &mdash; for your model risk management, with no spreadsheet required.
+    </p>
+    <p>
+      <strong>On SR 11-7:</strong> the inventory was built for the Federal Reserve's SR 11-7 and OCC Bulletin 2011-12. Both were rescinded on 17 April 2026 by <a class="link" href="https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm">SR 26-2</a> and <a class="link" href="https://www.occ.gov/news-issuances/bulletins/2026/bulletin-2026-13.html">OCC Bulletin 2026-13</a>, &ldquo;Revised Guidance on Model Risk Management&rdquo;, which states that generative and agentic AI models are not within its scope. GaaS does not claim the inventory meets a supervisory letter.
     </p>
 
     <h3>Validation Status Mapping</h3>
@@ -812,7 +815,7 @@ openssl dgst -sha256 -verify gaas-audit-key.pem -signature signature.der payload
       <thead>
         <tr>
           <th>GaaS Agent Status</th>
-          <th>SR 11-7 Validation Status</th>
+          <th>Inventory Validation Status</th>
         </tr>
       </thead>
       <tbody>
@@ -836,7 +839,7 @@ openssl dgst -sha256 -verify gaas-audit-key.pem -signature signature.der payload
       <li>
         <span class="method method-get">GET</span>
         <span class="endpoint-path">/v1/model-inventory</span>
-        <span class="endpoint-desc">— Full SR 11-7 inventory for your organisation</span>
+        <span class="endpoint-desc">— Full model inventory for your organisation</span>
       </li>
       <li>
         <span class="method method-get">GET</span>

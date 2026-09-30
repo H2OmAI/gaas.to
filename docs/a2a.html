@@ -285,8 +285,10 @@
 
     <p>
       When AI agents talk to each other, delegate tasks, or execute financial transactions autonomously, governance becomes non-negotiable.
-      GaaS implements the <strong>Agent-to-Agent (A2A) Protocol v0.3</strong> specification:
-      every A2A message an agent sends to GaaS passes through the same 5-stage pipeline as a human-facing action.
+      GaaS speaks the <strong>Agent-to-Agent (A2A) Protocol</strong>: every A2A message an agent sends to GaaS passes
+      through the same 5-stage pipeline as a human-facing action. <strong>Version:</strong> the Agent Card declares
+      v0.3, the JSON-RPC methods use the v1.0 names (<code>SendMessage</code>, <code>GetTask</code>, <code>CancelTask</code>),
+      and message parts use a <code>type</code> field; GaaS has not yet been tested for conformance with either version.
     </p>
 
     <hr class="divider">

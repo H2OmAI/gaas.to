@@ -1385,9 +1385,9 @@
   {
     "id": "compliance#sr-11-7-model-inventory",
     "page": "Compliance & Liability Shield",
-    "section": "SR 11-7 Model Inventory",
+    "section": "Model Inventory",
     "url": "compliance.html#sr-11-7-model-inventory",
-    "body": "GET /v1/model-inventory returns SR 11-7 compliant model inventory in JSON, CSV, or HTML format. Includes model ID, version, purpose, risk tier, validation date, and ownership. Required for banking/financial regulators.",
+    "body": "GET /v1/model-inventory returns an inventory of every AI agent in JSON, CSV, or HTML format, for model risk management. SR 11-7 was rescinded on 2026-04-17 by SR 26-2, which places generative and agentic AI models outside its scope.",
     "tags": [
       "SR 11-7",
       "model inventory",
