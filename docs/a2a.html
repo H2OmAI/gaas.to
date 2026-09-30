@@ -285,8 +285,8 @@
 
     <p>
       When AI agents talk to each other, delegate tasks, or execute financial transactions autonomously, governance becomes non-negotiable.
-      GaaS implements the <strong>Agent-to-Agent (A2A) Protocol v0.3</strong> specification, acting as a governance proxy between agents:
-      every inter-agent call passes through the same 5-stage pipeline as a human-facing action.
+      GaaS implements the <strong>Agent-to-Agent (A2A) Protocol v0.3</strong> specification:
+      every A2A message an agent sends to GaaS passes through the same 5-stage pipeline as a human-facing action.
     </p>
 
     <hr class="divider">
@@ -297,32 +297,56 @@
       supported authentication methods, and governance endpoints.
     </p>
     <pre><code>GET /.well-known/agent.json</code></pre>
-    <pre><code>{
+    <pre data-example="agent-card"><code>{
   "name": "GaaS Governance Agent",
-  "version": "0.3.0",
-  "description": "Governance as a Service — A2A-native control plane for autonomous agent networks",
-  "url": "https://api.gaas.is",
+  "version": "0.3",
+  "url": "/a2a",
   "capabilities": {
-    "streaming": false,
-    "pushNotifications": true,
-    "stateTransitionHistory": true
+    "streaming": true,
+    "pushNotifications": false,
+    "extendedAgentCard": true
+  },
+  "authentication": {
+    "schemes": [
+      "ApiKey"
+    ]
   },
   "skills": [
     {
-      "id": "governance.evaluate",
-      "name": "Governance Evaluation",
-      "description": "Evaluate an agent action intent against active governance policies"
+      "id": "governance-check",
+      "name": "Governance Check"
     },
     {
-      "id": "governance.proxy",
-      "name": "A2A Governance Proxy",
-      "description": "Route and govern inter-agent task delegation"
+      "id": "risk-assessment",
+      "name": "Risk Assessment"
+    },
+    {
+      "id": "audit-trail",
+      "name": "Audit Trail"
+    },
+    {
+      "id": "escalation",
+      "name": "Human Escalation"
+    },
+    {
+      "id": "deliberation",
+      "name": "Multi-Agent Deliberation"
+    },
+    {
+      "id": "agent-trust",
+      "name": "Agent Trust Check"
+    },
+    {
+      "id": "payment-governance",
+      "name": "Payment Governance"
+    },
+    {
+      "id": "policy-exchange",
+      "name": "Policy Exchange"
     }
-  ],
-  "authentication": {
-    "schemes": ["Bearer", "OAuth2", "mTLS"]
-  }
+  ]
 }</code></pre>
+    <p>Abridged: the live card also carries a description, input and output modes, and a description of each skill.</p>
 
     <hr class="divider">
 
@@ -479,79 +503,65 @@ Authorization: Bearer &lt;agent_token&gt;
 
     <h2 id="a2a-authentication">A2A Authentication</h2>
     <p>
-      The A2A gateway supports four authentication schemes, matching the A2A Protocol v0.3 specification:
+      The A2A gateway accepts:
     </p>
     <ul>
-      <li><strong>Bearer Token:</strong> Standard JWT token in the <code>Authorization: Bearer</code> header, validated against the agent registry</li>
-      <li><strong>OAuth 2.0:</strong> Client credentials flow for service-to-service authentication; access tokens are cached for their TTL</li>
-      <li><strong>mTLS:</strong> Mutual TLS for high-security environments; the client certificate's CN is mapped to an agent identity</li>
-      <li><strong>GaaS API Key:</strong> Standard <code>X-API-Key</code> header — compatible with existing integrations, automatically associated with an agent profile</li>
+      <li><strong>GaaS API Key:</strong> the standard <code>X-API-Key</code> header &mdash; the same key as the rest of the API. This is what the hosted service accepts.</li>
+      <li><strong>Bearer JWT:</strong> an <code>Authorization: Bearer</code> token signed with the deployment's A2A secret (<code>GAAS_A2A_JWT_SECRET</code>), carrying <code>org_id</code> and optionally <code>agent_id</code>. Only when that secret is configured; the hosted service does not configure it today.</li>
     </ul>
+    <p>
+      The Agent Card lists exactly the schemes the deployment accepts. OAuth 2.0 client credentials and mutual TLS are not supported.
+    </p>
 
     <hr class="divider">
 
     <h2 id="governance-proxy">Governance Proxy</h2>
     <p>
-      For agents that delegate work to other agents, GaaS acts as a transparent governance proxy.
-      The orchestrating agent registers the target agent endpoint; GaaS intercepts outbound calls,
-      evaluates the intent, and forwards approved requests — all without modifying the agent's code.
+      Send an A2A message to <code>POST /a2a/proxy/messages</code> with the <code>target_agent_url</code> it is meant for.
+      GaaS runs it through the five-stage governance pipeline and returns the result as an A2A task.
+      <strong>Forwarding approved messages to the target agent is built, not yet switched on:</strong> today your
+      orchestrator forwards an approved message itself, and does not forward a blocked or escalated one.
+      <code>POST /a2a/proxy/messages/shadow</code> runs the same evaluation in shadow mode.
     </p>
 
-    <pre><code><span style="color:#8b949e"># Register a downstream agent for governance proxying</span>
-POST /v1/agents
+    <pre data-example="a2a-proxy-message"><code>POST /a2a/proxy/messages
+X-API-Key: gsk_...
+Content-Type: application/json
+
 {
-  "agent_id": "fulfillment_agent_v2",
-  "endpoint": "https://fulfillment.internal/a2a",
-  "capabilities": ["TRANSACT", "COMMUNICATE", "MODIFY"],
-  "trust_level": "standard",
-  "proxy_governance": true
+  "role": "user",
+  "parts": [
+    {"type": "text", "text": "Ship order 1042 to the customer's address on file"}
+  ],
+  "target_agent_url": "https://fulfillment.example.com/a2a"
 }</code></pre>
 
     <p>
-      Once registered, any A2A call your orchestrator makes to <code>fulfillment_agent_v2</code> is automatically
-      routed through the GaaS governance pipeline. If the action is approved, GaaS forwards the original request
-      to the downstream agent and returns its response. If blocked or escalated, GaaS returns a governance decision
-      and does not contact the downstream agent.
+      The target agent's URL must be HTTPS on a public host name: GaaS refuses private, loopback and cloud-metadata
+      addresses, and does not follow redirects, whenever it contacts another agent.
     </p>
 
     <hr class="divider">
 
     <h2 id="cross-org-policy-federation">Cross-Org Policy Federation</h2>
     <p>
-      Enterprise customers with multiple GaaS organizations (e.g., separate production and data-science orgs)
-      can configure bidirectional policy federation. When an agent from org A calls into org B's governed scope,
-      GaaS evaluates the intent against a merged policy set from both organizations.
+      <strong>Built, not yet enabled.</strong> Federation lets GaaS negotiate governance requirements and check mutual
+      compliance before agents in two organizations work together. The hosted service does not run it yet, so a
+      cross-organization request is governed only by the receiving organization's own policies.
     </p>
 
     <div class="note">
-      <strong>Federation scope:</strong> Policy federation is available on the Growth and Enterprise tiers.
-      Contact <a href="mailto:hello@gaas.is" class="link">hello@gaas.is</a> to configure a federation agreement between organizations.
+      <strong>Interested in federation?</strong> Contact <a href="mailto:hello@gaas.is" class="link">hello@gaas.is</a>.
     </div>
 
     <hr class="divider">
 
     <h2 id="push-notifications">Push Notifications</h2>
     <p>
-      Agents can register webhook endpoints to receive real-time updates on task status changes,
-      governance decisions, and escalation events. Push notifications are HMAC-SHA256 signed
-      using the agent's registered secret.
+      <strong>Not available yet.</strong> The signed push-notification sender is built, but no API route registers a
+      push configuration, so the Agent Card reports <code>"pushNotifications": false</code>. Poll
+      <code>GET /a2a/tasks/{task_id}</code>, or use <code>POST /a2a/messages/stream</code> for server-sent events.
     </p>
-
-    <pre><code>POST /v1/a2a
-{
-  "jsonrpc": "2.0",
-  "method": "tasks/pushNotification/set",
-  "params": {
-    "id": "task_abc123",
-    "pushNotificationConfig": {
-      "url": "https://your-agent.example.com/webhooks/gaas",
-      "authentication": {
-        "schemes": ["Bearer"],
-        "credentials": "your_webhook_secret"
-      }
-    }
-  }
-}</code></pre>
 
     <hr class="divider">
 
