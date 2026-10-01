@@ -368,20 +368,15 @@ Content-Type: application/json
   }
 }</code></pre>
 
-    <h3>Java (com.gaas.sdk)</h3>
-    <p>The Java SDK is not yet published to Maven Central (see <a href="sdks.html#java">SDKs</a>). Once it is, the same pattern applies:</p>
-    <pre><code><span class="keyword">import</span> com.gaas.sdk.GaaSClient;
-<span class="keyword">import</span> com.gaas.sdk.exceptions.GaaSException;
-
-<span class="keyword">try</span> {
-    GaaSResponse response = client.<span class="func">submitIntent</span>(intent);
-} <span class="keyword">catch</span> (GaaSException e) {
-    <span class="keyword">if</span> (e.<span class="func">getStatusCode</span>() == <span class="keyword">null</span> || e.<span class="func">getStatusCode</span>() != 429) <span class="keyword">throw</span> e;
-    Object v = e.<span class="func">getDetails</span>().<span class="func">isEmpty</span>() ? <span class="keyword">null</span> : e.<span class="func">getDetails</span>().<span class="func">get</span>(0).<span class="func">get</span>(<span class="string">"retry_after_seconds"</span>);
-    <span class="keyword">int</span> retryAfter = v <span class="keyword">instanceof</span> Number n ? n.<span class="func">intValue</span>() : 1;
-    System.out.<span class="func">println</span>(<span class="string">"Rate limited. Retrying after "</span> + retryAfter + <span class="string">" seconds..."</span>);
-    Thread.<span class="func">sleep</span>(retryAfter * 1000L);
-    GaaSResponse response = client.<span class="func">submitIntent</span>(intent);  <span class="comment">// Retry</span>
+    <h3>Java (is.gaas.sdk)</h3>
+    <p>The Java SDK is not yet published to Maven Central (see <a href="sdks.html#java">SDKs</a>). A 429 arrives as <code>GaaSRateLimitException</code>, carrying the wait the API sent:</p>
+    <pre><code data-doc-test="java-rate-limit"><span class="keyword">try</span> {
+    <span class="func">handle</span>(client.<span class="func">submitIntent</span>(intent).<span class="func">getData</span>(), intent);
+} <span class="keyword">catch</span> (<span class="type">GaaSRateLimitException</span> e) {
+    <span class="type">Integer</span> wait = e.<span class="func">getRetryAfterSeconds</span>(); <span class="comment">// the API sends it; null only if it did not</span>
+    <span class="type">System</span>.out.<span class="func">println</span>(<span class="string">"Rate limited. Retrying after "</span> + wait + <span class="string">" seconds..."</span>);
+    <span class="type">Thread</span>.<span class="func">sleep</span>((wait != <span class="keyword">null</span> ? wait : 1) * 1000L);
+    <span class="func">handle</span>(client.<span class="func">submitIntent</span>(intent).<span class="func">getData</span>(), intent); <span class="comment">// retry once</span>
 }</code></pre>
 
     <hr class="divider">

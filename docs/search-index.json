@@ -725,7 +725,7 @@
     "page": "SDKs",
     "section": "Java",
     "url": "sdks.html#java",
-    "body": "Java SDK com.gaas:gaas-sdk — in development, not yet published to Maven Central; call the REST API directly until it is. GaaSClient with CompletableFuture for async. Java 17+. IntentBuilder for intent construction.",
+    "body": "Java SDK is.gaas:gaas-sdk 0.3.0 — ready, not yet published to Maven Central; call the REST API directly until it is. GaaSClient with CompletableFuture for async, IntentBuilder for intents, a typed exception per API error. Java 17+.",
     "tags": [
       "Maven",
       "gaas-sdk",
@@ -2100,6 +2100,24 @@
       "python",
       "governance",
       "tools"
+    ]
+  },
+  {
+    "id": "sdks#agent-framework",
+    "page": "SDKs",
+    "section": "Microsoft Agent Framework",
+    "url": "sdks.html#agent-framework",
+    "body": "Govern Microsoft Agent Framework (AutoGen's successor) agent tools with GaaS. GaaSGovernanceMiddleware is function middleware: every tool call, including local MCP tools, is checked before it runs; BLOCK raises GovernanceBlockedError (a MiddlewareFailure) and stops agent.run(), or with on_block=\"inform\" tells the model. Fails closed; hold-and-poll on ESCALATE and BLOCK. gaas-agent-framework 0.1.0 — ready, not yet published to PyPI.",
+    "tags": [
+      "agent-framework",
+      "microsoft",
+      "autogen",
+      "sdk",
+      "adapter",
+      "python",
+      "governance",
+      "tools",
+      "middleware"
     ]
   },
   {

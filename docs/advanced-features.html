@@ -236,55 +236,8 @@
   "failed": 1
 }</code></pre>
 
-    <h3>Python (gaas_sdk)</h3>
-    <pre><code><span class="keyword">from</span> gaas_sdk <span class="keyword">import</span> GaaSClient, build_intent
-
-<span class="keyword">async with</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, headers={<span class="string">"X-API-Key"</span>: <span class="string">"your_key"</span>}) <span class="keyword">as</span> client:
-    intents = [<span class="func">build_intent</span>(...) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="func">range</span>(10)]
-    response = <span class="keyword">await</span> client.<span class="func">submit_intents_bulk</span>(intents)
-
-    <span class="comment"># Handle partial failures</span>
-    <span class="keyword">for</span> result <span class="keyword">in</span> response.results:
-        <span class="keyword">if</span> result.success:
-            <span class="func">print</span>(<span class="string">f"Intent {result.intent_id}: {result.decision.verdict}"</span>)
-        <span class="keyword">else</span>:
-            <span class="func">print</span>(<span class="string">f"Intent {result.intent_id} failed: {result.error}"</span>)</code></pre>
-
-    <h3>TypeScript (@governancehq/sdk)</h3>
-    <pre><code><span class="keyword">import</span> { GaaSClient, buildIntent } <span class="keyword">from</span> <span class="string">'@governancehq/sdk'</span>;
-
-<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>({
-  baseUrl: <span class="string">'https://api.gaas.is'</span>,
-  headers: { <span class="string">'X-API-Key'</span>: <span class="string">'your_key'</span> },
-});
-
-<span class="keyword">const</span> intents = <span class="keyword">new</span> <span class="func">Array</span>(10).<span class="func">fill</span>(null).<span class="func">map</span>(() => <span class="func">buildIntent</span>({...}));
-<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntentsBulk</span>(intents);
-
-response.results.<span class="func">forEach</span>((result) => {
-  <span class="keyword">if</span> (result.success) {
-    console.<span class="func">log</span>(<span class="string">`Intent ${result.intentId}: ${result.decision.verdict}`</span>);
-  } <span class="keyword">else</span> {
-    console.<span class="func">error</span>(<span class="string">`Intent ${result.intentId} failed: ${result.error}`</span>);
-  }
-});</code></pre>
-
-    <h3>Java (com.gaas.sdk)</h3>
-    <pre><code><span class="keyword">import</span> com.gaas.sdk.*;
-
-<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, <span class="string">"your_key"</span>);
-<span class="type">List</span>&lt;<span class="type">IntentDeclaration</span>&gt; intents = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();
-<span class="comment">// ... populate intents ...</span>
-
-<span class="type">BulkIntentResponse</span> response = client.<span class="func">submitIntentsBulk</span>(intents);
-
-<span class="keyword">for</span> (<span class="type">IntentResult</span> result : response.<span class="func">getResults</span>()) {
-  <span class="keyword">if</span> (result.<span class="func">isSuccess</span>()) {
-    System.out.<span class="func">println</span>(<span class="string">"Intent "</span> + result.<span class="func">getIntentId</span>() + <span class="string">": "</span> + result.<span class="func">getDecision</span>().<span class="func">getVerdict</span>());
-  } <span class="keyword">else</span> {
-    System.err.<span class="func">println</span>(<span class="string">"Intent "</span> + result.<span class="func">getIntentId</span>() + <span class="string">" failed: "</span> + result.<span class="func">getError</span>());
-  }
-}</code></pre>
+    <h3>In the SDKs</h3>
+    <p>The Python, TypeScript and Java SDKs have no batch method yet. Call <code>POST /v1/intents/batch</code> directly, or submit intents one at a time with each SDK's submit method.</p>
 
     <div class="note">
       <strong>Rate limiting:</strong> Bulk submissions count as a single request against the <code>intent</code> tier rate limit (120 requests/minute). The rate limiter does not multiply by the number of intents in the batch.
@@ -317,19 +270,8 @@ response.results.<span class="func">forEach</span>((result) => {
       The response includes an <code>X-GaaS-Fields-Filtered: true</code> header when filtering is active. Error responses (4xx/5xx) pass through unfiltered.
     </p>
 
-    <h3>Python (gaas_sdk)</h3>
-    <pre><code>response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(
-    intent,
-    fields=<span class="string">"decision.verdict,decision.risk_assessment.score"</span>
-)</code></pre>
-
-    <h3>TypeScript (@governancehq/sdk)</h3>
-    <pre><code><span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent, {
-  fields: <span class="string">'decision.verdict,decision.risk_assessment.score'</span>,
-});</code></pre>
-
-    <h3>Java (com.gaas.sdk)</h3>
-    <pre><code><span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent, <span class="string">"decision.verdict,decision.risk_assessment.score"</span>);</code></pre>
+    <h3>In the SDKs</h3>
+    <p>The Python, TypeScript and Java SDKs have no <code>fields</code> option yet; they always receive the full decision. Add <code>?fields=</code> to a direct API call instead.</p>
 
     <div class="note">
       <strong>Use case:</strong> Mobile apps or slow networks where you only need the verdict and risk score, not the full reasoning chain, modifications, or audit trail.
@@ -369,39 +311,8 @@ Content-Type: application/json
   }
 }</code></pre>
 
-    <h3>Python (gaas_sdk)</h3>
-    <pre><code><span class="comment"># Header-based (recommended)</span>
-response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(
-    intent,
-    headers={<span class="string">"Idempotency-Key"</span>: <span class="string">"unique-key-123"</span>}
-)
-
-<span class="comment"># Body-based (legacy)</span>
-intent = <span class="func">build_intent</span>(..., idempotency_key=<span class="string">"unique-key-123"</span>)
-response = <span class="keyword">await</span> client.<span class="func">submit_intent</span>(intent)</code></pre>
-
-    <h3>TypeScript (@governancehq/sdk)</h3>
-    <pre><code><span class="comment">// Header-based (recommended)</span>
-<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent, {
-  headers: { <span class="string">'Idempotency-Key'</span>: <span class="string">'unique-key-123'</span> },
-});
-
-<span class="comment">// Body-based (legacy)</span>
-<span class="keyword">const</span> intent = <span class="func">buildIntent</span>({ ..., idempotencyKey: <span class="string">'unique-key-123'</span> });
-<span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);</code></pre>
-
-    <h3>Java (com.gaas.sdk)</h3>
-    <pre><code><span class="comment">// Header-based (recommended)</span>
-<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; headers = <span class="keyword">new</span> <span class="type">HashMap</span>&lt;&gt;();
-headers.<span class="func">put</span>(<span class="string">"Idempotency-Key"</span>, <span class="string">"unique-key-123"</span>);
-<span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent, headers);
-
-<span class="comment">// Body-based (legacy)</span>
-<span class="type">IntentDeclaration</span> intent = <span class="type">IntentBuilder</span>.<span class="func">create</span>()
-    .<span class="func">idempotencyKey</span>(<span class="string">"unique-key-123"</span>)
-    .<span class="comment">/* ... */</span>
-    .<span class="func">build</span>();
-<span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent);</code></pre>
+    <h3>In the SDKs</h3>
+    <p>The Python, TypeScript and Java SDKs send the body-based key; none of them takes per-request headers yet. Set it when you build the intent: <code>build_intent(..., idempotency_key="unique-key-123")</code> in Python, <code>buildIntent({ ..., idempotencyKey: 'unique-key-123' })</code> in TypeScript, <code>IntentBuilder.create().idempotencyKey("unique-key-123")</code> in Java. For the header, call the API directly.</p>
 
     <div class="warning">
       <strong>TTL and cleanup:</strong> Idempotency keys expire after a configurable TTL (default: 24 hours). Expired keys are automatically purged.

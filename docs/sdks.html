@@ -202,7 +202,7 @@
   <main>
     <h1>SDKs</h1>
     <p class="subtitle">
-      Official client libraries for Python, TypeScript, LangChain/LangGraph, the OpenAI Agents SDK, CrewAI, Pydantic AI, and the Vercel AI SDK &mdash; plus an MCP server for Claude Code and Claude Desktop. A Java SDK is in development. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
+      Official client libraries for Python, TypeScript, LangChain/LangGraph, the OpenAI Agents SDK, CrewAI, Pydantic AI, Microsoft Agent Framework, and the Vercel AI SDK &mdash; plus an MCP server for Claude Code and Claude Desktop. A Java SDK is in development. Submit intents, retrieve decisions, handle errors &mdash; with full type safety.
     </p>
 
     <h2 id="at-a-glance">At a Glance</h2>
@@ -227,7 +227,7 @@
       </tr>
       <tr>
         <td>Java</td>
-        <td><code>com.gaas:gaas-sdk</code></td>
+        <td><code>is.gaas:gaas-sdk</code></td>
         <td>Not yet on Maven Central</td>
         <td>Java 17+</td>
       </tr>
@@ -267,6 +267,12 @@
         <td><code>pip install gaas-pydantic-ai</code></td>
         <td>Python 3.11+</td>
       </tr>
+      <tr>
+        <td>Microsoft Agent Framework</td>
+        <td><code>gaas-agent-framework</code></td>
+        <td>Not yet on PyPI</td>
+        <td>Python 3.11+, agent-framework-core 1.15+</td>
+      </tr>
     </table>
 
     <div class="note">
@@ -274,7 +280,7 @@
     </div>
 
     <div class="warning" id="fail-closed">
-      <strong>Framework plugins fail closed.</strong> If GaaS cannot give a decision &mdash; it is unreachable, it times out, or it answers with any HTTP error, including a wrong API key (401) &mdash; the governed tool <strong>does not run</strong>. The plugin reports it exactly as a BLOCK, with <code>GovernanceBlockedError</code> and verdict <code>UNEVALUATED</code> (plus a short <code>reason</code> such as <code>HTTP 401</code> or <code>timeout</code>). To run tools anyway when GaaS cannot answer, set <code>fail_open=True</code> (Python) or <code>failOpen: true</code> (Vercel AI); the action then runs ungoverned and a warning is logged. <code>raise_on_governance_error</code> / <code>raiseOnGovernanceError</code> still re-raises the underlying error and takes precedence. This is the default from gaas-langchain 0.3.0, gaas-crewai 0.2.0, gaas-openai-agents 0.2.0, gaas-pydantic-ai 0.2.0 and @governancehq/vercel-ai 0.2.0; earlier versions ran the tool ungoverned on any error.
+      <strong>Framework plugins fail closed.</strong> If GaaS cannot give a decision &mdash; it is unreachable, it times out, or it answers with any HTTP error, including a wrong API key (401) &mdash; the governed tool <strong>does not run</strong>. The plugin reports it exactly as a BLOCK, with <code>GovernanceBlockedError</code> and verdict <code>UNEVALUATED</code> (plus a short <code>reason</code> such as <code>HTTP 401</code> or <code>timeout</code>). To run tools anyway when GaaS cannot answer, set <code>fail_open=True</code> (Python) or <code>failOpen: true</code> (Vercel AI); the action then runs ungoverned and a warning is logged. <code>raise_on_governance_error</code> / <code>raiseOnGovernanceError</code> still re-raises the underlying error and takes precedence. This is the default from gaas-langchain 0.3.0, gaas-crewai 0.2.0, gaas-openai-agents 0.2.0, gaas-pydantic-ai 0.2.0 and @governancehq/vercel-ai 0.2.0; earlier versions ran the tool ungoverned on any error. gaas-agent-framework has failed closed from its first release; its <code>raise_on_governance_error</code> raises <code>GaaSGovernanceError</code> with the underlying error as the cause, because Agent Framework would otherwise turn the error into a tool result and keep the run going.
     </div>
 
     <hr class="divider">
@@ -452,56 +458,91 @@ intent = <span class="func">build_intent</span>(
     <h2 id="java">Java</h2>
 
     <p>
-      <strong>In development.</strong> The Java SDK lives in the repository (<code>sdks/java</code>, version 0.2.0) but is not yet published to Maven Central, so the coordinates below do not resolve yet. Until it is published, call the <a href="api-reference.html">REST API</a> directly.
+      <strong>Ready; not yet on Maven Central.</strong> The Java SDK (version 0.3.0, Java 17+) is built and tested, but the coordinates below do not resolve until its first release is published. Until then, call the <a href="api-reference.html">REST API</a> directly.
     </p>
 
     <h3>Install</h3>
 
     <p><strong>Maven:</strong></p>
     <pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;com.gaas&lt;/groupId&gt;
+    &lt;groupId&gt;is.gaas&lt;/groupId&gt;
     &lt;artifactId&gt;gaas-sdk&lt;/artifactId&gt;
-    &lt;version&gt;0.2.0&lt;/version&gt;
+    &lt;version&gt;0.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 
     <p><strong>Gradle:</strong></p>
-    <pre><code>implementation <span class="string">'com.gaas:gaas-sdk:0.2.0'</span></code></pre>
+    <pre><code>implementation <span class="string">'is.gaas:gaas-sdk:0.3.0'</span></code></pre>
 
     <h3>Submit an Intent</h3>
-    <pre><code><span class="keyword">import</span> com.gaas.sdk.*;
-
-<span class="keyword">try</span> (<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, <span class="string">"your_key"</span>)) {
+    <p>With <code>is.gaas.sdk.*</code>, <code>is.gaas.sdk.model.*</code>, <code>is.gaas.sdk.model.enums.*</code> and <code>java.util.Map</code> imported, and your API key in <code>GAAS_API_KEY</code>:</p>
+    <pre><code data-doc-test="java-quickstart"><span class="keyword">try</span> (<span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="func">GaaSClient</span>(<span class="string">"https://api.gaas.is"</span>, <span class="type">System</span>.<span class="func">getenv</span>(<span class="string">"GAAS_API_KEY"</span>))) {
     <span class="type">IntentDeclaration</span> intent = <span class="type">IntentBuilder</span>.<span class="func">create</span>()
-        .<span class="func">agentId</span>(<span class="string">"billing_bot"</span>)
-        .<span class="func">actionType</span>(ActionType.COMMUNICATE)
-        .<span class="func">verb</span>(<span class="string">"send_email"</span>)
-        .<span class="func">targetType</span>(TargetType.PERSON)
-        .<span class="func">targetIdentifier</span>(<span class="string">"patient@example.com"</span>)
-        .<span class="func">summary</span>(<span class="string">"Send billing statement to patient"</span>)
-        .<span class="func">content</span>(Map.<span class="func">of</span>(<span class="string">"recipient"</span>, <span class="string">"patient@example.com"</span>, <span class="string">"channel"</span>, <span class="string">"email"</span>))
+        .<span class="func">agentId</span>(<span class="string">"onboarding-agent"</span>)
+        .<span class="func">actionType</span>(<span class="type">ActionType</span>.COMMUNICATE)
+        .<span class="func">verb</span>(<span class="string">"send"</span>)
+        .<span class="func">targetType</span>(<span class="type">TargetType</span>.ENDPOINT)
+        .<span class="func">targetIdentifier</span>(<span class="string">"email-service"</span>)
+        .<span class="func">summary</span>(<span class="string">"Send the welcome email to a new customer"</span>)
+        .<span class="func">content</span>(<span class="type">Map</span>.<span class="func">of</span>(<span class="string">"to"</span>, <span class="string">"user@example.com"</span>, <span class="string">"template"</span>, <span class="string">"welcome"</span>))
         .<span class="func">build</span>();
 
-    <span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent);
+    <span class="type">GovernanceDecision</span> decision = client.<span class="func">submitIntent</span>(intent).<span class="func">getData</span>();
+    <span class="type">System</span>.out.<span class="func">println</span>(decision.<span class="func">getVerdict</span>()); <span class="comment">// APPROVE, APPROVE_MODIFIED, ESCALATE or BLOCK</span>
+}</code></pre>
 
-    <span class="keyword">if</span> (response.<span class="func">getData</span>().<span class="func">getVerdict</span>() == Verdict.APPROVE) {
-        <span class="func">sendEmail</span>(response.<span class="func">getData</span>());
-    } <span class="keyword">else if</span> (response.<span class="func">getData</span>().<span class="func">getVerdict</span>() == Verdict.BLOCK) {
-        System.out.<span class="func">println</span>(response.<span class="func">getData</span>().<span class="func">getReasoning</span>());
-    }
+    <h3>Act on the Verdict</h3>
+    <p>GaaS decides; your code enforces. Act only on <code>APPROVE</code>, or on <code>APPROVE_MODIFIED</code> with the changes applied. A deliberated decision takes about 40&ndash;60&nbsp;s, so the client waits up to 240&nbsp;s by default (<code>timeout</code> on the builder; see <a href="authentication.html">Authentication</a>).</p>
+    <pre><code data-doc-test="java-verdicts"><span class="keyword">switch</span> (decision.<span class="func">getVerdict</span>()) {
+    <span class="keyword">case</span> APPROVE -&gt; <span class="func">act</span>(intent);
+    <span class="keyword">case</span> APPROVE_MODIFIED -&gt; <span class="func">act</span>(intent, decision.<span class="func">getModifications</span>()); <span class="comment">// apply the changes first</span>
+    <span class="keyword">case</span> ESCALATE -&gt; <span class="func">holdForReview</span>(decision.<span class="func">getEscalation</span>().<span class="func">getEscalationId</span>()); <span class="comment">// a person decides</span>
+    <span class="keyword">case</span> BLOCK -&gt; <span class="func">refuse</span>(decision.<span class="func">getBlock</span>().<span class="func">getReasons</span>()); <span class="comment">// do not act</span>
 }</code></pre>
 
     <h3>Async API</h3>
-    <pre><code><span class="type">CompletableFuture</span>&lt;<span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt;&gt; future =
-    client.<span class="func">submitIntentAsync</span>(intent);</code></pre>
+    <p>Every method has an <code>&hellip;Async</code> twin that returns a <code>CompletableFuture</code>:</p>
+    <pre><code data-doc-test="java-async">client.<span class="func">submitIntentAsync</span>(intent)
+    .<span class="func">thenAccept</span>(response -&gt; <span class="func">handle</span>(response.<span class="func">getData</span>(), intent))
+    .<span class="func">exceptionally</span>(error -&gt; {
+        <span class="comment">// A failure arrives wrapped in a CompletionException; the GaaSException is its cause.</span>
+        <span class="type">Throwable</span> cause = error instanceof <span class="type">CompletionException</span> ? error.<span class="func">getCause</span>() : error;
+        <span class="func">noDecision</span>(cause); <span class="comment">// do not act</span>
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    })
+    .<span class="func">join</span>();</code></pre>
 
     <h3>Error Handling</h3>
-    <pre><code><span class="keyword">try</span> {
-    <span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; response = client.<span class="func">submitIntent</span>(intent);
-} <span class="keyword">catch</span> (<span class="type">GaaSValidationException</span> e) {
-    System.out.<span class="func">println</span>(<span class="string">"Validation failed: "</span> + e.<span class="func">getMessage</span>());
-} <span class="keyword">catch</span> (<span class="type">GaaSConnectionException</span> e) {
-    System.out.<span class="func">println</span>(<span class="string">"Could not reach GaaS server"</span>);
-}</code></pre>
+    <p>Every failure is an unchecked <code>GaaSException</code>. If GaaS gives no decision, do not act.</p>
+    <table>
+      <thead>
+        <tr><th>Exception</th><th>HTTP</th><th>Code</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>GaaSValidationException</code></td><td>400</td><td><code>validation_error</code></td></tr>
+        <tr><td><code>GaaSAuthenticationException</code></td><td>401</td><td><code>unauthorized</code></td></tr>
+        <tr><td><code>GaaSQuotaExceededException</code></td><td>402</td><td><code>quota_exceeded</code> (<code>getUsed()</code>, <code>getHardLimit()</code>)</td></tr>
+        <tr><td><code>GaaSForbiddenException</code></td><td>403</td><td><code>forbidden</code></td></tr>
+        <tr><td><code>GaaSNotFoundException</code></td><td>404</td><td><code>not_found</code></td></tr>
+        <tr><td><code>GaaSConflictException</code></td><td>409</td><td><code>conflict</code></td></tr>
+        <tr><td><code>GaaSSemanticException</code></td><td>422</td><td><code>semantic_validation_error</code></td></tr>
+        <tr><td><code>GaaSRateLimitException</code></td><td>429</td><td><code>rate_limit_exceeded</code> (<code>getRetryAfterSeconds()</code>)</td></tr>
+        <tr><td><code>GaaSServerException</code></td><td>500</td><td><code>internal_error</code></td></tr>
+        <tr><td><code>GaaSConnectionException</code></td><td>&mdash;</td><td><code>connection_error</code>: could not connect, or no answer in time</td></tr>
+      </tbody>
+    </table>
+    <pre><code data-doc-test="java-errors"><span class="keyword">try</span> {
+    <span class="type">GovernanceDecision</span> decision = client.<span class="func">submitIntent</span>(intent).<span class="func">getData</span>();
+    <span class="func">handle</span>(decision, intent);
+} <span class="keyword">catch</span> (<span class="type">GaaSRateLimitException</span> e) {
+    <span class="func">retryAfter</span>(e.<span class="func">getRetryAfterSeconds</span>()); <span class="comment">// 429; null if the API gave no wait</span>
+} <span class="keyword">catch</span> (<span class="type">GaaSQuotaExceededException</span> e) {
+    <span class="func">report</span>(<span class="string">"quota used "</span> + e.<span class="func">getUsed</span>() + <span class="string">" of "</span> + e.<span class="func">getHardLimit</span>()); <span class="comment">// 402</span>
+} <span class="keyword">catch</span> (<span class="type">GaaSAuthenticationException</span> | <span class="type">GaaSForbiddenException</span> e) {
+    <span class="func">report</span>(<span class="string">"check the API key and its role: "</span> + e.<span class="func">getMessage</span>()); <span class="comment">// 401, 403</span>
+} <span class="keyword">catch</span> (<span class="type">GaaSException</span> e) {
+    <span class="func">report</span>(e.<span class="func">getCode</span>() + <span class="string">": "</span> + e.<span class="func">getMessage</span>()); <span class="comment">// anything else, including no connection</span>
+}
+<span class="comment">// Whatever was caught, the action did not run: no decision means no permission.</span></code></pre>
 
     <hr class="divider">
 
@@ -756,6 +797,65 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
 
     <hr class="divider">
 
+    <!-- ── Microsoft Agent Framework ───────────────────────────── -->
+
+    <h2 id="agent-framework">Microsoft Agent Framework</h2>
+
+    <p>
+      <strong>Ready; not yet on PyPI.</strong> The plugin (version 0.1.0) is built and tested, but the install line below works only once its first release is published.
+    </p>
+
+    <h3>Install</h3>
+    <pre><code>pip install "gaas-agent-framework[agent-framework]"</code></pre>
+
+    <h3>Govern Every Tool Call</h3>
+    <pre><code data-doc-test="agent-framework-quickstart"><span class="keyword">from</span> agent_framework <span class="keyword">import</span> Agent
+<span class="keyword">from</span> gaas_agent_framework <span class="keyword">import</span> GaaSGovernanceConfig, GaaSGovernanceMiddleware
+
+config = <span class="func">GaaSGovernanceConfig</span>(
+    api_url=<span class="string">"https://api.gaas.is"</span>,
+    api_key=<span class="string">"gsk_your_key"</span>,
+    agent_id=<span class="string">"my-agent"</span>,
+)
+
+agent = <span class="func">Agent</span>(
+    client=chat_client,
+    tools=[search_web, send_email],
+    middleware=[<span class="func">GaaSGovernanceMiddleware</span>(config)],
+)
+result = <span class="keyword">await</span> agent.<span class="func">run</span>(<span class="string">"Email the Q3 report to finance@acme.com"</span>)</code></pre>
+    <p>
+      One function middleware governs every tool the agent calls, including local MCP tools: the
+      tool name and arguments, the model's tool-call id and the session id flow into the
+      governance intent. Attach it to the agent, to a single <code>agent.run()</code>, or to a
+      chat client. Tools the model provider runs on its own side (hosted tools) never reach
+      function middleware, so they cannot be governed here.
+    </p>
+
+    <h3>BLOCK Stops the Run</h3>
+    <pre><code data-doc-test="agent-framework-blocked"><span class="keyword">from</span> gaas_agent_framework <span class="keyword">import</span> GovernanceBlockedError
+
+<span class="keyword">try</span>:
+    result = <span class="keyword">await</span> agent.<span class="func">run</span>(<span class="string">"Wire $250k to the new vendor"</span>)
+<span class="keyword">except</span> <span class="type">GovernanceBlockedError</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(e.verdict)               <span class="comment"># "BLOCK", "ESCALATE", "ESCALATE_DENY", "UNEVALUATED", ...</span>
+    <span class="func">print</span>(e.decision_id)            <span class="comment"># GaaS decision ID</span>
+    <span class="func">print</span>(e.blocking_policies)      <span class="comment"># ["pol_t1_001", ...]</span></code></pre>
+    <p>
+      <code>GovernanceBlockedError</code> is an Agent Framework <code>MiddlewareFailure</code>, the
+      one exception the framework lets abort a run from function middleware; any other exception
+      would be turned into a tool result and the agent would carry on. To let the agent continue
+      instead, set <code>on_block="inform"</code>: the blocked tool still does not run, and the
+      model is told it was not allowed. <code>hold_on_escalate=True</code> waits for a human on
+      ESCALATE, and <code>hold_on_block=True</code> waits for a person to approve a BLOCK, then
+      retries once. When GaaS cannot give a decision, the tool does not run, with verdict
+      <code>UNEVALUATED</code>, unless <code>fail_open=True</code> (see
+      <a class="link" href="#fail-closed">Framework plugins fail closed</a>). Requires
+      agent-framework-core 1.15 or later.
+    </p>
+
+    <hr class="divider">
+
     <!-- ── Vercel AI SDK ────────────────────────────────────────── -->
 
     <h2 id="vercel-ai">Vercel AI SDK</h2>
@@ -898,7 +998,7 @@ result = <span class="keyword">await</span> agent.<span class="func">run</span>(
     <p>TypeScript:</p>
     <pre><code><span class="keyword">const</span> decision = <span class="keyword">await</span> client.<span class="func">getDecision</span>(<span class="string">'intent-id'</span>);</code></pre>
     <p>Java:</p>
-    <pre><code><span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; decision = client.<span class="func">getDecision</span>(<span class="string">"intent-id"</span>);</code></pre>
+    <pre><code data-doc-test="java-get-decision"><span class="type">GaaSResponse</span>&lt;<span class="type">GovernanceDecision</span>&gt; decision = client.<span class="func">getDecision</span>(<span class="string">"intent-id"</span>);</code></pre>
 
     <hr class="divider">
 
