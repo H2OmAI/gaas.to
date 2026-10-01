@@ -422,7 +422,7 @@
     "page": "A2A & Agent Networks",
     "section": "Agent Card",
     "url": "a2a.html#agent-card",
-    "body": "Agent Card JSON document describes an agent's capabilities, trust score, skills, and supported A2A protocol version. Published at /.well-known/agent.json. Required for A2A registration.",
+    "body": "GaaS's A2A v1.0 Agent Card: capabilities, skills, security schemes and supported interfaces (JSON-RPC, protocol version 1.0). Published without authentication at /.well-known/agent-card.json; /.well-known/agent.json redirects there.",
     "tags": [
       "Agent Card",
       "capabilities",
@@ -437,13 +437,13 @@
     "page": "A2A & Agent Networks",
     "section": "A2A Gateway",
     "url": "a2a.html#a2a-gateway",
-    "body": "POST /v1/a2a/rpc — JSON-RPC 2.0 endpoint for agent-to-agent task delegation. Caller agent governs the delegated task through the GaaS pipeline before the callee executes. Method: tasks/send.",
+    "body": "POST /a2a/v1 — A2A v1.0 JSON-RPC endpoint (A2A-Version: 1.0 header required). Methods: SendMessage, SendStreamingMessage, GetTask, ListTasks, CancelTask, SubscribeToTask. Every message is governed by the GaaS pipeline; verdicts become task states.",
     "tags": [
       "A2A Gateway",
-      "/v1/a2a/rpc",
+      "/a2a/v1",
       "JSON-RPC",
-      "tasks/send",
-      "delegation",
+      "SendMessage",
+      "A2A v1.0",
       "POST"
     ]
   },

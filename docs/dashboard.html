@@ -600,6 +600,12 @@
         <span>Reassign</span>
       </div>
     </div>
+    <p>
+      When GaaS holds an action for review, it emails your organization's contact address &mdash; at most once per
+      agent per hour &mdash; with a link to the review, the deadline, and what happens if nobody decides in time
+      (your escalation policy's timeout rule). Your own systems can listen for the
+      <a class="link" href="webhooks.html"><code>decision.escalated</code></a> webhook.
+    </p>
 
     <h3>Calibration backtest</h3>
     <div class="conversation-example">

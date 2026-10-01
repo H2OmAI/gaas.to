@@ -280,162 +280,157 @@
   <main>
     <h1>A2A &amp; Agent Networks</h1>
     <p class="subtitle">
-      GaaS as the governance control plane for multi-agent systems &mdash; covering the A2A Protocol v0.3, Agent Trust Registry, and AP2 Agentic Payment Governance.
+      GaaS as the governance control plane for multi-agent systems &mdash; covering the A2A Protocol v1.0, Agent Trust Registry, and AP2 Agentic Payment Governance.
     </p>
 
     <p>
       When AI agents talk to each other, delegate tasks, or execute financial transactions autonomously, governance becomes non-negotiable.
-      GaaS speaks the <strong>Agent-to-Agent (A2A) Protocol</strong>: every A2A message an agent sends to GaaS passes
-      through the same 5-stage pipeline as a human-facing action. <strong>Version:</strong> the Agent Card declares
-      v0.3, the JSON-RPC methods use the v1.0 names (<code>SendMessage</code>, <code>GetTask</code>, <code>CancelTask</code>),
-      and message parts use a <code>type</code> field; GaaS has not yet been tested for conformance with either version.
+      GaaS is an <strong>A2A v1.0</strong> agent: every message another agent sends it passes through the same
+      5-stage governance pipeline as a human-facing action. It is built on the official A2A SDK and tested on every
+      change with the official A2A conformance suite (TCK) at the MUST level, over JSON-RPC &mdash; the binding its
+      Agent Card declares.
     </p>
 
     <hr class="divider">
 
     <h2 id="agent-card">Agent Card</h2>
     <p>
-      GaaS publishes a machine-readable agent card at a well-known URL so that other A2A-compatible systems can discover its capabilities,
-      supported authentication methods, and governance endpoints.
+      GaaS publishes its Agent Card at the spec's well-known path, without authentication:
+      <code>GET /.well-known/agent-card.json</code>. (<code>/.well-known/agent.json</code>, the pre-v1.0 path,
+      redirects there.) <code>version</code> is GaaS's own version; the A2A protocol version is on each entry of
+      <code>supportedInterfaces</code>.
     </p>
-    <pre><code>GET /.well-known/agent.json</code></pre>
     <pre data-example="agent-card"><code>{
   "name": "GaaS Governance Agent",
-  "version": "0.3",
-  "url": "/a2a",
+  "version": "0.2.17",
+  "supportedInterfaces": [
+    {
+      "url": "https://api.gaas.is/a2a/v1",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
   "capabilities": {
     "streaming": true,
     "pushNotifications": false,
-    "extendedAgentCard": true
+    "extendedAgentCard": false
   },
-  "authentication": {
-    "schemes": [
-      "ApiKey"
-    ]
+  "securitySchemes": {
+    "apiKey": {
+      "apiKeySecurityScheme": {
+        "description": "Your GaaS API key (the same key as the rest of the API).",
+        "location": "header",
+        "name": "X-API-Key"
+      }
+    }
   },
+  "securityRequirements": [
+    {
+      "schemes": {
+        "apiKey": {}
+      }
+    }
+  ],
   "skills": [
     {
       "id": "governance-check",
-      "name": "Governance Check"
+      "name": "Governance Check",
+      "tags": [
+        "governance",
+        "compliance",
+        "risk",
+        "audit",
+        "policy"
+      ]
     },
     {
       "id": "risk-assessment",
-      "name": "Risk Assessment"
+      "name": "Risk Assessment",
+      "tags": [
+        "risk",
+        "scoring",
+        "assessment",
+        "dimensions"
+      ]
     },
-    {
-      "id": "audit-trail",
-      "name": "Audit Trail"
-    },
-    {
-      "id": "escalation",
-      "name": "Human Escalation"
-    },
-    {
-      "id": "deliberation",
-      "name": "Multi-Agent Deliberation"
-    },
-    {
-      "id": "agent-trust",
-      "name": "Agent Trust Check"
-    },
-    {
-      "id": "payment-governance",
-      "name": "Payment Governance"
-    },
-    {
-      "id": "policy-exchange",
-      "name": "Policy Exchange"
-    }
+    …
   ]
 }</code></pre>
-    <p>Abridged: the live card also carries a description, input and output modes, and a description of each skill.</p>
+    <p>Abridged: the live card also carries a description, provider, documentation link, input and output modes, and all 8 skills.</p>
 
     <hr class="divider">
 
     <h2 id="a2a-gateway">A2A Gateway</h2>
     <p>
-      The A2A gateway exposes a JSON-RPC 2.0 endpoint that any A2A-compliant agent can call directly.
-      Requests are automatically translated into GaaS intent declarations, run through the full governance pipeline,
-      and translated back into A2A-compliant responses.
+      The A2A endpoint is JSON-RPC 2.0 at <code>POST /a2a/v1</code>. Every request must carry
+      <code>A2A-Version: 1.0</code>; a request without it (which the spec reads as 0.3) or with another version gets
+      error <code>-32009</code> (<code>VersionNotSupportedError</code>). Authenticate with your GaaS API key in
+      <code>X-API-Key</code>.
     </p>
 
-    <div class="endpoint">
-      <span class="method method-post">POST</span>
-      <span class="path">/a2a/jsonrpc</span>
-      <p class="desc">A2A JSON-RPC 2.0 gateway — handles all A2A protocol methods. Mounted outside the <code>/v1</code> prefix.</p>
-    </div>
-
-    <h3>Supported JSON-RPC Methods</h3>
+    <h3>Methods</h3>
     <table>
-      <thead>
-        <tr><th>Method</th><th>Description</th></tr>
-      </thead>
+      <thead><tr><th>Method</th><th>What it does</th></tr></thead>
       <tbody>
-        <tr><td><code>a2a.SendMessage</code></td><td>Submit a task for governance evaluation and execution</td></tr>
-        <tr><td><code>a2a.GetTask</code></td><td>Retrieve the current status and result of a task</td></tr>
-        <tr><td><code>a2a.ListTasks</code></td><td>List all tasks for the authenticated agent</td></tr>
-        <tr><td><code>a2a.CancelTask</code></td><td>Request cancellation of a pending or in-progress task</td></tr>
-        <tr><td><code>a2a.GetExtendedAgentCard</code></td><td>Retrieve the extended agent card with governance capabilities</td></tr>
+        <tr><td><code>SendMessage</code></td><td>Govern an action; returns the task with the decision</td></tr>
+        <tr><td><code>SendStreamingMessage</code></td><td>The same, as server-sent events</td></tr>
+        <tr><td><code>GetTask</code></td><td>One of your tasks</td></tr>
+        <tr><td><code>ListTasks</code></td><td>Your tasks, newest first, paged (<code>pageSize</code>, <code>pageToken</code>)</td></tr>
+        <tr><td><code>CancelTask</code></td><td>Cancel one of your tasks that has not finished</td></tr>
+        <tr><td><code>SubscribeToTask</code></td><td>Stream a running task's updates</td></tr>
+        <tr><td>Push notification methods</td><td>Not available: <code>-32003</code> (see below)</td></tr>
+        <tr><td><code>GetExtendedAgentCard</code></td><td>Not offered: <code>-32004</code>; the public card is complete</td></tr>
       </tbody>
     </table>
+    <p>
+      Tasks belong to the organization whose key created them. Another organization's task id gets
+      <code>-32001</code> (<code>TaskNotFoundError</code>), the same as an id that does not exist.
+    </p>
 
-    <h3>Example: A2A Task Submission</h3>
-    <pre><code>POST /a2a/jsonrpc
+    <h3>Example: govern an action</h3>
+    <pre data-example="a2a-v1-send"><code>POST /a2a/v1
+X-API-Key: gsk_...
+A2A-Version: 1.0
 Content-Type: application/json
-Authorization: Bearer &lt;agent_token&gt;
 
 {
   "jsonrpc": "2.0",
-  "id": "req_001",
-  "method": "tasks/send",
+  "id": 1,
+  "method": "SendMessage",
   "params": {
-    "id": "task_abc123",
     "message": {
-      "role": "user",
-      "parts": [
-        {
-          "type": "text",
-          "text": "Transfer $2,500 to vendor account V-9912 for invoice #INV-2026-0044"
-        }
-      ]
-    },
-    "metadata": {
-      "agent_id": "procurement_agent_v1",
-      "delegated_by": "orchestrator_agent",
-      "delegation_depth": 1
+      "messageId": "msg-0001",
+      "role": "ROLE_USER",
+      "parts": [{"text": "Send the quarterly revenue report to the external auditor by email"}]
     }
   }
 }</code></pre>
-
     <p>
-      The gateway translates this into a <code>TRANSACT</code> intent, runs it through the governance pipeline
-      (including AP2 mandate verification), and returns a JSON-RPC result containing the governance decision.
+      The result is a task. Its <code>governance-decision</code> artifact holds GaaS's decision as a
+      <code>data</code> part (<code>verdict</code>, <code>risk_score</code>, <code>reasoning</code>,
+      <code>audit_id</code>, <code>blocking_policies</code>, &hellip;), the status message carries the reasoning, and
+      the task metadata carries <code>gaas_audit_id</code>, <code>gaas_intent_id</code> and <code>gaas_verdict</code>.
+      To pick a skill, put <code>"skill": "&lt;id&gt;"</code> in the message metadata or in a data part. Set
+      <code>"gaas.pipelineMode": "shadow"</code> in the message metadata to evaluate without enforcing.
     </p>
 
-    <pre><code>{
-  "jsonrpc": "2.0",
-  "id": "req_001",
-  "result": {
-    "id": "task_abc123",
-    "status": {
-      "state": "completed"
-    },
-    "artifacts": [
-      {
-        "type": "governance_decision",
-        "decision": {
-          "verdict": "approve",
-          "risk_assessment": { "score": 0.18, "level": "LOW" },
-          "ap2_context": {
-            "mandate_id": "mnd_vendor_9912",
-            "remaining_budget": 47500.00,
-            "psd2_sca_required": false
-          }
-        }
-      }
-    ]
-  }
-}</code></pre>
+    <h3>Decisions as task states</h3>
+    <table>
+      <thead><tr><th>GaaS verdict</th><th>Task state</th></tr></thead>
+      <tbody>
+        <tr><td>approve, approve with modifications</td><td><code>TASK_STATE_COMPLETED</code></td></tr>
+        <tr><td>block</td><td><code>TASK_STATE_REJECTED</code></td></tr>
+        <tr><td>escalate (a person must decide)</td><td><code>TASK_STATE_INPUT_REQUIRED</code></td></tr>
+        <tr><td>evaluation error</td><td><code>TASK_STATE_FAILED</code></td></tr>
+      </tbody>
+    </table>
+    <p>
+      An escalated action becomes a review item in your dashboard, and GaaS emails your organization. The task's
+      metadata carries <code>gaas_escalation_id</code>. Send another message on the same task (with its
+      <code>taskId</code> and <code>contextId</code>) to get the outcome: approved or modified &rarr;
+      <code>COMPLETED</code>, denied &rarr; <code>REJECTED</code>, timed out &rarr; per your timeout rule, still waiting
+      &rarr; <code>INPUT_REQUIRED</code> again.
+    </p>
 
     <hr class="divider">
 
@@ -505,7 +500,7 @@ Authorization: Bearer &lt;agent_token&gt;
 
     <h2 id="a2a-authentication">A2A Authentication</h2>
     <p>
-      The A2A gateway accepts:
+      <code>POST /a2a/v1</code> accepts:
     </p>
     <ul>
       <li><strong>GaaS API Key:</strong> the standard <code>X-API-Key</code> header &mdash; the same key as the rest of the API. This is what the hosted service accepts.</li>
@@ -560,9 +555,9 @@ Content-Type: application/json
 
     <h2 id="push-notifications">Push Notifications</h2>
     <p>
-      <strong>Not available yet.</strong> The signed push-notification sender is built, but no API route registers a
-      push configuration, so the Agent Card reports <code>"pushNotifications": false</code>. Poll
-      <code>GET /a2a/tasks/{task_id}</code>, or use <code>POST /a2a/messages/stream</code> for server-sent events.
+      <strong>Not available yet.</strong> The Agent Card says <code>"pushNotifications": false</code>, and the push
+      configuration methods return <code>-32003</code> (<code>PushNotificationNotSupportedError</code>). Poll with
+      <code>GetTask</code>, or stream with <code>SendStreamingMessage</code> / <code>SubscribeToTask</code>.
     </p>
 
     <hr class="divider">
