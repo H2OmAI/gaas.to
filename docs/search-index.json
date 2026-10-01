@@ -725,7 +725,7 @@
     "page": "SDKs",
     "section": "Java",
     "url": "sdks.html#java",
-    "body": "Java SDK is.gaas:gaas-sdk 0.3.0 — ready, not yet published to Maven Central; call the REST API directly until it is. GaaSClient with CompletableFuture for async, IntentBuilder for intents, a typed exception per API error. Java 17+.",
+    "body": "Java SDK is.gaas:gaas-sdk 0.3.0 from the GaaS Maven repository https://maven.gaas.is (Maven and Gradle install snippets). GaaSClient with CompletableFuture for async, IntentBuilder for intents, a typed exception per API error. Java 17+.",
     "tags": [
       "Maven",
       "gaas-sdk",

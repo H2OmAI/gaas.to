@@ -283,7 +283,7 @@ Content-Type: application/json
 <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="func">submitIntent</span>(intent);</code></pre>
 
     <h3>Java (is.gaas.sdk)</h3>
-    <p>The Java SDK is not yet published to Maven Central (see <a href="sdks.html#java">SDKs</a>). The client sends the key as <code>X-API-Key</code> on every request:</p>
+    <p>The Java SDK installs from <code>https://maven.gaas.is</code> (see <a href="sdks.html#java">SDKs</a>). The client sends the key as <code>X-API-Key</code> on every request:</p>
     <pre><code data-doc-test="java-configuration"><span class="type">GaaSClient</span> client = <span class="keyword">new</span> <span class="type">GaaSClient</span>.<span class="func">Builder</span>()
     .<span class="func">baseUrl</span>(<span class="string">"https://api.gaas.is"</span>)
     .<span class="func">apiKey</span>(<span class="type">System</span>.<span class="func">getenv</span>(<span class="string">"GAAS_API_KEY"</span>))

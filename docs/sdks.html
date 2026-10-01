@@ -228,7 +228,7 @@
       <tr>
         <td>Java</td>
         <td><code>is.gaas:gaas-sdk</code></td>
-        <td>Not yet on Maven Central</td>
+        <td><code>is.gaas:gaas-sdk</code> from <code>https://maven.gaas.is</code></td>
         <td>Java 17+</td>
       </tr>
       <tr>
@@ -458,20 +458,53 @@ intent = <span class="func">build_intent</span>(
     <h2 id="java">Java</h2>
 
     <p>
-      <strong>Ready; not yet on Maven Central.</strong> The Java SDK (version 0.3.0, Java 17+) is built and tested, but the coordinates below do not resolve until its first release is published. Until then, call the <a href="api-reference.html">REST API</a> directly.
+      The Java SDK (version 0.3.0, Java 17+) installs from the GaaS Maven repository, <code>https://maven.gaas.is</code>, alongside Maven Central. Every published file has <code>.sha256</code> and <code>.sha512</code> checksums, and a published version never changes.
     </p>
 
     <h3>Install</h3>
 
-    <p><strong>Maven:</strong></p>
-    <pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;is.gaas&lt;/groupId&gt;
-    &lt;artifactId&gt;gaas-sdk&lt;/artifactId&gt;
-    &lt;version&gt;0.3.0&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+    <p><strong>Maven</strong> (<code>pom.xml</code>):</p>
+    <pre><code data-install="maven">&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;gaas&lt;/id&gt;
+        &lt;url&gt;https://maven.gaas.is&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
 
-    <p><strong>Gradle:</strong></p>
-    <pre><code>implementation <span class="string">'is.gaas:gaas-sdk:0.3.0'</span></code></pre>
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;is.gaas&lt;/groupId&gt;
+        &lt;artifactId&gt;gaas-sdk&lt;/artifactId&gt;
+        &lt;version&gt;0.3.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+    <p><strong>Gradle</strong> (<code>build.gradle</code>):</p>
+    <pre><code data-install="gradle-groovy">repositories {
+    mavenCentral()
+    maven {
+        url = 'https://maven.gaas.is'
+        content { includeGroup 'is.gaas' }
+    }
+}
+
+dependencies {
+    implementation 'is.gaas:gaas-sdk:0.3.0'
+}</code></pre>
+
+    <p><strong>Gradle Kotlin DSL</strong> (<code>build.gradle.kts</code>):</p>
+    <pre><code data-install="gradle-kotlin">repositories {
+    mavenCentral()
+    maven("https://maven.gaas.is") {
+        content { includeGroup("is.gaas") }
+    }
+}
+
+dependencies {
+    implementation("is.gaas:gaas-sdk:0.3.0")
+}</code></pre>
+
+    <p><code>includeGroup</code> makes Gradle ask the GaaS repository for <code>is.gaas</code> artifacts only, and Maven Central for everything else.</p>
 
     <h3>Submit an Intent</h3>
     <p>With <code>is.gaas.sdk.*</code>, <code>is.gaas.sdk.model.*</code>, <code>is.gaas.sdk.model.enums.*</code> and <code>java.util.Map</code> imported, and your API key in <code>GAAS_API_KEY</code>:</p>

@@ -369,7 +369,7 @@ Content-Type: application/json
 }</code></pre>
 
     <h3>Java (is.gaas.sdk)</h3>
-    <p>The Java SDK is not yet published to Maven Central (see <a href="sdks.html#java">SDKs</a>). A 429 arrives as <code>GaaSRateLimitException</code>, carrying the wait the API sent:</p>
+    <p>The Java SDK installs from <code>https://maven.gaas.is</code> (see <a href="sdks.html#java">SDKs</a>). A 429 arrives as <code>GaaSRateLimitException</code>, carrying the wait the API sent:</p>
     <pre><code data-doc-test="java-rate-limit"><span class="keyword">try</span> {
     <span class="func">handle</span>(client.<span class="func">submitIntent</span>(intent).<span class="func">getData</span>(), intent);
 } <span class="keyword">catch</span> (<span class="type">GaaSRateLimitException</span> e) {
