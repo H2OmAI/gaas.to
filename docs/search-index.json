@@ -2107,7 +2107,7 @@
     "page": "SDKs",
     "section": "Microsoft Agent Framework",
     "url": "sdks.html#agent-framework",
-    "body": "Govern Microsoft Agent Framework (AutoGen's successor) agent tools with GaaS. GaaSGovernanceMiddleware is function middleware: every tool call, including local MCP tools, is checked before it runs; BLOCK raises GovernanceBlockedError (a MiddlewareFailure) and stops agent.run(), or with on_block=\"inform\" tells the model. Fails closed; hold-and-poll on ESCALATE and BLOCK. gaas-agent-framework 0.1.0 — ready, not yet published to PyPI.",
+    "body": "Govern Microsoft Agent Framework (AutoGen's successor) agent tools with GaaS. GaaSGovernanceMiddleware is function middleware: every tool call, including local MCP tools, is checked before it runs; BLOCK raises GovernanceBlockedError (a MiddlewareFailure) and stops agent.run(), or with on_block=\"inform\" tells the model. Fails closed; hold-and-poll on ESCALATE and BLOCK. pip install \"gaas-agent-framework[agent-framework]\".",
     "tags": [
       "agent-framework",
       "microsoft",
