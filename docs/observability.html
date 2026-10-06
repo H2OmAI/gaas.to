@@ -420,27 +420,16 @@ Content-Type: application/json
 
     <hr class="divider">
 
-    <h2>Metrics Persistence &amp; History</h2>
+    <h2>Metrics History</h2>
     <p>
-      In addition to real-time Prometheus metrics, GaaS persists hourly snapshots for historical trend analysis.
-    </p>
-
-    <h3>Metrics History</h3>
-    <p>
-      Retrieve historical metrics snapshots:
+      In addition to real-time Prometheus metrics, your organization's governance metrics are available for each past hour, computed from its own decisions and escalations:
     </p>
     <pre><code>GET /v1/dashboard/metrics/history?hours=24&amp;limit=100</code></pre>
     <p>
-      Returns timestamped snapshots containing block rate, average risk, latency percentiles, decision counts, and escalation counts. Useful for generating compliance reports and trend analysis.
+      Returns one entry for each UTC hour that had decisions or escalations, oldest first: decision counts by verdict, block rate, average risk, deliberation rate, latency percentiles (p50, p99), escalations created, escalations awaiting review at the end of the hour, and the override and false-block rates over the 7 days up to it. Shadow-mode decisions are not counted.
     </p>
-
-    <h3>Manual Snapshot</h3>
     <p>
-      Trigger an on-demand metrics snapshot:
-    </p>
-    <pre><code>POST /v1/dashboard/metrics/snapshot</code></pre>
-    <p>
-      Creates an immediate snapshot of current metrics. Useful for capturing baseline before configuration changes or after incident resolution.
+      The window is the last 30 days unless you set it: <code>hours</code> (1&ndash;8760) counts back from <code>end</code>, or give <code>start</code> and <code>end</code> as ISO 8601 date-times. <code>limit</code> (default 720) and <code>offset</code> page through the hours. Only your organization's data is included.
     </p>
 
     <hr class="divider">
