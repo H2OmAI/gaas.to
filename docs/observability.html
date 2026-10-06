@@ -300,7 +300,7 @@
 
     <h2 id="anomaly-alerting">Anomaly Alerting</h2>
     <p>
-      Beyond passive metrics, GaaS actively monitors operational health and fires alerts when thresholds are exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check (every 60 seconds), dispatching events through the notification engine.
+      Beyond passive metrics, GaaS actively monitors the health of its own platform and raises an alert when a threshold is exceeded. The anomaly monitor evaluates metrics on every governance decision and through a periodic background check (every 60 seconds), and reports each alert to the GaaS operations team. These are platform-health alerts, not alerts about one organization: your organization is notified by email, automatically, when one of its actions is blocked or an escalation is waiting for review.
     </p>
 
     <div class="note">
@@ -317,11 +317,6 @@
       <tr>
         <td><code>circuit_breaker_tripped</code></td>
         <td>Learning calibration circuit breaker freezes due to quality degradation</td>
-        <td>Critical</td>
-      </tr>
-      <tr>
-        <td><code>critical_escalation</code></td>
-        <td>Escalation created with risk score &ge; 0.7</td>
         <td>Critical</td>
       </tr>
       <tr>
@@ -350,73 +345,6 @@
         <td>Warning</td>
       </tr>
     </table>
-
-    <div class="note">
-      <strong>Deduplication.</strong> The notification engine respects per-rule cooldown periods. A rule with <code>cooldown_minutes: 15</code> will fire at most once every 15 minutes for the same event type, preventing alert storms during sustained anomalies.
-    </div>
-
-    <hr class="divider">
-
-    <h2 id="notification-channels">Notification Channels</h2>
-    <p>
-      Alert events are dispatched through configurable channels. Each notification rule specifies a channel and recipients.
-    </p>
-
-    <table>
-      <tr>
-        <th>Channel</th>
-        <th>Configuration</th>
-        <th>Recipient Format</th>
-      </tr>
-      <tr>
-        <td><strong>Webhook</strong></td>
-        <td>No env vars needed</td>
-        <td>URL &mdash; receives JSON POST with <code>title</code>, <code>message</code>, <code>metadata</code></td>
-      </tr>
-      <tr>
-        <td><strong>Email</strong></td>
-        <td><code>GAAS_SMTP_HOST</code>, <code>GAAS_SMTP_PORT</code>, <code>GAAS_SMTP_USER</code>, <code>GAAS_SMTP_PASS</code>, <code>GAAS_SMTP_FROM</code></td>
-        <td>Email address</td>
-      </tr>
-      <tr>
-        <td><strong>PagerDuty</strong></td>
-        <td><code>GAAS_PAGERDUTY_ROUTING_KEY</code></td>
-        <td>PagerDuty service key</td>
-      </tr>
-    </table>
-
-    <p>
-      Channels degrade gracefully &mdash; if SMTP is not configured, email rules silently skip. The same applies to PagerDuty. Webhook requires no server-side configuration.
-    </p>
-
-    <hr class="divider">
-
-    <h2 id="notification-rules">Notification Rules</h2>
-    <p>
-      Rules are managed via the dashboard API. Each rule matches an event type (exact or wildcard) to a channel and recipient list.
-    </p>
-
-    <pre><code>POST /v1/dashboard/notifications/rules
-Content-Type: application/json
-
-{
-  "name": "Ops team &mdash; all critical events",
-  "trigger": "*_critical*",
-  "channel": "webhook",
-  "recipients": ["https://hooks.slack.com/services/T00/B00/xxx"],
-  "cooldown_minutes": 15
-}</code></pre>
-
-    <p>Trigger patterns:</p>
-    <ul>
-      <li><code>circuit_breaker_tripped</code> &mdash; exact match</li>
-      <li><code>circuit_*</code> &mdash; wildcard prefix (matches any event starting with <code>circuit_</code>)</li>
-      <li><code>*</code> &mdash; catch-all, matches every event</li>
-    </ul>
-
-    <div class="note">
-      <strong>Dashboard integration.</strong> You can also create and manage notification rules through the <a class="link" href="dashboard.html">conversational dashboard</a> using natural language.
-    </div>
 
     <hr class="divider">
 
@@ -523,34 +451,9 @@ Content-Type: application/json
         <td>OTLP gRPC collector endpoint</td>
       </tr>
       <tr>
-        <td><code>GAAS_SMTP_HOST</code></td>
-        <td>&mdash;</td>
-        <td>SMTP server for email notifications</td>
-      </tr>
-      <tr>
-        <td><code>GAAS_SMTP_PORT</code></td>
-        <td><code>587</code></td>
-        <td>SMTP port</td>
-      </tr>
-      <tr>
-        <td><code>GAAS_SMTP_USER</code></td>
-        <td>&mdash;</td>
-        <td>SMTP username</td>
-      </tr>
-      <tr>
-        <td><code>GAAS_SMTP_PASS</code></td>
-        <td>&mdash;</td>
-        <td>SMTP password</td>
-      </tr>
-      <tr>
-        <td><code>GAAS_SMTP_FROM</code></td>
-        <td>&mdash;</td>
-        <td>From address for email alerts</td>
-      </tr>
-      <tr>
         <td><code>GAAS_PAGERDUTY_ROUTING_KEY</code></td>
         <td>&mdash;</td>
-        <td>PagerDuty Events API v2 routing key</td>
+        <td>PagerDuty Events API v2 routing key for sub-processor change notices</td>
       </tr>
     </table>
 
@@ -558,7 +461,7 @@ Content-Type: application/json
 
     <h2>Related Pages</h2>
     <ul>
-      <li><a class="link" href="dashboard.html">Conversational Dashboard</a> &mdash; manage notification rules and review alerts through natural language</li>
+      <li><a class="link" href="dashboard.html">Conversational Dashboard</a> &mdash; review decisions, escalations and agent activity through natural language</li>
       <li><a class="link" href="getting-started.html">Getting Started</a> &mdash; onboard, integrate, and go live</li>
       <li><a class="link" href="intent-api.html">Intent Declaration API</a> &mdash; the pipeline that generates the metrics</li>
     </ul>

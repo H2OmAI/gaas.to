@@ -1193,21 +1193,6 @@
     ]
   },
   {
-    "id": "observability#notification-channels",
-    "page": "Observability & Alerting",
-    "section": "Notification Channels",
-    "url": "observability.html#notification-channels",
-    "body": "Alert delivery to Slack (GAAS_ALERT_SLACK_WEBHOOK), PagerDuty (GAAS_PAGERDUTY_ROUTING_KEY), and email. Configure via environment variables. Multiple channels can receive the same alert.",
-    "tags": [
-      "Slack",
-      "PagerDuty",
-      "email",
-      "GAAS_ALERT_SLACK_WEBHOOK",
-      "GAAS_PAGERDUTY_ROUTING_KEY",
-      "alert channels"
-    ]
-  },
-  {
     "id": "observability#prometheus-metrics-reference",
     "page": "Observability & Alerting",
     "section": "Prometheus Metrics Reference",
