@@ -458,7 +458,7 @@ intent = <span class="func">build_intent</span>(
     <h2 id="java">Java</h2>
 
     <p>
-      The Java SDK (version 0.3.0, Java 17+) installs from the GaaS Maven repository, <code>https://maven.gaas.is</code>, alongside Maven Central. Every published file has <code>.sha256</code> and <code>.sha512</code> checksums, and a published version never changes.
+      The Java SDK (version 0.3.1, Java 17+) installs from the GaaS Maven repository, <code>https://maven.gaas.is</code>, alongside Maven Central. Every published file has <code>.sha256</code> and <code>.sha512</code> checksums, and a published version never changes.
     </p>
 
     <h3>Install</h3>
@@ -475,7 +475,7 @@ intent = <span class="func">build_intent</span>(
     &lt;dependency&gt;
         &lt;groupId&gt;is.gaas&lt;/groupId&gt;
         &lt;artifactId&gt;gaas-sdk&lt;/artifactId&gt;
-        &lt;version&gt;0.3.0&lt;/version&gt;
+        &lt;version&gt;0.3.1&lt;/version&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;</code></pre>
 
@@ -489,7 +489,7 @@ intent = <span class="func">build_intent</span>(
 }
 
 dependencies {
-    implementation 'is.gaas:gaas-sdk:0.3.0'
+    implementation 'is.gaas:gaas-sdk:0.3.1'
 }</code></pre>
 
     <p><strong>Gradle Kotlin DSL</strong> (<code>build.gradle.kts</code>):</p>
@@ -501,7 +501,7 @@ dependencies {
 }
 
 dependencies {
-    implementation("is.gaas:gaas-sdk:0.3.0")
+    implementation("is.gaas:gaas-sdk:0.3.1")
 }</code></pre>
 
     <p><code>includeGroup</code> makes Gradle ask the GaaS repository for <code>is.gaas</code> artifacts only, and Maven Central for everything else.</p>
