@@ -327,7 +327,7 @@ Content-Type: application/json
 
     <h3>How It Works</h3>
     <ol>
-      <li>Make a request to a cacheable endpoint (e.g., <code>GET /v1/membranes/{id}</code>)</li>
+      <li>Make a request to a cacheable endpoint (e.g., <code>GET /v1/membranes/{membrane_id}</code>)</li>
       <li>GaaS returns an <code>ETag</code> header with a cache validator (e.g., <code>ETag: "abc123"</code>)</li>
       <li>On subsequent requests, include <code>If-None-Match: "abc123"</code></li>
       <li>If the resource hasn't changed, GaaS returns <code>304 Not Modified</code> with no body</li>
